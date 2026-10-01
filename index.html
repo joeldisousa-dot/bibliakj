@@ -1,867 +1,2647 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#111827">
-<meta name="description" content="Bíblia King James — leitura, pesquisa e texto diário.">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0"
+>
+
+<meta
+  name="theme-color"
+  content="#151515"
+>
+
+<meta
+  name="description"
+  content="Bíblia King James - leitura, pesquisa e texto diário."
+>
+
 <title>Bíblia King James</title>
 
+
 <style>
+
+/* ============================================================
+   VARIÁVEIS
+   ============================================================ */
+
 :root {
-  --bg: #f4f1ea;
-  --surface: #fffdf8;
-  --surface-2: #f8f5ee;
-  --text: #25221d;
-  --muted: #766f64;
-  --line: #ded7ca;
-  --accent: #8b5e34;
-  --accent-dark: #684522;
-  --header: #151515;
-  --white: #fff;
-  --shadow: 0 12px 35px rgba(35, 29, 20, .10);
+
+  --bg:
+    #f3f0e9;
+
+  --surface:
+    #fffdf8;
+
+  --surface2:
+    #f8f4ec;
+
+  --text:
+    #29251f;
+
+  --muted:
+    #766e63;
+
+  --line:
+    #ded7cb;
+
+  --accent:
+    #8b5e34;
+
+  --accentDark:
+    #684421;
+
+  --dark:
+    #151515;
+
+  --white:
+    #ffffff;
+
+  --shadow:
+    0 12px 35px
+    rgba(
+      35,
+      29,
+      20,
+      .10
+    );
+
 }
 
-* { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+/* ============================================================
+   RESET
+   ============================================================ */
+
+* {
+
+  box-sizing:
+    border-box;
+
+}
+
+
+html {
+
+  scroll-behavior:
+    smooth;
+
+}
+
 
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: Georgia, "Times New Roman", serif;
+
+  margin:
+    0;
+
+  background:
+    var(--bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    Georgia,
+    "Times New Roman",
+    serif;
+
 }
 
-button, input, select {
-  font: inherit;
+
+/* ============================================================
+   ELEMENTOS
+   ============================================================ */
+
+button,
+input {
+
+  font:
+    inherit;
+
 }
+
 
 button {
-  cursor: pointer;
+
+  cursor:
+    pointer;
+
 }
+
+
+/* ============================================================
+   TOPO
+   ============================================================ */
 
 .topbar {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background: rgba(21,21,21,.97);
-  color: #fff;
-  box-shadow: 0 4px 18px rgba(0,0,0,.18);
+
+  position:
+    sticky;
+
+  top:
+    0;
+
+  z-index:
+    100;
+
+  background:
+    rgba(
+      21,
+      21,
+      21,
+      .97
+    );
+
+  color:
+    white;
+
+  box-shadow:
+    0 4px 18px
+    rgba(
+      0,
+      0,
+      0,
+      .18
+    );
+
 }
+
 
 .topbar-inner {
-  max-width: 1200px;
-  margin: auto;
-  min-height: 70px;
-  padding: 12px 18px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
+
+  max-width:
+    1200px;
+
+  margin:
+    auto;
+
+  min-height:
+    70px;
+
+  padding:
+    12px 18px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    18px;
+
 }
+
 
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 11px;
-  min-width: 230px;
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  gap:
+    11px;
+
+  min-width:
+    240px;
+
 }
+
 
 .brand-icon {
-  width: 40px;
-  height: 40px;
-  display: grid;
-  place-items: center;
-  border: 1px solid rgba(255,255,255,.25);
-  border-radius: 10px;
-  font-size: 21px;
+
+  width:
+    42px;
+
+  height:
+    42px;
+
+  display:
+    grid;
+
+  place-items:
+    center;
+
+  border:
+    1px solid
+    rgba(
+      255,
+      255,
+      255,
+      .25
+    );
+
+  border-radius:
+    10px;
+
+  font-size:
+    21px;
+
 }
+
 
 .brand strong {
-  display: block;
-  font-size: 19px;
+
+  display:
+    block;
+
+  font-size:
+    19px;
+
 }
+
 
 .brand small {
-  display: block;
-  color: #cfc8bd;
-  font-size: 12px;
-  margin-top: 2px;
+
+  display:
+    block;
+
+  color:
+    #cfc8bd;
+
+  font-size:
+    12px;
+
+  margin-top:
+    2px;
+
 }
+
+
+/* ============================================================
+   PESQUISA
+   ============================================================ */
 
 .search {
-  flex: 1;
-  display: flex;
-  gap: 8px;
+
+  flex:
+    1;
+
+  display:
+    flex;
+
+  gap:
+    8px;
+
 }
+
 
 .search input {
-  width: 100%;
-  border: 1px solid #454545;
-  background: #242424;
-  color: #fff;
-  border-radius: 10px;
-  padding: 12px 14px;
-  outline: none;
+
+  width:
+    100%;
+
+  border:
+    1px solid
+    #444;
+
+  background:
+    #242424;
+
+  color:
+    white;
+
+  border-radius:
+    10px;
+
+  padding:
+    12px 14px;
+
+  outline:
+    none;
+
 }
+
 
 .search input:focus {
-  border-color: #b58a60;
+
+  border-color:
+    #b58a60;
+
 }
+
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
 
 .btn {
-  border: 0;
-  border-radius: 9px;
-  padding: 10px 14px;
-  background: var(--accent);
-  color: #fff;
-  transition: .2s;
+
+  border:
+    0;
+
+  border-radius:
+    9px;
+
+  padding:
+    10px 14px;
+
+  background:
+    var(--accent);
+
+  color:
+    white;
+
+  transition:
+    .2s;
+
 }
+
 
 .btn:hover {
-  background: var(--accent-dark);
+
+  background:
+    var(--accentDark);
+
 }
+
 
 .btn.secondary {
-  background: #eee8dd;
-  color: #3c352d;
+
+  background:
+    #eee8dd;
+
+  color:
+    #3c352d;
+
 }
+
 
 .btn.dark {
-  background: #292929;
-  border: 1px solid #444;
+
+  background:
+    #292929;
+
+  border:
+    1px solid
+    #444;
+
 }
 
-.btn.icon {
-  padding: 9px 11px;
-}
+
+/* ============================================================
+   LAYOUT
+   ============================================================ */
 
 .layout {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 24px 18px 50px;
-  display: grid;
-  grid-template-columns: 255px minmax(0, 1fr);
-  gap: 24px;
+
+  max-width:
+    1200px;
+
+  margin:
+    auto;
+
+  padding:
+    24px 18px 50px;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    255px minmax(
+      0,
+      1fr
+    );
+
+  gap:
+    24px;
+
 }
+
+
+/* ============================================================
+   MENU LATERAL
+   ============================================================ */
 
 .sidebar {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 16px;
-  padding: 16px;
-  height: fit-content;
-  position: sticky;
-  top: 94px;
-  box-shadow: var(--shadow);
+
+  background:
+    var(--surface);
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:
+    16px;
+
+  padding:
+    16px;
+
+  height:
+    fit-content;
+
+  position:
+    sticky;
+
+  top:
+    94px;
+
+  box-shadow:
+    var(--shadow);
+
 }
+
 
 .sidebar-title {
-  font-weight: bold;
-  margin-bottom: 12px;
-  font-size: 16px;
+
+  font-weight:
+    bold;
+
+  margin-bottom:
+    12px;
+
+  font-size:
+    16px;
+
 }
+
 
 .testament-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 6px;
-  margin-bottom: 12px;
+
+  display:
+    grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:
+    6px;
+
+  margin-bottom:
+    12px;
+
 }
+
 
 .tab {
-  border: 1px solid var(--line);
-  background: var(--surface-2);
-  color: var(--text);
-  padding: 9px 5px;
-  border-radius: 8px;
+
+  border:
+    1px solid
+    var(--line);
+
+  background:
+    var(--surface2);
+
+  color:
+    var(--text);
+
+  padding:
+    9px 5px;
+
+  border-radius:
+    8px;
+
 }
+
 
 .tab.active {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
+
+  background:
+    var(--accent);
+
+  color:
+    white;
+
+  border-color:
+    var(--accent);
+
 }
+
 
 #bookList {
-  display: grid;
-  gap: 4px;
-  max-height: 62vh;
-  overflow: auto;
+
+  display:
+    grid;
+
+  gap:
+    4px;
+
+  max-height:
+    62vh;
+
+  overflow:
+    auto;
+
 }
 
+
 .book {
-  width: 100%;
-  text-align: left;
-  background: transparent;
-  border: 0;
-  border-radius: 8px;
-  padding: 9px 10px;
-  color: var(--text);
+
+  width:
+    100%;
+
+  text-align:
+    left;
+
+  background:
+    transparent;
+
+  border:
+    0;
+
+  border-radius:
+    8px;
+
+  padding:
+    9px 10px;
+
+  color:
+    var(--text);
+
 }
+
 
 .book:hover,
 .book.active {
-  background: #eee6da;
-  color: var(--accent-dark);
-  font-weight: bold;
+
+  background:
+    #eee6da;
+
+  color:
+    var(--accentDark);
+
+  font-weight:
+    bold;
+
 }
+
+
+/* ============================================================
+   CONTEÚDO
+   ============================================================ */
 
 .content {
-  min-width: 0;
+
+  min-width:
+    0;
+
 }
+
+
+/* ============================================================
+   TEXTO DO DIA
+   ============================================================ */
 
 .daily {
-  background: linear-gradient(135deg, #211c17, #3d2b1d);
-  color: #fff;
-  border-radius: 18px;
-  padding: 25px;
-  margin-bottom: 22px;
-  box-shadow: var(--shadow);
+
+  background:
+    linear-gradient(
+      135deg,
+      #211c17,
+      #3d2b1d
+    );
+
+  color:
+    white;
+
+  border-radius:
+    18px;
+
+  padding:
+    25px;
+
+  margin-bottom:
+    22px;
+
+  box-shadow:
+    var(--shadow);
+
 }
+
 
 .daily-label {
-  color: #d8b895;
-  text-transform: uppercase;
-  letter-spacing: 1.4px;
-  font-size: 12px;
-  font-weight: bold;
+
+  color:
+    #d8b895;
+
+  text-transform:
+    uppercase;
+
+  letter-spacing:
+    1.4px;
+
+  font-size:
+    12px;
+
+  font-weight:
+    bold;
+
 }
+
 
 .daily h2 {
-  margin: 7px 0 13px;
-  font-size: 25px;
+
+  margin:
+    7px 0 13px;
+
+  font-size:
+    25px;
+
 }
+
 
 .daily p {
-  font-size: 19px;
-  line-height: 1.75;
-  margin: 0 0 18px;
+
+  font-size:
+    19px;
+
+  line-height:
+    1.75;
+
+  margin:
+    0 0 18px;
+
 }
+
 
 .daily-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+
+  display:
+    flex;
+
+  gap:
+    8px;
+
+  flex-wrap:
+    wrap;
+
 }
 
-.daily .btn {
-  background: #a8784b;
-}
+
+/* ============================================================
+   LEITOR
+   ============================================================ */
 
 .reader {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  box-shadow: var(--shadow);
-  overflow: hidden;
+
+  background:
+    var(--surface);
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:
+    18px;
+
+  box-shadow:
+    var(--shadow);
+
+  overflow:
+    hidden;
+
 }
+
 
 .reader-head {
-  padding: 22px 24px 16px;
-  border-bottom: 1px solid var(--line);
+
+  padding:
+    22px 24px 16px;
+
+  border-bottom:
+    1px solid
+    var(--line);
+
 }
+
 
 .breadcrumb {
-  color: var(--muted);
-  font-size: 13px;
-  margin-bottom: 5px;
+
+  color:
+    var(--muted);
+
+  font-size:
+    13px;
+
+  margin-bottom:
+    5px;
+
 }
+
 
 .reader-title {
-  margin: 0;
-  font-size: 30px;
+
+  margin:
+    0;
+
+  font-size:
+    30px;
+
 }
+
 
 .chapter-controls {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 13px 24px;
-  background: var(--surface-2);
-  border-bottom: 1px solid var(--line);
+
+  display:
+    flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    10px;
+
+  padding:
+    13px 24px;
+
+  background:
+    var(--surface2);
+
+  border-bottom:
+    1px solid
+    var(--line);
+
 }
+
 
 .chapter-controls .center {
-  font-weight: bold;
-  text-align: center;
+
+  font-weight:
+    bold;
+
+  text-align:
+    center;
+
 }
+
 
 .verses {
-  padding: 18px 24px 30px;
+
+  padding:
+    18px 24px 30px;
+
 }
+
 
 .verse {
-  position: relative;
-  padding: 8px 8px 8px 53px;
-  border-radius: 9px;
-  line-height: 1.85;
-  font-size: 19px;
+
+  position:
+    relative;
+
+  padding:
+    8px 8px 8px 53px;
+
+  border-radius:
+    9px;
+
+  line-height:
+    1.85;
+
+  font-size:
+    19px;
+
 }
+
 
 .verse:hover {
-  background: #faf7f1;
+
+  background:
+    #faf7f1;
+
 }
+
 
 .verse-number {
-  position: absolute;
-  left: 8px;
-  top: 10px;
-  width: 35px;
-  text-align: right;
-  color: var(--accent);
-  font-size: 14px;
-  font-weight: bold;
+
+  position:
+    absolute;
+
+  left:
+    8px;
+
+  top:
+    10px;
+
+  width:
+    35px;
+
+  text-align:
+    right;
+
+  color:
+    var(--accent);
+
+  font-size:
+    14px;
+
+  font-weight:
+    bold;
+
 }
+
 
 .verse-actions {
-  display: inline-flex;
-  margin-left: 8px;
-  opacity: 0;
-  transition: .2s;
+
+  display:
+    inline-flex;
+
+  margin-left:
+    8px;
+
+  opacity:
+    0;
+
+  transition:
+    .2s;
+
 }
 
-.verse:hover .verse-actions,
-.verse:focus-within .verse-actions {
-  opacity: 1;
+
+.verse:hover
+.verse-actions {
+
+  opacity:
+    1;
+
 }
+
 
 .small-share {
-  border: 0;
-  background: transparent;
-  color: var(--accent);
-  padding: 2px 5px;
+
+  border:
+    0;
+
+  background:
+    transparent;
+
+  color:
+    var(--accent);
+
+  padding:
+    2px 5px;
+
 }
 
-.empty, .loading, .error {
-  padding: 35px;
-  text-align: center;
-  color: var(--muted);
-}
 
-.error {
-  color: #9b2c2c;
-}
+/* ============================================================
+   PESQUISA
+   ============================================================ */
 
 .search-results {
-  margin-top: 20px;
-  display: none;
+
+  margin-top:
+    20px;
+
+  display:
+    none;
+
 }
+
 
 .result {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 15px;
-  margin-bottom: 10px;
-  cursor: pointer;
+
+  background:
+    var(--surface);
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius:
+    12px;
+
+  padding:
+    15px;
+
+  margin-bottom:
+    10px;
+
+  cursor:
+    pointer;
+
 }
+
 
 .result:hover {
-  border-color: #bda98f;
+
+  border-color:
+    #bda98f;
+
 }
+
 
 .result-ref {
-  color: var(--accent);
-  font-weight: bold;
-  margin-bottom: 5px;
+
+  color:
+    var(--accent);
+
+  font-weight:
+    bold;
+
+  margin-bottom:
+    5px;
+
 }
+
+
+/* ============================================================
+   ESTADOS
+   ============================================================ */
+
+.empty,
+.loading,
+.error {
+
+  padding:
+    35px;
+
+  text-align:
+    center;
+
+  color:
+    var(--muted);
+
+}
+
+
+.error {
+
+  color:
+    #9b2c2c;
+
+}
+
 
 .status {
-  position: fixed;
-  right: 18px;
-  bottom: 18px;
-  background: #202020;
-  color: white;
-  padding: 11px 15px;
-  border-radius: 9px;
-  box-shadow: var(--shadow);
-  opacity: 0;
-  pointer-events: none;
-  transform: translateY(8px);
-  transition: .25s;
-  z-index: 50;
+
+  position:
+    fixed;
+
+  right:
+    18px;
+
+  bottom:
+    18px;
+
+  background:
+    #202020;
+
+  color:
+    white;
+
+  padding:
+    11px 15px;
+
+  border-radius:
+    9px;
+
+  box-shadow:
+    var(--shadow);
+
+  opacity:
+    0;
+
+  pointer-events:
+    none;
+
+  transform:
+    translateY(8px);
+
+  transition:
+    .25s;
+
+  z-index:
+    500;
+
 }
+
 
 .status.show {
-  opacity: 1;
-  transform: translateY(0);
+
+  opacity:
+    1;
+
+  transform:
+    translateY(0);
+
 }
 
-@media (max-width: 850px) {
+
+/* ============================================================
+   CELULAR
+   ============================================================ */
+
+@media (
+  max-width: 850px
+) {
+
   .topbar-inner {
-    flex-wrap: wrap;
+
+    flex-wrap:
+      wrap;
+
   }
+
 
   .brand {
-    min-width: 0;
+
+    min-width:
+      0;
+
   }
+
 
   .search {
-    order: 3;
-    flex-basis: 100%;
+
+    order:
+      3;
+
+    flex-basis:
+      100%;
+
   }
+
 
   .layout {
-    grid-template-columns: 1fr;
+
+    grid-template-columns:
+      1fr;
+
   }
+
 
   .sidebar {
-    position: static;
+
+    position:
+      static;
+
   }
+
 
   #bookList {
-    max-height: 220px;
-    grid-template-columns: repeat(2, minmax(0,1fr));
+
+    max-height:
+      220px;
+
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(
+          0,
+          1fr
+        )
+      );
+
   }
+
 
   .daily h2 {
-    font-size: 22px;
+
+    font-size:
+      22px;
+
   }
+
 
   .reader-title {
-    font-size: 25px;
+
+    font-size:
+      25px;
+
   }
+
 
   .verse {
-    padding-left: 43px;
-    font-size: 18px;
+
+    padding-left:
+      43px;
+
+    font-size:
+      18px;
+
   }
 
+
   .verse-actions {
-    opacity: 1;
+
+    opacity:
+      1;
+
   }
+
 }
+
 </style>
+
 </head>
+
 
 <body>
 
+
+<!-- ==========================================================
+     CABEÇALHO
+     =========================================================== -->
+
 <header class="topbar">
+
   <div class="topbar-inner">
+
+
     <div class="brand">
-      <div class="brand-icon">✝</div>
-      <div>
-        <strong>Bíblia King James</strong>
-        <small>Leitura e estudo das Escrituras</small>
+
+      <div class="brand-icon">
+        ✝
       </div>
+
+      <div>
+
+        <strong>
+          Bíblia King James
+        </strong>
+
+        <small>
+          Leitura e estudo das Escrituras
+        </small>
+
+      </div>
+
     </div>
 
+
     <div class="search">
-      <input id="searchInput" type="search"
-             placeholder="Pesquisar uma palavra ou expressão...">
-      <button class="btn" onclick="pesquisar()">Pesquisar</button>
+
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Pesquisar uma palavra ou expressão..."
+      >
+
+      <button
+        class="btn"
+        onclick="pesquisar()"
+      >
+        Pesquisar
+      </button>
+
     </div>
+
+
   </div>
+
 </header>
+
+
+<!-- ==========================================================
+     LAYOUT
+     =========================================================== -->
 
 <main class="layout">
 
+
+  <!-- ========================================================
+       MENU
+       ========================================================= -->
+
   <aside class="sidebar">
-    <div class="sidebar-title">Livros da Bíblia</div>
+
+    <div class="sidebar-title">
+      Livros da Bíblia
+    </div>
+
 
     <div class="testament-tabs">
-      <button id="tabAT" class="tab active" onclick="selecionarTestamento('AT')">
+
+      <button
+        id="tabAT"
+        class="tab active"
+        onclick="selecionarTestamento('AT')"
+      >
         Antigo Testamento
       </button>
-      <button id="tabNT" class="tab" onclick="selecionarTestamento('NT')">
+
+
+      <button
+        id="tabNT"
+        class="tab"
+        onclick="selecionarTestamento('NT')"
+      >
         Novo Testamento
       </button>
+
     </div>
 
+
     <div id="bookList">
-      <div class="loading">Carregando livros...</div>
+
+      <div class="loading">
+        Carregando livros...
+      </div>
+
     </div>
+
   </aside>
+
+
+  <!-- ========================================================
+       CONTEÚDO
+       ========================================================= -->
 
   <section class="content">
 
+
+    <!-- ======================================================
+         TEXTO DO DIA
+         ======================================================= -->
+
     <section class="daily">
-      <div class="daily-label">Texto do dia</div>
-      <h2 id="dailyReference">Carregando...</h2>
-      <p id="dailyText">Carregando o texto bíblico para hoje...</p>
+
+      <div class="daily-label">
+        Texto do dia
+      </div>
+
+
+      <h2 id="dailyReference">
+        Carregando...
+      </h2>
+
+
+      <p id="dailyText">
+        Carregando o texto bíblico para hoje...
+      </p>
+
 
       <div class="daily-actions">
-        <button class="btn" onclick="compartilharDiario()">
+
+        <button
+          class="btn"
+          onclick="compartilharDiario()"
+        >
           ↗ Compartilhar
         </button>
-        <button class="btn" onclick="abrirDiario()">
+
+
+        <button
+          class="btn"
+          onclick="abrirDiario()"
+        >
           Ler capítulo
         </button>
+
       </div>
+
     </section>
 
-    <section id="searchResults" class="search-results"></section>
+
+    <!-- ======================================================
+         RESULTADOS DA PESQUISA
+         ======================================================= -->
+
+    <section
+      id="searchResults"
+      class="search-results"
+    ></section>
+
+
+    <!-- ======================================================
+         LEITOR
+         ======================================================= -->
 
     <section class="reader">
 
+
       <div class="reader-head">
-        <div class="breadcrumb" id="readerBreadcrumb">Bíblia King James</div>
-        <h1 class="reader-title" id="readerTitle">Selecione um livro</h1>
+
+        <div
+          class="breadcrumb"
+          id="readerBreadcrumb"
+        >
+          Bíblia King James
+        </div>
+
+
+        <h1
+          class="reader-title"
+          id="readerTitle"
+        >
+          Selecione um livro
+        </h1>
+
       </div>
 
+
       <div class="chapter-controls">
-        <button class="btn secondary" onclick="capituloAnterior()">
+
+
+        <button
+          class="btn secondary"
+          onclick="capituloAnterior()"
+        >
           ← Anterior
         </button>
 
-        <div class="center" id="chapterLabel">Capítulo</div>
 
-        <button class="btn secondary" onclick="proximoCapitulo()">
+        <div
+          class="center"
+          id="chapterLabel"
+        >
+          Capítulo
+        </div>
+
+
+        <button
+          class="btn secondary"
+          onclick="proximoCapitulo()"
+        >
           Próximo →
         </button>
+
+
       </div>
 
-      <div id="verses" class="verses">
+
+      <div
+        id="verses"
+        class="verses"
+      >
+
         <div class="empty">
-          Escolha um livro e um capítulo para começar a leitura.
+
+          Escolha um livro e um capítulo
+          para começar a leitura.
+
         </div>
+
       </div>
+
 
     </section>
 
   </section>
+
 </main>
 
-<div id="status" class="status"></div>
+
+<div
+  id="status"
+  class="status"
+></div>
+
 
 <script>
+
 /*
+ * ============================================================
+ * CONFIGURAÇÃO
+ * ============================================================
+ *
  * COLOQUE AQUI A URL DA IMPLANTAÇÃO DO GOOGLE APPS SCRIPT.
+ *
  * Exemplo:
- * https://script.google.com/macros/s/SEU_ID/exec
+ *
+ * https://script.google.com/macros/s/XXXXXXXXXXXX/exec
+ *
  */
-const API_URL = 'https://script.google.com/macros/s/AKfycbyKA4GKY39Aly4eGUUZCnUvA6mQKgvjDcOsKzgrAq_Qxl5s_dl2VJdlbMrlaSZJ4ox3kA/exec';
+
+const API_URL =
+  'COLE_AQUI_A_URL_DA_SUA_API';
+
+
+/*
+ * ============================================================
+ * VARIÁVEIS
+ * ============================================================
+ */
 
 let livros = [];
-let testamentoAtual = 'AT';
-let livroAtual = null;
-let capituloAtual = 1;
-let ultimoDiario = null;
 
-document.addEventListener('DOMContentLoaded', async () => {
-  document.getElementById('searchInput')
-    .addEventListener('keydown', e => {
-      if (e.key === 'Enter') pesquisar();
-    });
+let testamentoAtual =
+  'AT';
 
-  await Promise.all([
-    carregarLivros(),
-    carregarDiario()
-  ]);
-});
+let livroAtual =
+  null;
 
-async function api(params) {
-  if (!API_URL || API_URL.includes('COLE_AQUI')) {
-    throw new Error('Configure a URL da API do Google Apps Script no arquivo index.html.');
+let capituloAtual =
+  1;
+
+let ultimoDiario =
+  null;
+
+
+/*
+ * ============================================================
+ * INICIALIZAÇÃO
+ * ============================================================
+ */
+
+document.addEventListener(
+  'DOMContentLoaded',
+  async () => {
+
+    document
+      .getElementById(
+        'searchInput'
+      )
+      .addEventListener(
+        'keydown',
+        evento => {
+
+          if (
+            evento.key ===
+            'Enter'
+          ) {
+
+            pesquisar();
+
+          }
+
+        }
+      );
+
+
+    await Promise.all([
+
+      carregarLivros(),
+
+      carregarDiario()
+
+    ]);
+
+  }
+);
+
+
+/*
+ * ============================================================
+ * API
+ * ============================================================
+ */
+
+async function api(
+  parametros
+) {
+
+  if (
+    !API_URL ||
+    API_URL.includes(
+      'COLE_AQUI'
+    )
+  ) {
+
+    throw new Error(
+      'Configure a URL da API do Google Apps Script no index.html.'
+    );
+
   }
 
-  const url = API_URL + '?' + new URLSearchParams(params).toString();
 
-  const response = await fetch(url, {
-    method: 'GET',
-    cache: 'no-store'
-  });
+  const url =
+    API_URL +
+    '?' +
+    new URLSearchParams(
+      parametros
+    ).toString();
 
-  if (!response.ok) {
-    throw new Error('Não foi possível acessar a API.');
+
+  const resposta =
+    await fetch(
+      url,
+      {
+        method:
+          'GET',
+
+        cache:
+          'no-store'
+      }
+    );
+
+
+  if (
+    !resposta.ok
+  ) {
+
+    throw new Error(
+      'Não foi possível acessar a API.'
+    );
+
   }
 
-  const data = await response.json();
 
-  if (!data.ok) {
-    throw new Error(data.erro || 'Erro na API.');
+  const dados =
+    await resposta.json();
+
+
+  if (
+    !dados.ok
+  ) {
+
+    throw new Error(
+      dados.erro ||
+      'Erro na API.'
+    );
+
   }
 
-  return data;
+
+  return dados;
+
 }
+
+
+/*
+ * ============================================================
+ * CARREGAR LIVROS
+ * ============================================================
+ */
 
 async function carregarLivros() {
+
   try {
-    const data = await api({ action: 'livros' });
-    livros = data.livros || [];
+
+    const dados =
+      await api({
+        action:
+          'livros'
+      });
+
+
+    livros =
+      dados.livros ||
+      [];
+
+
     renderizarLivros();
 
-    if (livros.length) {
-      const primeiro = livros.find(l => normalizar(l.qual) === 'AT') || livros[0];
-      selecionarLivro(primeiro);
+
+    if (
+      livros.length
+    ) {
+
+      const primeiro =
+        livros.find(
+          livro =>
+            normalizar(
+              livro.qual
+            ) ===
+            'AT'
+        ) ||
+        livros[0];
+
+
+      selecionarLivro(
+        primeiro
+      );
+
     }
-  } catch (err) {
-    document.getElementById('bookList').innerHTML =
-      `<div class="error">${esc(err.message)}</div>`;
-    mostrarStatus(err.message);
+
+  } catch (
+    erro
+  ) {
+
+    document
+      .getElementById(
+        'bookList'
+      )
+      .innerHTML =
+        `<div class="error">
+          ${esc(erro.message)}
+        </div>`;
+
+
+    mostrarStatus(
+      erro.message
+    );
+
   }
+
 }
 
-function selecionarTestamento(qual) {
-  testamentoAtual = qual;
 
-  document.getElementById('tabAT').classList.toggle('active', qual === 'AT');
-  document.getElementById('tabNT').classList.toggle('active', qual === 'NT');
+/*
+ * ============================================================
+ * TESTAMENTO
+ * ============================================================
+ */
+
+function selecionarTestamento(
+  qual
+) {
+
+  testamentoAtual =
+    qual;
+
+
+  document
+    .getElementById(
+      'tabAT'
+    )
+    .classList.toggle(
+      'active',
+      qual === 'AT'
+    );
+
+
+  document
+    .getElementById(
+      'tabNT'
+    )
+    .classList.toggle(
+      'active',
+      qual === 'NT'
+    );
+
 
   renderizarLivros();
+
 }
+
+
+/*
+ * ============================================================
+ * LIVROS
+ * ============================================================
+ */
 
 function renderizarLivros() {
-  const container = document.getElementById('bookList');
 
-  const lista = livros.filter(l =>
-    normalizar(l.qual) === normalizar(testamentoAtual)
-  );
+  const container =
+    document.getElementById(
+      'bookList'
+    );
 
-  if (!lista.length) {
-    container.innerHTML = '<div class="empty">Nenhum livro encontrado.</div>';
+
+  const lista =
+    livros.filter(
+      livro =>
+        normalizar(
+          livro.qual
+        ) ===
+        normalizar(
+          testamentoAtual
+        )
+    );
+
+
+  if (
+    !lista.length
+  ) {
+
+    container.innerHTML =
+      '<div class="empty">' +
+      'Nenhum livro encontrado.' +
+      '</div>';
+
     return;
+
   }
 
-  container.innerHTML = lista.map(l => `
-    <button class="book ${livroAtual && String(l.livro) === String(livroAtual.livro) ? 'active' : ''}"
-      onclick='selecionarLivro(${JSON.stringify(l)})'>
-      ${esc(l.nome)}
-    </button>
-  `).join('');
+
+  container.innerHTML =
+    lista.map(
+      livro => `
+
+        <button
+          class="book ${
+            livroAtual &&
+            String(
+              livro.livro
+            ) ===
+            String(
+              livroAtual.livro
+            )
+              ? 'active'
+              : ''
+          }"
+          onclick='selecionarLivro(
+            ${JSON.stringify(livro)}
+          )'
+        >
+          ${esc(livro.nome)}
+        </button>
+
+      `
+    ).join('');
+
 }
 
-async function selecionarLivro(livro) {
-  livroAtual = livro;
-  capituloAtual = 1;
+
+/*
+ * ============================================================
+ * SELECIONAR LIVRO
+ * ============================================================
+ */
+
+async function selecionarLivro(
+  livro
+) {
+
+  livroAtual =
+    livro;
+
+  capituloAtual =
+    1;
+
 
   renderizarLivros();
+
   await carregarCapitulo();
+
 }
+
+
+/*
+ * ============================================================
+ * CAPÍTULO
+ * ============================================================
+ */
 
 async function carregarCapitulo() {
-  if (!livroAtual) return;
 
-  const verses = document.getElementById('verses');
-  verses.innerHTML = '<div class="loading">Carregando capítulo...</div>';
-
-  try {
-    const data = await api({
-      action: 'capitulo',
-      livro: livroAtual.livro,
-      cap: capituloAtual
-    });
-
-    renderizarCapitulo(data);
-  } catch (err) {
-    verses.innerHTML = `<div class="error">${esc(err.message)}</div>`;
-  }
-}
-
-function renderizarCapitulo(data) {
-  document.getElementById('readerBreadcrumb').textContent =
-    `${data.livro.qual === 'NT' ? 'Novo Testamento' : 'Antigo Testamento'} • ${data.livro.nome}`;
-
-  document.getElementById('readerTitle').textContent =
-    `${data.livro.nome} ${data.capitulo}`;
-
-  document.getElementById('chapterLabel').textContent =
-    `${data.livro.nome} • Capítulo ${data.capitulo}`;
-
-  if (!data.versiculos.length) {
-    document.getElementById('verses').innerHTML =
-      '<div class="empty">Este capítulo não foi encontrado.</div>';
+  if (
+    !livroAtual
+  ) {
     return;
   }
 
-  document.getElementById('verses').innerHTML = data.versiculos.map(v => {
-    const referencia = `${data.livro.nome} ${data.capitulo}:${v.versiculo}`;
-    return `
-      <article class="verse" id="v-${v.versiculo}">
-        <span class="verse-number">${v.versiculo}</span>
-        <span>${esc(v.texto)}</span>
-        <span class="verse-actions">
-          <button class="small-share"
-            title="Compartilhar versículo"
-            onclick='compartilharTexto(${JSON.stringify(referencia)}, ${JSON.stringify(v.texto)})'>
-            ↗
-          </button>
-        </span>
-      </article>
-    `;
-  }).join('');
 
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+  const container =
+    document.getElementById(
+      'verses'
+    );
+
+
+  container.innerHTML =
+    '<div class="loading">' +
+    'Carregando capítulo...' +
+    '</div>';
+
+
+  try {
+
+    const dados =
+      await api({
+
+        action:
+          'capitulo',
+
+        livro:
+          livroAtual.livro,
+
+        cap:
+          capituloAtual
+
+      });
+
+
+    renderizarCapitulo(
+      dados
+    );
+
+
+  } catch (
+    erro
+  ) {
+
+    container.innerHTML =
+      `<div class="error">
+        ${esc(erro.message)}
+      </div>`;
+
+  }
+
 }
+
+
+/*
+ * ============================================================
+ * EXIBIR CAPÍTULO
+ * ============================================================
+ */
+
+function renderizarCapitulo(
+  dados
+) {
+
+  document
+    .getElementById(
+      'readerBreadcrumb'
+    )
+    .textContent =
+      `${
+        dados.livro.qual === 'NT'
+          ? 'Novo Testamento'
+          : 'Antigo Testamento'
+      } • ${
+        dados.livro.nome
+      }`;
+
+
+  document
+    .getElementById(
+      'readerTitle'
+    )
+    .textContent =
+      `${dados.livro.nome}
+       ${dados.capitulo}`;
+
+
+  document
+    .getElementById(
+      'chapterLabel'
+    )
+    .textContent =
+      `${dados.livro.nome}
+       • Capítulo
+       ${dados.capitulo}`;
+
+
+  if (
+    !dados.versiculos.length
+  ) {
+
+    document
+      .getElementById(
+        'verses'
+      )
+      .innerHTML =
+        '<div class="empty">' +
+        'Este capítulo não foi encontrado.' +
+        '</div>';
+
+    return;
+
+  }
+
+
+  document
+    .getElementById(
+      'verses'
+    )
+    .innerHTML =
+
+      dados.versiculos
+        .map(
+          verso => {
+
+            const referencia =
+              `${dados.livro.nome}
+               ${dados.capitulo}:
+               ${verso.versiculo}`;
+
+
+            return `
+
+              <article
+                class="verse"
+                id="v-${verso.versiculo}"
+              >
+
+                <span
+                  class="verse-number"
+                >
+                  ${verso.versiculo}
+                </span>
+
+
+                <span>
+                  ${esc(
+                    verso.texto
+                  )}
+                </span>
+
+
+                <span
+                  class="verse-actions"
+                >
+
+                  <button
+                    class="small-share"
+                    title="Compartilhar versículo"
+                    onclick='compartilharTexto(
+                      ${JSON.stringify(
+                        referencia
+                      )},
+                      ${JSON.stringify(
+                        verso.texto
+                      )}
+                    )'
+                  >
+                    ↗
+                  </button>
+
+                </span>
+
+              </article>
+
+            `;
+
+          }
+        )
+        .join('');
+
+
+  window.scrollTo({
+    top:
+      0,
+
+    behavior:
+      'smooth'
+  });
+
+}
+
+
+/*
+ * ============================================================
+ * CAPÍTULO ANTERIOR
+ * ============================================================
+ */
 
 function capituloAnterior() {
-  if (!livroAtual || capituloAtual <= 1) return;
+
+  if (
+    !livroAtual ||
+    capituloAtual <= 1
+  ) {
+
+    return;
+
+  }
+
+
   capituloAtual--;
+
   carregarCapitulo();
+
 }
+
+
+/*
+ * ============================================================
+ * PRÓXIMO CAPÍTULO
+ * ============================================================
+ */
 
 function proximoCapitulo() {
-  if (!livroAtual) return;
+
+  if (
+    !livroAtual
+  ) {
+
+    return;
+
+  }
+
+
   capituloAtual++;
+
   carregarCapitulo();
+
 }
+
+
+/*
+ * ============================================================
+ * TEXTO DO DIA
+ * ============================================================
+ */
 
 async function carregarDiario() {
+
   try {
-    ultimoDiario = await api({ action: 'diario' });
 
-    document.getElementById('dailyReference').textContent =
-      ultimoDiario.referencia;
+    ultimoDiario =
+      await api({
+        action:
+          'diario'
+      });
 
-    document.getElementById('dailyText').textContent =
-      ultimoDiario.texto;
-  } catch (err) {
-    document.getElementById('dailyReference').textContent = 'Texto do dia';
-    document.getElementById('dailyText').textContent = err.message;
+
+    document
+      .getElementById(
+        'dailyReference'
+      )
+      .textContent =
+        ultimoDiario.referencia;
+
+
+    document
+      .getElementById(
+        'dailyText'
+      )
+      .textContent =
+        ultimoDiario.texto;
+
+
+  } catch (
+    erro
+  ) {
+
+    document
+      .getElementById(
+        'dailyReference'
+      )
+      .textContent =
+        'Texto do dia';
+
+
+    document
+      .getElementById(
+        'dailyText'
+      )
+      .textContent =
+        erro.message;
+
   }
+
 }
+
+
+/*
+ * ============================================================
+ * ABRIR TEXTO DO DIA
+ * ============================================================
+ */
 
 function abrirDiario() {
-  if (!ultimoDiario) return;
 
-  const livro = livros.find(l =>
-    String(l.livro) === String(ultimoDiario.livro.livro)
-  );
+  if (
+    !ultimoDiario
+  ) {
 
-  if (livro) {
-    selecionarTestamento(livro.qual || 'AT');
-    selecionarLivro(livro).then(() => {
-      capituloAtual = Number(ultimoDiario.capitulo);
-      carregarCapitulo().then(() => {
-        setTimeout(() => {
-          const el = document.getElementById(
-            `v-${ultimoDiario.versiculo}`
-          );
-          if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 400);
-      });
-    });
-  }
-}
+    return;
 
-async function compartilharDiario() {
-  if (!ultimoDiario) return;
-
-  await compartilharTexto(
-    ultimoDiario.referencia,
-    ultimoDiario.texto
-  );
-}
-
-async function compartilharTexto(referencia, texto) {
-  const mensagem =
-    `${referencia}\n\n"${texto}"\n\nBíblia King James`;
-
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: referencia,
-        text: mensagem,
-        url: location.href
-      });
-      return;
-    } catch (e) {
-      // Cancelamento do usuário não precisa gerar erro.
-      if (e && e.name === 'AbortError') return;
-    }
   }
 
-  try {
-    await navigator.clipboard.writeText(mensagem);
-    mostrarStatus('Texto copiado. Agora você pode compartilhar onde quiser.');
-  } catch (e) {
-    mostrarStatus('Não foi possível copiar automaticamente.');
-  }
-}
 
-async function pesquisar() {
-  const q = document.getElementById('searchInput').value.trim();
-  const box = document.getElementById('searchResults');
+  const livro =
+    livros.find(
+      item =>
+        String(
+          item.livro
+        ) ===
+        String(
+          ultimoDiario.livro.livro
+        )
+    );
 
-  if (q.length < 2) {
-    mostrarStatus('Digite pelo menos 2 caracteres.');
+
+  if (!livro) {
     return;
   }
 
-  box.style.display = 'block';
-  box.innerHTML = '<div class="loading">Pesquisando...</div>';
 
-  try {
-    const data = await api({
-      action: 'buscar',
-      q: q,
-      limite: 50
-    });
+  selecionarTestamento(
+    livro.qual ||
+    'AT'
+  );
 
-    if (!data.resultados.length) {
-      box.innerHTML = '<div class="empty">Nenhum versículo encontrado.</div>';
+
+  selecionarLivro(
+    livro
+  ).then(
+    () => {
+
+      capituloAtual =
+        Number(
+          ultimoDiario.capitulo
+        );
+
+
+      carregarCapitulo()
+        .then(
+          () => {
+
+            setTimeout(
+              () => {
+
+                const elemento =
+                  document.getElementById(
+                    `v-${ultimoDiario.versiculo}`
+                  );
+
+
+                if (
+                  elemento
+                ) {
+
+                  elemento.scrollIntoView({
+                    behavior:
+                      'smooth',
+
+                    block:
+                      'center'
+                  });
+
+                }
+
+              },
+              400
+            );
+
+          }
+        );
+
+    }
+  );
+
+}
+
+
+/*
+ * ============================================================
+ * COMPARTILHAR TEXTO DO DIA
+ * ============================================================
+ */
+
+async function compartilharDiario() {
+
+  if (
+    !ultimoDiario
+  ) {
+
+    return;
+
+  }
+
+
+  await compartilharTexto(
+
+    ultimoDiario.referencia,
+
+    ultimoDiario.texto
+
+  );
+
+}
+
+
+/*
+ * ============================================================
+ * COMPARTILHAR VERSÍCULO
+ * ============================================================
+ */
+
+async function compartilharTexto(
+  referencia,
+  texto
+) {
+
+  const mensagem =
+
+    `${referencia}
+
+"${texto}"
+
+Bíblia King James`;
+
+
+  /*
+   * Compartilhamento nativo.
+   */
+  if (
+    navigator.share
+  ) {
+
+    try {
+
+      await navigator.share({
+
+        title:
+          referencia,
+
+        text:
+          mensagem,
+
+        url:
+          location.href
+
+      });
+
+
       return;
+
+    } catch (
+      erro
+    ) {
+
+      if (
+        erro &&
+        erro.name ===
+        'AbortError'
+      ) {
+
+        return;
+
+      }
+
     }
 
-    box.innerHTML = `
-      <div style="margin-bottom:10px;color:var(--muted)">
-        ${data.total} resultado(s) para <strong>${esc(data.consulta)}</strong>
+  }
+
+
+  /*
+   * Alternativa:
+   * copiar para área de transferência.
+   */
+  try {
+
+    await navigator.clipboard.writeText(
+      mensagem
+    );
+
+
+    mostrarStatus(
+      'Texto copiado. Agora você pode compartilhar onde quiser.'
+    );
+
+
+  } catch (
+    erro
+  ) {
+
+    mostrarStatus(
+      'Não foi possível copiar automaticamente.'
+    );
+
+  }
+
+}
+
+
+/*
+ * ============================================================
+ * PESQUISA
+ * ============================================================
+ */
+
+async function pesquisar() {
+
+  const campo =
+    document.getElementById(
+      'searchInput'
+    );
+
+
+  const consulta =
+    campo.value.trim();
+
+
+  const caixa =
+    document.getElementById(
+      'searchResults'
+    );
+
+
+  if (
+    consulta.length < 2
+  ) {
+
+    mostrarStatus(
+      'Digite pelo menos 2 caracteres.'
+    );
+
+    return;
+
+  }
+
+
+  caixa.style.display =
+    'block';
+
+
+  caixa.innerHTML =
+    '<div class="loading">' +
+    'Pesquisando...' +
+    '</div>';
+
+
+  try {
+
+    const dados =
+      await api({
+
+        action:
+          'buscar',
+
+        q:
+          consulta,
+
+        limite:
+          50
+
+      });
+
+
+    if (
+      !dados.resultados.length
+    ) {
+
+      caixa.innerHTML =
+        '<div class="empty">' +
+        'Nenhum versículo encontrado.' +
+        '</div>';
+
+      return;
+
+    }
+
+
+    caixa.innerHTML = `
+
+      <div
+        style="
+          margin-bottom:10px;
+          color:var(--muted)
+        "
+      >
+
+        ${
+          dados.total
+        }
+        resultado(s) para
+
+        <strong>
+          ${esc(
+            dados.consulta
+          )}
+        </strong>
+
       </div>
-      ${data.resultados.map(r => `
-        <div class="result"
-          onclick='abrirResultado(${JSON.stringify(r)})'>
-          <div class="result-ref">
-            ${esc(r.nome)} ${r.capitulo}:${r.versiculo}
-          </div>
-          <div>${esc(r.texto)}</div>
-        </div>
-      `).join('')}
+
+
+      ${
+        dados.resultados
+          .map(
+            resultado => `
+
+              <div
+                class="result"
+                onclick='abrirResultado(
+                  ${JSON.stringify(
+                    resultado
+                  )}
+                )'
+              >
+
+                <div class="result-ref">
+
+                  ${
+                    esc(
+                      resultado.nome
+                    )
+                  }
+
+                  ${
+                    resultado.capitulo
+                  }:${
+                    resultado.versiculo
+                  }
+
+                </div>
+
+
+                <div>
+
+                  ${
+                    esc(
+                      resultado.texto
+                    )
+                  }
+
+                </div>
+
+              </div>
+
+            `
+          )
+          .join('')
+      }
+
     `;
 
-    box.scrollIntoView({ behavior: 'smooth', block: 'start' });
 
-  } catch (err) {
-    box.innerHTML = `<div class="error">${esc(err.message)}</div>`;
-  }
-}
+    caixa.scrollIntoView({
+      behavior:
+        'smooth',
 
-function abrirResultado(r) {
-  const livro = livros.find(l => String(l.livro) === String(r.livro));
-  if (!livro) return;
-
-  selecionarTestamento(livro.qual || 'AT');
-
-  selecionarLivro(livro).then(() => {
-    capituloAtual = Number(r.capitulo);
-    carregarCapitulo().then(() => {
-      setTimeout(() => {
-        const el = document.getElementById(`v-${r.versiculo}`);
-        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
-      }, 350);
+      block:
+        'start'
     });
-  });
+
+
+  } catch (
+    erro
+  ) {
+
+    caixa.innerHTML =
+      `<div class="error">
+        ${esc(
+          erro.message
+        )}
+      </div>`;
+
+  }
+
 }
 
-function mostrarStatus(texto) {
-  const el = document.getElementById('status');
-  el.textContent = texto;
-  el.classList.add('show');
 
-  clearTimeout(window.statusTimer);
-  window.statusTimer = setTimeout(() => {
-    el.classList.remove('show');
-  }, 3000);
+/*
+ * ============================================================
+ * ABRIR RESULTADO
+ * ============================================================
+ */
+
+function abrirResultado(
+  resultado
+) {
+
+  const livro =
+    livros.find(
+      item =>
+        String(
+          item.livro
+        ) ===
+        String(
+          resultado.livro
+        )
+    );
+
+
+  if (!livro) {
+    return;
+  }
+
+
+  selecionarTestamento(
+    livro.qual ||
+    'AT'
+  );
+
+
+  selecionarLivro(
+    livro
+  ).then(
+    () => {
+
+      capituloAtual =
+        Number(
+          resultado.capitulo
+        );
+
+
+      carregarCapitulo()
+        .then(
+          () => {
+
+            setTimeout(
+              () => {
+
+                const elemento =
+                  document.getElementById(
+                    `v-${resultado.versiculo}`
+                  );
+
+
+                if (
+                  elemento
+                ) {
+
+                  elemento.scrollIntoView({
+                    behavior:
+                      'smooth',
+
+                    block:
+                      'center'
+                  });
+
+                }
+
+              },
+              350
+            );
+
+          }
+        );
+
+    }
+  );
+
 }
 
-function normalizar(v) {
-  return String(v || '')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toUpperCase()
-    .trim();
+
+/*
+ * ============================================================
+ * MENSAGEM
+ * ============================================================
+ */
+
+function mostrarStatus(
+  mensagem
+) {
+
+  const elemento =
+    document.getElementById(
+      'status'
+    );
+
+
+  elemento.textContent =
+    mensagem;
+
+
+  elemento.classList.add(
+    'show'
+  );
+
+
+  clearTimeout(
+    window.statusTimer
+  );
+
+
+  window.statusTimer =
+    setTimeout(
+      () => {
+
+        elemento.classList.remove(
+          'show'
+        );
+
+      },
+      3000
+    );
+
 }
 
-function esc(v) {
-  return String(v ?? '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+
+/*
+ * ============================================================
+ * NORMALIZAR
+ * ============================================================
+ */
+
+function normalizar(
+  valor
+) {
+
+  return String(
+    valor || ''
+  )
+  .normalize('NFD')
+  .replace(
+    /[\u0300-\u036f]/g,
+    ''
+  )
+  .toUpperCase()
+  .trim();
+
 }
+
+
+/*
+ * ============================================================
+ * PROTEGER HTML
+ * ============================================================
+ */
+
+function esc(
+  valor
+) {
+
+  return String(
+    valor ?? ''
+  )
+
+  .replace(
+    /&/g,
+    '&amp;'
+  )
+
+  .replace(
+    /</g,
+    '&lt;'
+  )
+
+  .replace(
+    />/g,
+    '&gt;'
+  )
+
+  .replace(
+    /"/g,
+    '&quot;'
+  )
+
+  .replace(
+    /'/g,
+    '&#039;'
+  );
+
+}
+
 </script>
 
 </body>
+
 </html>
