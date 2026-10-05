@@ -22,8 +22,6 @@
 
 <title>Bíblia King James</title>
 
-<!-- API JSONP compatível com GitHub Pages + Google Apps Script -->
-
 
 <style>
 
@@ -46,6 +44,8 @@
   --accentDark: #684421;
 
   --dark: #151515;
+  --dark2: #242424;
+
   --white: #ffffff;
 
   --shadow:
@@ -72,7 +72,13 @@ body {
 
   margin: 0;
 
-  background: var(--bg);
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(139, 94, 52, .07),
+      transparent 35%
+    ),
+    var(--bg);
 
   color: var(--text);
 
@@ -108,12 +114,16 @@ button {
   z-index: 100;
 
   background:
-    rgba(21, 21, 21, .97);
+    linear-gradient(
+      135deg,
+      #111111,
+      #1d1915
+    );
 
   color: white;
 
   box-shadow:
-    0 4px 18px rgba(0, 0, 0, .18);
+    0 4px 22px rgba(0, 0, 0, .20);
 
 }
 
@@ -124,7 +134,7 @@ button {
 
   margin: auto;
 
-  min-height: 70px;
+  min-height: 72px;
 
   padding: 12px 18px;
 
@@ -152,9 +162,9 @@ button {
 
 .brand-icon {
 
-  width: 42px;
+  width: 44px;
 
-  height: 42px;
+  height: 44px;
 
   display: grid;
 
@@ -164,9 +174,19 @@ button {
     1px solid
     rgba(255, 255, 255, .25);
 
-  border-radius: 10px;
+  border-radius: 13px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #9d7044,
+      #694522
+    );
 
   font-size: 21px;
+
+  box-shadow:
+    0 5px 16px rgba(0, 0, 0, .22);
 
 }
 
@@ -203,7 +223,20 @@ button {
 
   display: flex;
 
-  gap: 8px;
+  gap: 7px;
+
+  min-width: 0;
+
+}
+
+
+.search-input-wrapper {
+
+  position: relative;
+
+  flex: 1;
+
+  min-width: 0;
 
 }
 
@@ -214,24 +247,79 @@ button {
 
   border:
     1px solid
-    #444;
+    #454545;
 
-  background: #242424;
+  background:
+    rgba(255,255,255,.07);
 
   color: white;
 
-  border-radius: 10px;
+  border-radius: 11px;
 
-  padding: 12px 14px;
+  padding: 12px 42px 12px 14px;
 
   outline: none;
 
+  transition: .2s;
+
+}
+
+
+.search input::placeholder {
+  color: #aaa39a;
 }
 
 
 .search input:focus {
 
   border-color: #b58a60;
+
+  background:
+    rgba(255,255,255,.11);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(181,138,96,.12);
+
+}
+
+
+.clear-search {
+
+  position: absolute;
+
+  right: 8px;
+
+  top: 50%;
+
+  transform:
+    translateY(-50%);
+
+  width: 28px;
+
+  height: 28px;
+
+  border: 0;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  color: #aaa39a;
+
+  font-size: 17px;
+
+  display: none;
+
+}
+
+
+.clear-search:hover {
+
+  background:
+    rgba(255,255,255,.10);
+
+  color: white;
 
 }
 
@@ -252,7 +340,12 @@ button {
 
   color: white;
 
-  transition: .2s;
+  transition:
+    background .2s,
+    transform .2s,
+    box-shadow .2s;
+
+  white-space: nowrap;
 
 }
 
@@ -260,6 +353,11 @@ button {
 .btn:hover {
 
   background: var(--accentDark);
+
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 12px rgba(0,0,0,.12);
 
 }
 
@@ -276,6 +374,26 @@ button {
 .btn.secondary:hover {
 
   background: #e2d9ca;
+
+}
+
+
+.btn.outline {
+
+  background: transparent;
+
+  color: #ddd;
+
+  border:
+    1px solid
+    #555;
+
+}
+
+
+.btn.outline:hover {
+
+  background: #292929;
 
 }
 
@@ -334,9 +452,20 @@ button {
 
   font-weight: bold;
 
-  margin-bottom: 12px;
+  margin-bottom: 4px;
 
   font-size: 16px;
+
+}
+
+
+.sidebar-subtitle {
+
+  color: var(--muted);
+
+  font-size: 12px;
+
+  margin-bottom: 12px;
 
 }
 
@@ -368,6 +497,16 @@ button {
 
   border-radius: 8px;
 
+  transition: .2s;
+
+}
+
+
+.tab:hover {
+
+  border-color:
+    var(--accent);
+
 }
 
 
@@ -378,6 +517,10 @@ button {
   color: white;
 
   border-color: var(--accent);
+
+  box-shadow:
+    0 4px 10px
+    rgba(139,94,52,.20);
 
 }
 
@@ -391,6 +534,23 @@ button {
   max-height: 62vh;
 
   overflow: auto;
+
+  padding-right: 3px;
+
+}
+
+
+#bookList::-webkit-scrollbar {
+  width: 6px;
+}
+
+
+#bookList::-webkit-scrollbar-thumb {
+
+  background:
+    #d0c6b7;
+
+  border-radius: 10px;
 
 }
 
@@ -411,17 +571,55 @@ button {
 
   color: var(--text);
 
+  position: relative;
+
+  transition: .2s;
+
 }
 
 
-.book:hover,
+.book:hover {
+
+  background: #f2ece2;
+
+  color: var(--accentDark);
+
+}
+
+
 .book.active {
 
-  background: #eee6da;
+  background:
+    linear-gradient(
+      90deg,
+      #eee4d5,
+      #f8f3eb
+    );
 
   color: var(--accentDark);
 
   font-weight: bold;
+
+}
+
+
+.book.active::before {
+
+  content: "";
+
+  position: absolute;
+
+  left: 0;
+
+  top: 7px;
+
+  bottom: 7px;
+
+  width: 3px;
+
+  border-radius: 4px;
+
+  background: var(--accent);
 
 }
 
@@ -443,6 +641,10 @@ button {
 
 .daily {
 
+  position: relative;
+
+  overflow: hidden;
+
   background:
     linear-gradient(
       135deg,
@@ -454,11 +656,35 @@ button {
 
   border-radius: 18px;
 
-  padding: 25px;
+  padding: 27px;
 
   margin-bottom: 22px;
 
   box-shadow: var(--shadow);
+
+}
+
+
+.daily::before {
+
+  content: "“";
+
+  position: absolute;
+
+  right: 22px;
+
+  top: -25px;
+
+  font-family: Georgia, serif;
+
+  font-size: 150px;
+
+  line-height: 1;
+
+  color:
+    rgba(255,255,255,.055);
+
+  pointer-events: none;
 
 }
 
@@ -484,6 +710,8 @@ button {
 
   font-size: 25px;
 
+  position: relative;
+
 }
 
 
@@ -495,6 +723,10 @@ button {
 
   margin: 0 0 18px;
 
+  position: relative;
+
+  max-width: 900px;
+
 }
 
 
@@ -505,6 +737,83 @@ button {
   gap: 8px;
 
   flex-wrap: wrap;
+
+  position: relative;
+
+}
+
+
+/* ============================================================
+   RESULTADOS
+   ============================================================ */
+
+.search-results {
+
+  margin-top: 20px;
+
+  display: none;
+
+}
+
+
+.search-results-header {
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: space-between;
+
+  gap: 10px;
+
+  margin-bottom: 10px;
+
+  color: var(--muted);
+
+  font-size: 14px;
+
+}
+
+
+.result {
+
+  background: var(--surface);
+
+  border:
+    1px solid
+    var(--line);
+
+  border-radius: 12px;
+
+  padding: 15px;
+
+  margin-bottom: 10px;
+
+  cursor: pointer;
+
+  transition: .2s;
+
+}
+
+
+.result:hover {
+
+  border-color: #bda98f;
+
+  background: #fffaf2;
+
+  transform: translateY(-1px);
+
+}
+
+
+.result-ref {
+
+  color: var(--accent);
+
+  font-weight: bold;
+
+  margin-bottom: 5px;
 
 }
 
@@ -537,6 +846,27 @@ button {
   border-bottom:
     1px solid
     var(--line);
+
+  position: relative;
+
+}
+
+
+.reader-head::after {
+
+  content: "";
+
+  display: block;
+
+  width: 60px;
+
+  height: 3px;
+
+  border-radius: 5px;
+
+  background: var(--accent);
+
+  margin-top: 13px;
 
 }
 
@@ -588,6 +918,8 @@ button {
 
   text-align: center;
 
+  color: var(--accentDark);
+
 }
 
 
@@ -602,13 +934,17 @@ button {
 
   position: relative;
 
-  padding: 8px 8px 8px 53px;
+  padding: 9px 8px 9px 53px;
 
   border-radius: 9px;
 
   line-height: 1.85;
 
   font-size: 19px;
+
+  transition:
+    background .2s,
+    transform .2s;
 
 }
 
@@ -626,7 +962,7 @@ button {
 
   left: 8px;
 
-  top: 10px;
+  top: 12px;
 
   width: 35px;
 
@@ -686,58 +1022,6 @@ button {
 
 
 /* ============================================================
-   PESQUISA
-   ============================================================ */
-
-.search-results {
-
-  margin-top: 20px;
-
-  display: none;
-
-}
-
-
-.result {
-
-  background: var(--surface);
-
-  border:
-    1px solid
-    var(--line);
-
-  border-radius: 12px;
-
-  padding: 15px;
-
-  margin-bottom: 10px;
-
-  cursor: pointer;
-
-}
-
-
-.result:hover {
-
-  border-color: #bda98f;
-
-  background: #fffaf2;
-
-}
-
-
-.result-ref {
-
-  color: var(--accent);
-
-  font-weight: bold;
-
-  margin-bottom: 5px;
-
-}
-
-
-/* ============================================================
    ESTADOS
    ============================================================ */
 
@@ -756,7 +1040,8 @@ button {
 
 .loading {
 
-  animation: pulse 1.2s infinite;
+  animation:
+    pulse 1.2s infinite;
 
 }
 
@@ -928,6 +1213,44 @@ button {
   }
 
 
+  .brand-icon {
+
+    width: 40px;
+
+    height: 40px;
+
+  }
+
+
+  .brand strong {
+
+    font-size: 17px;
+
+  }
+
+
+  .brand small {
+
+    font-size: 11px;
+
+  }
+
+
+  .search {
+
+    gap: 5px;
+
+  }
+
+
+  .search .btn {
+
+    padding:
+      9px 10px;
+
+  }
+
+
   .layout {
 
     padding:
@@ -941,6 +1264,13 @@ button {
   .daily {
 
     padding: 19px;
+
+  }
+
+
+  .daily p {
+
+    font-size: 17px;
 
   }
 
@@ -1033,14 +1363,33 @@ button {
 
     <div class="search">
 
-      <input
-        id="searchInput"
-        type="search"
-        placeholder="Pesquisar uma palavra ou expressão..."
-      >
+      <div class="search-input-wrapper">
+
+        <input
+          id="searchInput"
+          type="search"
+          autocomplete="off"
+          placeholder="Pesquisar uma palavra ou expressão..."
+          aria-label="Pesquisar na Bíblia"
+        >
+
+        <button
+          id="clearSearch"
+          class="clear-search"
+          type="button"
+          title="Limpar pesquisa"
+          aria-label="Limpar pesquisa"
+          onclick="limparPesquisa()"
+        >
+          ×
+        </button>
+
+      </div>
+
 
       <button
         class="btn"
+        type="button"
         onclick="pesquisar()"
       >
         Pesquisar
@@ -1072,11 +1421,17 @@ button {
     </div>
 
 
+    <div class="sidebar-subtitle">
+      Escolha um livro para iniciar a leitura
+    </div>
+
+
     <div class="testament-tabs">
 
       <button
         id="tabAT"
         class="tab active"
+        type="button"
         onclick="selecionarTestamento('AT')"
       >
         Antigo
@@ -1086,6 +1441,7 @@ button {
       <button
         id="tabNT"
         class="tab"
+        type="button"
         onclick="selecionarTestamento('NT')"
       >
         Novo
@@ -1119,7 +1475,7 @@ button {
     <section class="daily">
 
       <div class="daily-label">
-        Texto do dia
+        ✦ Palavra para hoje
       </div>
 
 
@@ -1137,6 +1493,7 @@ button {
 
         <button
           class="btn"
+          type="button"
           onclick="compartilharDiario()"
         >
           ↗ Compartilhar
@@ -1145,6 +1502,7 @@ button {
 
         <button
           class="btn"
+          type="button"
           onclick="abrirDiario()"
         >
           Ler versículo
@@ -1197,6 +1555,7 @@ button {
 
         <button
           class="btn secondary"
+          type="button"
           onclick="capituloAnterior()"
         >
           ← Anterior
@@ -1213,6 +1572,7 @@ button {
 
         <button
           class="btn secondary"
+          type="button"
           onclick="proximoCapitulo()"
         >
           Próximo →
@@ -1259,6 +1619,28 @@ button {
 const API_URL =
   'https://script.google.com/macros/s/AKfycbyACS3Hi-BjcYFvCA1j8FzjMcEdc26-j2jc557fhdCmvHNz3qdhdRvXhTxVn9yAnxwm1w/exec';
 
+
+/*
+ * Tempo máximo de cada chamada.
+ *
+ * 12 segundos é suficiente para a maioria das respostas
+ * do Google Apps Script, sem deixar a página presa por muito
+ * tempo quando a API realmente estiver indisponível.
+ */
+
+const API_TIMEOUT = 12000;
+
+
+/*
+ * Número máximo de tentativas.
+ *
+ * Uma segunda tentativa ajuda quando o Google Apps Script
+ * está acordando ou passando por uma pequena demora.
+ */
+
+const API_TENTATIVAS = 2;
+
+
 /* ============================================================
    VARIÁVEIS
    ============================================================ */
@@ -1280,7 +1662,7 @@ let ultimoDiario = null;
 
 document.addEventListener(
   'DOMContentLoaded',
-  async () => {
+  function() {
 
     const campo =
       document.getElementById(
@@ -1288,169 +1670,428 @@ document.addEventListener(
       );
 
 
-    campo.addEventListener(
-      'keydown',
-      evento => {
+    if (campo) {
 
-        if (
-          evento.key === 'Enter'
-        ) {
+      campo.addEventListener(
+        'keydown',
+        function(evento) {
 
-          pesquisar();
+          if (
+            evento.key === 'Enter'
+          ) {
+
+            evento.preventDefault();
+
+            pesquisar();
+
+          }
 
         }
-
-      }
-    );
+      );
 
 
-    await Promise.allSettled([
+      campo.addEventListener(
+        'input',
+        function() {
 
-      carregarLivros(),
+          atualizarBotaoLimpar();
 
-      carregarDiario()
+        }
+      );
 
-    ]);
+    }
+
+
+    /*
+     * Não utilizamos Promise.all aqui.
+     *
+     * Cada carregamento pode terminar independentemente.
+     * Isso evita que uma chamada lenta prejudique a outra.
+     */
+
+    carregarLivros();
+
+    carregarDiario();
 
   }
 );
 
 
 /* ============================================================
-   API
+   API JSONP
    ============================================================ */
 
-function api(parametros) {
+function api(parametros, tentativa) {
 
-  return new Promise(function(resolve, reject) {
-
-    if (!API_URL) {
-
-      reject(new Error(
-        'URL da API do Google Apps Script não configurada.'
-      ));
-
-      return;
-
-    }
+  tentativa =
+    Number.isFinite(tentativa)
+      ? tentativa
+      : 1;
 
 
-    const callback =
-      'kjsApi_' +
-      Date.now() + '_' +
-      Math.random()
-        .toString(36)
-        .slice(2);
+  return new Promise(
+    function(resolve, reject) {
+
+      if (!API_URL) {
+
+        reject(
+          new Error(
+            'URL da API do Google Apps Script não configurada.'
+          )
+        );
+
+        return;
+
+      }
 
 
-    const params =
-      new URLSearchParams(
+      /*
+       * Nome único para cada callback.
+       */
+
+      const callback =
+        'kjsApi_' +
+        Date.now() +
+        '_' +
+        Math.random()
+          .toString(36)
+          .substring(2, 10);
+
+
+      /*
+       * Copia os parâmetros.
+       */
+
+      const params =
+        new URLSearchParams();
+
+
+      Object.keys(
         parametros || {}
+      ).forEach(
+        function(chave) {
+
+          const valor =
+            parametros[chave];
+
+          if (
+            valor !== undefined &&
+            valor !== null
+          ) {
+
+            params.set(
+              chave,
+              String(valor)
+            );
+
+          }
+
+        }
       );
 
-    params.set(
-      'callback',
-      callback
-    );
+
+      /*
+       * Callback utilizado pelo Google Apps Script.
+       */
+
+      params.set(
+        'callback',
+        callback
+      );
 
 
-    const script =
-      document.createElement('script');
+      /*
+       * Parâmetro para evitar cache.
+       */
 
-    let finalizado = false;
-
-    const timeout =
-      setTimeout(function() {
-
-        finalizar();
-
-        reject(new Error(
-          'Tempo esgotado ao comunicar com o Google Apps Script.'
-        ));
-
-      }, 15000);
+      params.set(
+        '_',
+        String(
+          Date.now()
+        )
+      );
 
 
-    function finalizar() {
+      const script =
+        document.createElement(
+          'script'
+        );
 
-      if (finalizado) {
-        return;
+
+      script.async = true;
+
+      script.type =
+        'text/javascript';
+
+
+      let finalizado = false;
+
+      let timeoutId = null;
+
+
+      function limpar() {
+
+        if (timeoutId) {
+
+          clearTimeout(
+            timeoutId
+          );
+
+          timeoutId = null;
+
+        }
+
+
+        try {
+
+          delete window[callback];
+
+        } catch (erro) {
+
+          window[callback] =
+            undefined;
+
+        }
+
+
+        if (
+          script &&
+          script.parentNode
+        ) {
+
+          script.parentNode.removeChild(
+            script
+          );
+
+        }
+
       }
 
-      finalizado = true;
 
-      clearTimeout(timeout);
+      function finalizar() {
 
-      script.remove();
+        if (finalizado) {
+          return false;
+        }
 
-      try {
-        delete window[callback];
-      } catch (erro) {
-        window[callback] = undefined;
+        finalizado = true;
+
+        limpar();
+
+        return true;
+
       }
+
+
+      /*
+       * CALLBACK DO GOOGLE APPS SCRIPT
+       */
+
+      window[callback] =
+        function(dados) {
+
+          if (finalizado) {
+            return;
+          }
+
+
+          finalizar();
+
+
+          /*
+           * Verificação do retorno.
+           */
+
+          if (
+            dados === undefined ||
+            dados === null
+          ) {
+
+            reject(
+              new Error(
+                'O Google Apps Script não retornou dados.'
+              )
+            );
+
+            return;
+
+          }
+
+
+          if (
+            typeof dados !== 'object'
+          ) {
+
+            reject(
+              new Error(
+                'Resposta inválida recebida do Google Apps Script.'
+              )
+            );
+
+            return;
+
+          }
+
+
+          if (
+            dados.sucesso === false ||
+            dados.ok === false
+          ) {
+
+            reject(
+              new Error(
+                dados.erro ||
+                dados.mensagem ||
+                'Erro retornado pelo Google Apps Script.'
+              )
+            );
+
+            return;
+
+          }
+
+
+          resolve(dados);
+
+        };
+
+
+      /*
+       * ERRO DE CARREGAMENTO DO SCRIPT
+       */
+
+      script.onerror =
+        function() {
+
+          if (finalizado) {
+            return;
+          }
+
+
+          finalizar();
+
+
+          /*
+           * Faz nova tentativa.
+           */
+
+          if (
+            tentativa <
+            API_TENTATIVAS
+          ) {
+
+            setTimeout(
+              function() {
+
+                api(
+                  parametros,
+                  tentativa + 1
+                )
+                .then(resolve)
+                .catch(reject);
+
+              },
+              800
+            );
+
+            return;
+
+          }
+
+
+          reject(
+            new Error(
+              'Não foi possível acessar o Google Apps Script.'
+            )
+          );
+
+        };
+
+
+      /*
+       * TIMEOUT
+       */
+
+      timeoutId =
+        setTimeout(
+          function() {
+
+            if (finalizado) {
+              return;
+            }
+
+
+            finalizar();
+
+
+            /*
+             * Segunda tentativa automática.
+             */
+
+            if (
+              tentativa <
+              API_TENTATIVAS
+            ) {
+
+              setTimeout(
+                function() {
+
+                  api(
+                    parametros,
+                    tentativa + 1
+                  )
+                  .then(resolve)
+                  .catch(reject);
+
+                },
+                800
+              );
+
+              return;
+
+            }
+
+
+            reject(
+              new Error(
+                'Tempo esgotado ao comunicar com o Google Apps Script.'
+              )
+            );
+
+          },
+          API_TIMEOUT
+        );
+
+
+      /*
+       * MONTA A URL FINAL
+       */
+
+      script.src =
+        API_URL +
+        (
+          API_URL.indexOf('?') >= 0
+            ? '&'
+            : '?'
+        ) +
+        params.toString();
+
+
+      /*
+       * Adiciona somente depois de todos
+       * os eventos estarem preparados.
+       */
+
+      document
+        .head
+        .appendChild(
+          script
+        );
 
     }
-
-
-    window[callback] =
-      function(dados) {
-
-        if (finalizado) {
-          return;
-        }
-
-        finalizar();
-
-        dados = dados || {};
-
-        if (dados.sucesso === false || dados.ok === false) {
-
-          reject(new Error(
-            dados.erro ||
-            'Erro retornado pela API.'
-          ));
-
-          return;
-
-        }
-
-        resolve(dados);
-
-      };
-
-
-    script.async = true;
-
-    script.src =
-      API_URL +
-      '?' +
-      params.toString();
-
-
-    script.onerror =
-      function() {
-
-        if (finalizado) {
-          return;
-        }
-
-        finalizar();
-
-        reject(new Error(
-          'Não foi possível comunicar com o Google Apps Script.'
-        ));
-
-      };
-
-
-    document.body.appendChild(
-      script
-    );
-
-  });
+  );
 
 }
-
 
 
 /* ============================================================
@@ -1479,32 +2120,62 @@ async function carregarLivros() {
       });
 
 
-    livros =
+    /*
+     * Compatibilidade com diferentes nomes
+     * que o Apps Script pode utilizar.
+     */
+
+    const listaRecebida =
       Array.isArray(
         dados.livros
       )
-        ? dados.livros.map(function(livro) {
-            const codigo =
-              livro.livro ||
-              livro.codigo ||
-              '';
+        ? dados.livros
+        : (
+            Array.isArray(
+              dados.dados
+            )
+              ? dados.dados
+              : []
+          );
 
-            const nome =
-              livro.nome ||
-              livro.nomeLivro ||
-              codigo;
 
-            return Object.assign(
-              {},
-              livro,
-              {
-                livro: String(codigo),
-                codigo: String(codigo),
-                nome: String(nome)
-              }
-            );
-          })
-        : [];
+    livros =
+      listaRecebida.map(
+        function(livro) {
+
+          const codigo =
+            livro.livro ||
+            livro.codigo ||
+            livro.id ||
+            '';
+
+
+          const nome =
+            livro.nome ||
+            livro.nomeLivro ||
+            livro.titulo ||
+            codigo;
+
+
+          return Object.assign(
+            {},
+            livro,
+            {
+
+              livro:
+                String(codigo),
+
+              codigo:
+                String(codigo),
+
+              nome:
+                String(nome)
+
+            }
+          );
+
+        }
+      );
 
 
     if (!livros.length) {
@@ -1521,10 +2192,16 @@ async function carregarLivros() {
 
     const primeiro =
       livros.find(
-        livro =>
-          normalizar(
-            livro.qual
-          ) === 'AT'
+        function(livro) {
+
+          return (
+            normalizar(
+              livro.qual
+            ) ===
+            'AT'
+          );
+
+        }
       ) ||
       livros[0];
 
@@ -1540,9 +2217,11 @@ async function carregarLivros() {
   } catch (erro) {
 
     container.innerHTML =
-      `<div class="error">
-        ${esc(erro.message)}
-      </div>`;
+      '<div class="error">' +
+      esc(
+        erro.message
+      ) +
+      '</div>';
 
 
     mostrarStatus(
@@ -1565,23 +2244,40 @@ function selecionarTestamento(
   testamentoAtual =
     String(
       qual || 'AT'
-    ).toUpperCase();
+    )
+    .toUpperCase();
 
 
-  document
-    .getElementById('tabAT')
-    .classList.toggle(
+  const tabAT =
+    document.getElementById(
+      'tabAT'
+    );
+
+
+  const tabNT =
+    document.getElementById(
+      'tabNT'
+    );
+
+
+  if (tabAT) {
+
+    tabAT.classList.toggle(
       'active',
       testamentoAtual === 'AT'
     );
 
+  }
 
-  document
-    .getElementById('tabNT')
-    .classList.toggle(
+
+  if (tabNT) {
+
+    tabNT.classList.toggle(
       'active',
       testamentoAtual === 'NT'
     );
+
+  }
 
 
   renderizarLivros();
@@ -1603,13 +2299,18 @@ function renderizarLivros() {
 
   const lista =
     livros.filter(
-      livro =>
-        normalizar(
-          livro.qual
-        ) ===
-        normalizar(
-          testamentoAtual
-        )
+      function(livro) {
+
+        return (
+          normalizar(
+            livro.qual
+          ) ===
+          normalizar(
+            testamentoAtual
+          )
+        );
+
+      }
     );
 
 
@@ -1628,7 +2329,7 @@ function renderizarLivros() {
   container.innerHTML =
     lista
       .map(
-        livro => {
+        function(livro) {
 
           const ativo =
             livroAtual &&
@@ -1643,6 +2344,7 @@ function renderizarLivros() {
           return `
 
             <button
+              type="button"
               class="book ${ativo ? 'active' : ''}"
               data-livro="${esc(livro.livro)}"
             >
@@ -1657,13 +2359,15 @@ function renderizarLivros() {
 
 
   container
-    .querySelectorAll('.book')
+    .querySelectorAll(
+      '.book'
+    )
     .forEach(
-      botao => {
+      function(botao) {
 
         botao.addEventListener(
           'click',
-          () => {
+          function() {
 
             const codigo =
               botao.dataset.livro;
@@ -1671,13 +2375,18 @@ function renderizarLivros() {
 
             const livro =
               livros.find(
-                item =>
-                  String(
-                    item.livro
-                  ) ===
-                  String(
-                    codigo
-                  )
+                function(item) {
+
+                  return (
+                    String(
+                      item.livro
+                    ) ===
+                    String(
+                      codigo
+                    )
+                  );
+
+                }
               );
 
 
@@ -1770,6 +2479,18 @@ async function carregarCapitulo() {
       });
 
 
+    if (
+      !dados ||
+      !dados.livro
+    ) {
+
+      throw new Error(
+        'Resposta inválida ao carregar o capítulo.'
+      );
+
+    }
+
+
     renderizarCapitulo(
       dados
     );
@@ -1777,9 +2498,16 @@ async function carregarCapitulo() {
   } catch (erro) {
 
     container.innerHTML =
-      `<div class="error">
-        ${esc(erro.message)}
-      </div>`;
+      '<div class="error">' +
+      esc(
+        erro.message
+      ) +
+      '</div>';
+
+
+    mostrarStatus(
+      erro.message
+    );
 
   }
 
@@ -1794,16 +2522,34 @@ function renderizarCapitulo(
   dados
 ) {
 
+  const livroDados =
+    dados.livro ||
+    {};
+
+
+  const nomeLivro =
+    livroDados.nome ||
+    livroAtual.nome ||
+    'Bíblia';
+
+
+  const qual =
+    normalizar(
+      livroDados.qual ||
+      livroAtual.qual
+    );
+
+
   document
     .getElementById(
       'readerBreadcrumb'
     )
     .textContent =
       `${
-        dados.livro.qual === 'NT'
+        qual === 'NT'
           ? 'Novo Testamento'
           : 'Antigo Testamento'
-      } • ${dados.livro.nome}`;
+      } • ${nomeLivro}`;
 
 
   document
@@ -1811,7 +2557,7 @@ function renderizarCapitulo(
       'readerTitle'
     )
     .textContent =
-      `${dados.livro.nome} ${dados.capitulo}`;
+      `${nomeLivro} ${dados.capitulo}`;
 
 
   document
@@ -1819,7 +2565,7 @@ function renderizarCapitulo(
       'chapterLabel'
     )
     .textContent =
-      `${dados.livro.nome} • Capítulo ${dados.capitulo}`;
+      `${nomeLivro} • Capítulo ${dados.capitulo}`;
 
 
   const versiculos =
@@ -1854,17 +2600,17 @@ function renderizarCapitulo(
 
       versiculos
         .map(
-          verso => {
+          function(verso) {
 
             const referencia =
-              `${dados.livro.nome} ${dados.capitulo}:${verso.versiculo}`;
+              `${nomeLivro} ${dados.capitulo}:${verso.versiculo}`;
 
 
             return `
 
               <article
                 class="verse"
-                id="v-${verso.versiculo}"
+                id="v-${esc(verso.versiculo)}"
               >
 
                 <span class="verse-number">
@@ -1880,8 +2626,10 @@ function renderizarCapitulo(
                 <span class="verse-actions">
 
                   <button
+                    type="button"
                     class="small-share"
                     title="Compartilhar versículo"
+                    aria-label="Compartilhar versículo"
                     onclick='compartilharTexto(
                       ${JSON.stringify(referencia)},
                       ${JSON.stringify(verso.texto)}
@@ -1902,8 +2650,11 @@ function renderizarCapitulo(
 
 
   window.scrollTo({
+
     top: 0,
+
     behavior: 'smooth'
+
   });
 
 }
@@ -1968,12 +2719,22 @@ async function carregarDiario() {
       });
 
 
+    if (!ultimoDiario) {
+
+      throw new Error(
+        'O Google Apps Script não retornou o texto diário.'
+      );
+
+    }
+
+
     document
       .getElementById(
         'dailyReference'
       )
       .textContent =
-        ultimoDiario.referencia;
+        ultimoDiario.referencia ||
+        'Texto do dia';
 
 
     document
@@ -1981,7 +2742,8 @@ async function carregarDiario() {
         'dailyText'
       )
       .textContent =
-        ultimoDiario.texto;
+        ultimoDiario.texto ||
+        'Nenhum texto disponível.';
 
   } catch (erro) {
 
@@ -2012,7 +2774,13 @@ async function carregarDiario() {
 async function abrirDiario() {
 
   if (!ultimoDiario) {
+
+    mostrarStatus(
+      'O texto diário ainda está sendo carregado.'
+    );
+
     return;
+
   }
 
 
@@ -2023,13 +2791,18 @@ async function abrirDiario() {
 
   const livro =
     livros.find(
-      item =>
-        String(
-          item.livro
-        ) ===
-        String(
-          codigoLivro
-        )
+      function(item) {
+
+        return (
+          String(
+            item.livro
+          ) ===
+          String(
+            codigoLivro
+          )
+        );
+
+      }
     );
 
 
@@ -2066,7 +2839,7 @@ async function abrirDiario() {
 
 
   setTimeout(
-    () => {
+    function() {
 
       const elemento =
         document.getElementById(
@@ -2077,8 +2850,11 @@ async function abrirDiario() {
       if (elemento) {
 
         elemento.scrollIntoView({
+
           behavior: 'smooth',
+
           block: 'center'
+
         });
 
       }
@@ -2097,7 +2873,13 @@ async function abrirDiario() {
 async function compartilharDiario() {
 
   if (!ultimoDiario) {
+
+    mostrarStatus(
+      'O texto diário ainda está carregando.'
+    );
+
     return;
+
   }
 
 
@@ -2189,6 +2971,12 @@ Bíblia King James`;
       area.value =
         mensagem;
 
+      area.style.position =
+        'fixed';
+
+      area.style.opacity =
+        '0';
+
       document.body.appendChild(
         area
       );
@@ -2260,7 +3048,7 @@ async function pesquisar() {
 
   caixa.innerHTML =
     '<div class="loading">' +
-    'Pesquisando...' +
+    'Pesquisando na Bíblia...' +
     '</div>';
 
 
@@ -2303,52 +3091,70 @@ async function pesquisar() {
 
     caixa.innerHTML = `
 
-      <div
-        style="
-          margin-bottom:10px;
-          color:var(--muted)
-        "
-      >
+      <div class="search-results-header">
 
-        ${esc(dados.total)}
-        resultado(s) para
+        <span>
 
-        <strong>
-          ${esc(dados.consulta)}
-        </strong>
+          ${esc(
+            dados.total ??
+            resultados.length
+          )}
+          resultado(s) para
+
+          <strong>
+            ${esc(
+              dados.consulta ||
+              consulta
+            )}
+          </strong>
+
+        </span>
+
+
+        <button
+          type="button"
+          class="btn secondary"
+          onclick="limparPesquisa()"
+        >
+          Limpar
+        </button>
 
       </div>
 
 
       ${resultados
         .map(
-          resultado => `
+          function(resultado) {
 
-            <div
-              class="result"
-              data-livro="${esc(resultado.livro)}"
-              data-capitulo="${esc(resultado.capitulo)}"
-              data-versiculo="${esc(resultado.versiculo)}"
-            >
+            return `
 
-              <div class="result-ref">
+              <div
+                class="result"
+                data-livro="${esc(resultado.livro)}"
+                data-capitulo="${esc(resultado.capitulo)}"
+                data-versiculo="${esc(resultado.versiculo)}"
+              >
 
-                ${esc(resultado.nome)}
+                <div class="result-ref">
 
-                ${esc(resultado.capitulo)}:${esc(resultado.versiculo)}
+                  ${esc(resultado.nome)}
+
+                  ${esc(resultado.capitulo)}:${esc(resultado.versiculo)}
+
+                </div>
+
+
+                <div>
+
+                  ${esc(resultado.texto)}
+
+                </div>
 
               </div>
 
+            `;
 
-              <div>
-
-                ${esc(resultado.texto)}
-
-              </div>
-
-            </div>
-
-          `
+          }
         )
         .join('')}
 
@@ -2356,13 +3162,15 @@ async function pesquisar() {
 
 
     caixa
-      .querySelectorAll('.result')
+      .querySelectorAll(
+        '.result'
+      )
       .forEach(
-        elemento => {
+        function(elemento) {
 
           elemento.addEventListener(
             'click',
-            () => {
+            function() {
 
               abrirResultado({
 
@@ -2389,18 +3197,108 @@ async function pesquisar() {
 
 
     caixa.scrollIntoView({
+
       behavior: 'smooth',
+
       block: 'start'
+
     });
 
   } catch (erro) {
 
     caixa.innerHTML =
-      `<div class="error">
-        ${esc(erro.message)}
-      </div>`;
+      '<div class="error">' +
+      esc(
+        erro.message
+      ) +
+      '</div>';
+
+
+    mostrarStatus(
+      erro.message
+    );
 
   }
+
+}
+
+
+/* ============================================================
+   LIMPAR PESQUISA
+   ============================================================ */
+
+function limparPesquisa() {
+
+  const campo =
+    document.getElementById(
+      'searchInput'
+    );
+
+
+  const caixa =
+    document.getElementById(
+      'searchResults'
+    );
+
+
+  if (campo) {
+
+    campo.value =
+      '';
+
+  }
+
+
+  if (caixa) {
+
+    caixa.innerHTML =
+      '';
+
+    caixa.style.display =
+      'none';
+
+  }
+
+
+  atualizarBotaoLimpar();
+
+
+  if (campo) {
+
+    campo.focus();
+
+  }
+
+}
+
+
+/* ============================================================
+   BOTÃO LIMPAR PESQUISA
+   ============================================================ */
+
+function atualizarBotaoLimpar() {
+
+  const campo =
+    document.getElementById(
+      'searchInput'
+    );
+
+
+  const botao =
+    document.getElementById(
+      'clearSearch'
+    );
+
+
+  if (!campo || !botao) {
+    return;
+  }
+
+
+  botao.style.display =
+    campo.value.trim()
+      ? 'grid'
+      : 'none';
 
 }
 
@@ -2415,13 +3313,18 @@ async function abrirResultado(
 
   const livro =
     livros.find(
-      item =>
-        String(
-          item.livro
-        ) ===
-        String(
-          resultado.livro
-        )
+      function(item) {
+
+        return (
+          String(
+            item.livro
+          ) ===
+          String(
+            resultado.livro
+          )
+        );
+
+      }
     );
 
 
@@ -2458,7 +3361,7 @@ async function abrirResultado(
 
 
   setTimeout(
-    () => {
+    function() {
 
       const elemento =
         document.getElementById(
@@ -2499,6 +3402,11 @@ function mostrarStatus(
     );
 
 
+  if (!elemento) {
+    return;
+  }
+
+
   elemento.textContent =
     mensagem;
 
@@ -2515,14 +3423,14 @@ function mostrarStatus(
 
   window.statusTimer =
     setTimeout(
-      () => {
+      function() {
 
         elemento.classList.remove(
           'show'
         );
 
       },
-      3500
+      4000
     );
 
 }
