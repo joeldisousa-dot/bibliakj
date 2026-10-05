@@ -1,476 +1,188 @@
-from pathlib import Path
-import re
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-src = Path("/mnt/data/Texto colado(20261005-122451).txt")
-out = Path("/mnt/data/Biblia_King_James_visual_personalizado.html")
+  <title>Bíblia King James</title>
 
-html = src.read_text(encoding="utf-8")
+  <style>
+    /* ============================================================
+       PESQUISA
+       ============================================================ */
 
-# Substitui apenas o bloco visual, preservando HTML e JavaScript funcionais.
-start = html.index("<style>")
-end = html.index("</style>", start) + len("</style>")
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 15px 0;
+    }
 
-css = r"""
-<style>
-:root{
-  --bg:#f4f1ea;
-  --surface:#fffdf8;
-  --surface2:#f7f2e9;
-  --text:#29231d;
-  --muted:#776d61;
-  --line:#e5ddd0;
-  --gold:#b88945;
-  --gold-dark:#7b5625;
-  --green:#304f45;
-  --green-dark:#1e382f;
-  --cream:#f1e7d4;
-  --white:#fff;
-  --shadow:0 18px 45px rgba(53,40,22,.10);
-  --shadow-soft:0 8px 25px rgba(53,40,22,.07);
-}
+    .search input {
+      flex: 1;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      outline: none;
+    }
 
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  margin:0;
-  color:var(--text);
-  background:
-    radial-gradient(circle at 8% 8%,rgba(184,137,69,.10),transparent 28%),
-    radial-gradient(circle at 92% 15%,rgba(48,79,69,.08),transparent 25%),
-    var(--bg);
-  font-family:Georgia,"Times New Roman",serif;
-}
-button,input{font:inherit}
-button{cursor:pointer}
+    .search input::placeholder {
+      color: #c4baad;
+    }
 
-.topbar{
-  position:sticky;
-  top:0;
-  z-index:100;
-  color:#fff;
-  background:
-    linear-gradient(110deg,rgba(25,45,38,.98),rgba(42,61,52,.98));
-  border-bottom:1px solid rgba(255,255,255,.10);
-  box-shadow:0 8px 28px rgba(20,28,24,.22);
-}
-.topbar-inner{
-  max-width:1240px;
-  min-height:78px;
-  margin:auto;
-  padding:12px 20px;
-  display:flex;
-  align-items:center;
-  gap:20px;
-}
-.brand{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  min-width:275px;
-}
-.brand-icon{
-  width:48px;height:48px;
-  display:grid;place-items:center;
-  border:1px solid rgba(255,255,255,.28);
-  border-radius:15px;
-  color:#f4d9a7;
-  background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.03));
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.12);
-  font-size:23px;
-}
-.brand strong{
-  display:block;
-  font-size:21px;
-  letter-spacing:.2px;
-}
-.brand small{
-  display:block;
-  color:#d8d4cb;
-  font-size:12px;
-  margin-top:3px;
-}
-.search{
-  flex:1;
-  display:flex;
-  gap:9px;
-}
-.search input{
-  width:100%;
-  min-height:45px;
-  border:1px solid rgba(255,255,255,.16);
-  background:rgba(255,255,255,.09);
-  color:#fff;
-  border-radius:13px;
-  padding:11px 15px;
-  outline:none;
-  transition:.2s;
-}
-.search input::placeholder{color:#c9c7c0}
-.search input:focus{
-  border-color:#d2ad70;
-  background:rgba(255,255,255,.13);
-  box-shadow:0 0 0 3px rgba(210,173,112,.12);
-}
+    /* Botão Limpar */
+    .search .secondary {
+      background: rgba(255,255,255,.08);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.16);
+      box-shadow: none;
+      padding: 11px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: .2s ease;
+      white-space: nowrap;
+    }
 
-.btn{
-  border:0;
-  border-radius:12px;
-  padding:10px 15px;
-  background:linear-gradient(135deg,var(--gold),#9b6d32);
-  color:#fff;
-  transition:.2s;
-  box-shadow:0 5px 14px rgba(123,86,37,.18);
-}
-.btn:hover{
-  transform:translateY(-1px);
-  filter:brightness(1.06);
-}
-.btn.secondary{
-  background:var(--surface2);
-  color:var(--green-dark);
-  border:1px solid var(--line);
-  box-shadow:none;
-}
-.btn.secondary:hover{background:var(--cream)}
+    .search .secondary:hover {
+      background: rgba(255,255,255,.15);
+    }
 
-.layout{
-  max-width:1240px;
-  margin:auto;
-  padding:28px 20px 60px;
-  display:grid;
-  grid-template-columns:270px minmax(0,1fr);
-  gap:25px;
-}
-.sidebar{
-  background:rgba(255,253,248,.94);
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:17px;
-  height:fit-content;
-  position:sticky;
-  top:101px;
-  box-shadow:var(--shadow-soft);
-}
-.sidebar-title{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  font-weight:bold;
-  margin:2px 2px 14px;
-  font-size:17px;
-}
-.sidebar-title:before{
-  content:"✦";
-  color:var(--gold);
-  font-size:13px;
-}
-.testament-tabs{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:7px;
-  margin-bottom:13px;
-}
-.tab{
-  border:1px solid var(--line);
-  background:var(--surface2);
-  color:var(--text);
-  padding:10px 6px;
-  border-radius:11px;
-  transition:.2s;
-}
-.tab:hover{border-color:#cdb48b}
-.tab.active{
-  background:linear-gradient(135deg,var(--green),#426458);
-  color:#fff;
-  border-color:var(--green);
-  box-shadow:0 5px 13px rgba(48,79,69,.17);
-}
-#bookList{
-  display:grid;
-  gap:4px;
-  max-height:64vh;
-  overflow:auto;
-  padding-right:3px;
-}
-#bookList::-webkit-scrollbar{width:6px}
-#bookList::-webkit-scrollbar-thumb{background:#d4c8b6;border-radius:20px}
-.book{
-  width:100%;
-  text-align:left;
-  background:transparent;
-  border:1px solid transparent;
-  border-radius:10px;
-  padding:9px 11px;
-  color:var(--text);
-  transition:.18s;
-}
-.book:hover{
-  background:#f4ede2;
-  border-color:#eadfce;
-  color:var(--gold-dark);
-  transform:translateX(2px);
-}
-.book.active{
-  background:linear-gradient(90deg,#efe3cf,#f8f1e6);
-  border-color:#e3cfaa;
-  color:var(--gold-dark);
-  font-weight:bold;
-}
+    .search-results {
+      display: none;
+      margin-top: 10px;
+    }
+  </style>
+</head>
 
-.content{min-width:0}
+<body>
 
-.daily{
-  position:relative;
-  overflow:hidden;
-  color:#fff;
-  border-radius:24px;
-  padding:30px;
-  margin-bottom:24px;
-  background:
-    radial-gradient(circle at 85% 15%,rgba(210,173,112,.22),transparent 24%),
-    radial-gradient(circle at 8% 90%,rgba(255,255,255,.07),transparent 25%),
-    linear-gradient(135deg,#203a31,#304e43 58%,#3d5c4f);
-  box-shadow:var(--shadow);
-}
-.daily:after{
-  content:"“";
-  position:absolute;
-  right:25px;
-  top:-25px;
-  color:rgba(255,255,255,.07);
-  font-size:180px;
-  line-height:1;
-  pointer-events:none;
-}
-.daily-label{
-  position:relative;
-  z-index:1;
-  color:#e6c991;
-  text-transform:uppercase;
-  letter-spacing:2px;
-  font-size:11px;
-  font-weight:bold;
-}
-.daily h2{
-  position:relative;
-  z-index:1;
-  margin:8px 0 14px;
-  font-size:27px;
-}
-.daily p{
-  position:relative;
-  z-index:1;
-  max-width:850px;
-  font-size:20px;
-  line-height:1.8;
-  margin:0 0 21px;
-  color:#f7f3eb;
-}
-.daily-actions{
-  position:relative;
-  z-index:1;
-  display:flex;
-  gap:9px;
-  flex-wrap:wrap;
-}
-.daily .btn{
-  background:rgba(255,255,255,.12);
-  border:1px solid rgba(255,255,255,.20);
-  box-shadow:none;
-}
-.daily .btn:hover{background:rgba(255,255,255,.19)}
-.daily .btn.secondary{
-  color:#fff;
-  background:rgba(0,0,0,.12);
-}
+  <!-- ============================================================
+       PESQUISA
+       ============================================================ -->
 
-.reader{
-  background:rgba(255,253,248,.96);
-  border:1px solid var(--line);
-  border-radius:22px;
-  box-shadow:var(--shadow);
-  overflow:hidden;
-}
-.reader-head{
-  padding:24px 27px 18px;
-  border-bottom:1px solid var(--line);
-  background:linear-gradient(180deg,#fffdf8,#fbf7ef);
-}
-.breadcrumb{
-  color:var(--gold-dark);
-  font-size:12px;
-  font-weight:bold;
-  letter-spacing:.5px;
-  margin-bottom:6px;
-}
-.reader-title{
-  margin:0;
-  font-size:32px;
-  color:var(--green-dark);
-}
-.chapter-controls{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-  padding:13px 22px;
-  background:var(--surface2);
-  border-bottom:1px solid var(--line);
-}
-.chapter-controls .center{
-  font-weight:bold;
-  text-align:center;
-  color:var(--green-dark);
-}
-.verses{
-  padding:20px 27px 35px;
-}
-.verse{
-  position:relative;
-  padding:11px 10px 11px 58px;
-  border-radius:12px;
-  line-height:1.9;
-  font-size:19px;
-  transition:.18s;
-}
-.verse:hover{
-  background:#fbf7ef;
-  box-shadow:inset 3px 0 0 #d8b36e;
-}
-.verse-number{
-  position:absolute;
-  left:9px;
-  top:14px;
-  width:37px;
-  text-align:right;
-  color:var(--gold);
-  font-size:13px;
-  font-weight:bold;
-}
-.verse-actions{
-  display:inline-flex;
-  margin-left:8px;
-  opacity:0;
-  transition:.2s;
-}
-.verse:hover .verse-actions{opacity:1}
-.small-share{
-  border:0;
-  background:#f1e7d4;
-  color:var(--gold-dark);
-  padding:3px 7px;
-  border-radius:7px;
-  font-size:15px;
-}
-.small-share:hover{
-  background:#e6d3af;
-  transform:scale(1.05);
-}
+  <div class="search">
 
-.search-results{
-  margin-top:20px;
-  display:none;
-}
-.result{
-  background:rgba(255,253,248,.95);
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:16px;
-  margin-bottom:10px;
-  cursor:pointer;
-  box-shadow:var(--shadow-soft);
-  transition:.2s;
-}
-.result:hover{
-  border-color:#cdb48b;
-  transform:translateY(-1px);
-  background:#fffaf2;
-}
-.result-ref{
-  color:var(--gold-dark);
-  font-weight:bold;
-  margin-bottom:6px;
-}
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="Pesquisar na Bíblia..."
+      autocomplete="off"
+      oninput="pesquisarBiblia()"
+    >
 
-.empty,.loading,.error{
-  padding:38px;
-  text-align:center;
-  color:var(--muted);
-}
-.loading{animation:pulse 1.2s infinite}
-@keyframes pulse{
-  0%,100%{opacity:.55}
-  50%{opacity:1}
-}
-.error{color:#9b3a32}
+    <button
+      type="button"
+      class="secondary"
+      id="clearSearch"
+      onclick="limparPesquisa()"
+    >
+      Limpar
+    </button>
 
-.status{
-  position:fixed;
-  right:18px;
-  bottom:18px;
-  background:var(--green-dark);
-  color:#fff;
-  padding:12px 16px;
-  border-radius:12px;
-  box-shadow:var(--shadow);
-  opacity:0;
-  pointer-events:none;
-  transform:translateY(8px);
-  transition:.25s;
-  z-index:500;
-  max-width:360px;
-  border:1px solid rgba(255,255,255,.10);
-}
-.status.show{opacity:1;transform:translateY(0)}
+  </div>
 
-@media(max-width:850px){
-  .topbar-inner{flex-wrap:wrap}
-  .brand{min-width:0}
-  .search{order:3;flex-basis:100%}
-  .layout{grid-template-columns:1fr}
-  .sidebar{position:static}
-  #bookList{
-    max-height:235px;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-  .daily h2{font-size:23px}
-  .reader-title{font-size:27px}
-  .verse{padding-left:47px;font-size:18px}
-  .verse-actions{opacity:1}
-}
-@media(max-width:500px){
-  .topbar-inner{padding:10px 12px;gap:11px}
-  .brand-icon{width:43px;height:43px}
-  .brand strong{font-size:18px}
-  .brand small{font-size:11px}
-  .layout{padding:15px 10px 35px}
-  .daily{padding:21px;border-radius:19px}
-  .daily p{font-size:18px;line-height:1.7}
-  .reader-head{padding:19px 17px 15px}
-  .reader-title{font-size:24px}
-  .chapter-controls{padding:10px 12px}
-  .chapter-controls .btn{padding:8px 9px;font-size:13px}
-  .verses{padding:12px 12px 25px}
-  .verse{padding-left:42px;font-size:17px;line-height:1.8}
-  .verse-number{left:5px}
-}
-</style>
-"""
+  <!-- Resultados da pesquisa -->
+  <div
+    id="searchResults"
+    class="search-results">
+  </div>
 
-html = html[:start] + css + html[end:]
 
-# Add a small personalized subtitle under the daily reference without changing JS.
-html = html.replace(
-    '<div class="daily-label">\n         Texto do dia\n       </div>',
-    '<div class="daily-label">\n         ✦ Palavra para hoje\n       </div>'
-)
+  <!-- ============================================================
+       JAVASCRIPT
+       ============================================================ -->
 
-# Add an elegant visual separator before the reader if not already present.
-html = html.replace(
-    '<!-- ======================================================\n          RESULTADOS DA PESQUISA',
-    '<div style="height:1px"></div>\n\n    <!-- ======================================================\n          RESULTADOS DA PESQUISA'
-)
+  <script>
 
-out.write_text(html, encoding="utf-8")
-print(f"Arquivo criado: {out}")
-print(f"Tamanho: {out.stat().st_size:,} bytes")
+    /* ============================================================
+       LIMPAR PESQUISA
+       ============================================================ */
+
+    function limparPesquisa() {
+
+      const campo =
+        document.getElementById('searchInput');
+
+      const caixa =
+        document.getElementById('searchResults');
+
+      if (campo) {
+        campo.value = '';
+      }
+
+      if (caixa) {
+        caixa.innerHTML = '';
+        caixa.style.display = 'none';
+      }
+
+      if (campo) {
+        campo.focus();
+      }
+    }
+
+
+    /* ============================================================
+       PESQUISAR BÍBLIA
+       ============================================================ */
+
+    function pesquisarBiblia() {
+
+      const campo =
+        document.getElementById('searchInput');
+
+      const caixa =
+        document.getElementById('searchResults');
+
+      if (!campo || !caixa) {
+        return;
+      }
+
+      const termo =
+        campo.value.trim();
+
+      if (!termo) {
+        caixa.innerHTML = '';
+        caixa.style.display = 'none';
+        return;
+      }
+
+      /*
+       * Coloque aqui a sua rotina atual
+       * de pesquisa da Bíblia.
+       *
+       * Esta parte é apenas um exemplo
+       * para demonstrar o funcionamento.
+       */
+
+      caixa.style.display = 'block';
+
+      caixa.innerHTML =
+        '<div style="padding:12px;">' +
+        'Pesquisando por: <strong>' +
+        escaparHTML(termo) +
+        '</strong>' +
+        '</div>';
+    }
+
+
+    /* ============================================================
+       PROTEÇÃO DE HTML
+       ============================================================ */
+
+    function escaparHTML(texto) {
+
+      return String(texto)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+
+    }
+
+  </script>
+
+</body>
+</html>
