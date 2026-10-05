@@ -22,6 +22,8 @@
 
 <title>Bíblia King James</title>
 
+<!-- API JSONP compatível com GitHub Pages + Google Apps Script -->
+
 
 <style>
 
@@ -1318,88 +1320,137 @@ document.addEventListener(
    API
    ============================================================ */
 
-async function api(parametros) {
+function api(parametros) {
 
-  if (!API_URL) {
+  return new Promise(function(resolve, reject) {
 
-    throw new Error(
-      'URL da API do Google Apps Script não configurada.'
-    );
+    if (!API_URL) {
 
-  }
+      reject(new Error(
+        'URL da API do Google Apps Script não configurada.'
+      ));
 
+      return;
 
-  const url =
-    API_URL +
-    '?' +
-    new URLSearchParams(
-      parametros
-    ).toString();
+    }
 
 
-  let resposta;
+    const callback =
+      'kjsApi_' +
+      Date.now() + '_' +
+      Math.random()
+        .toString(36)
+        .slice(2);
 
 
-  try {
-
-    resposta =
-      await fetch(
-        url,
-        {
-          method: 'GET',
-          cache: 'no-store'
-        }
+    const params =
+      new URLSearchParams(
+        parametros || {}
       );
 
-  } catch (erro) {
-
-    throw new Error(
-      'Não foi possível comunicar com o Google Apps Script.'
+    params.set(
+      'callback',
+      callback
     );
 
-  }
+
+    const script =
+      document.createElement('script');
+
+    let finalizado = false;
+
+    const timeout =
+      setTimeout(function() {
+
+        finalizar();
+
+        reject(new Error(
+          'Tempo esgotado ao comunicar com o Google Apps Script.'
+        ));
+
+      }, 15000);
 
 
-  if (!resposta.ok) {
+    function finalizar() {
 
-    throw new Error(
-      'A API retornou HTTP ' +
-      resposta.status
+      if (finalizado) {
+        return;
+      }
+
+      finalizado = true;
+
+      clearTimeout(timeout);
+
+      script.remove();
+
+      try {
+        delete window[callback];
+      } catch (erro) {
+        window[callback] = undefined;
+      }
+
+    }
+
+
+    window[callback] =
+      function(dados) {
+
+        if (finalizado) {
+          return;
+        }
+
+        finalizar();
+
+        dados = dados || {};
+
+        if (dados.sucesso === false || dados.ok === false) {
+
+          reject(new Error(
+            dados.erro ||
+            'Erro retornado pela API.'
+          ));
+
+          return;
+
+        }
+
+        resolve(dados);
+
+      };
+
+
+    script.async = true;
+
+    script.src =
+      API_URL +
+      '?' +
+      params.toString();
+
+
+    script.onerror =
+      function() {
+
+        if (finalizado) {
+          return;
+        }
+
+        finalizar();
+
+        reject(new Error(
+          'Não foi possível comunicar com o Google Apps Script.'
+        ));
+
+      };
+
+
+    document.body.appendChild(
+      script
     );
 
-  }
-
-
-  let dados;
-
-
-  try {
-
-    dados =
-      await resposta.json();
-
-  } catch (erro) {
-
-    throw new Error(
-      'A resposta da API não é um JSON válido.'
-    );
-
-  }
-
-
-  if (!dados.ok) {
-
-    throw new Error(
-      dados.erro ||
-      'Erro na API.'
-    );
-
-  }
-
-
-  return dados;
+  });
 
 }
+
 
 
 /* ============================================================
@@ -1432,7 +1483,27 @@ async function carregarLivros() {
       Array.isArray(
         dados.livros
       )
-        ? dados.livros
+        ? dados.livros.map(function(livro) {
+            const codigo =
+              livro.livro ||
+              livro.codigo ||
+              '';
+
+            const nome =
+              livro.nome ||
+              livro.nomeLivro ||
+              codigo;
+
+            return Object.assign(
+              {},
+              livro,
+              {
+                livro: String(codigo),
+                codigo: String(codigo),
+                nome: String(nome)
+              }
+            );
+          })
         : [];
 
 
