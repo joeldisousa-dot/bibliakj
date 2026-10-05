@@ -8,6 +8,180 @@
 
   <style>
     /* ============================================================
+       VISUAL PERSONALIZADO
+       ============================================================ */
+
+    :root {
+      --bg: #0d1726;
+      --bg-secondary: #132238;
+      --card: rgba(255,255,255,.07);
+      --card-border: rgba(255,255,255,.13);
+      --text: #f7f2e9;
+      --muted: #c4baad;
+      --accent: #d7b46a;
+      --accent-light: #efd99f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(
+          circle at top,
+          #1b304d 0%,
+          #0d1726 48%,
+          #080f19 100%
+        );
+      color: var(--text);
+      font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+    }
+
+    /* ============================================================
+       CONTAINER PRINCIPAL
+       ============================================================ */
+
+    .container,
+    .app,
+    main {
+      width: min(1200px, 94%);
+      margin: 0 auto;
+    }
+
+    /* ============================================================
+       CABEÇALHO
+       ============================================================ */
+
+    header {
+      padding: 28px 20px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      letter-spacing: .5px;
+    }
+
+    header p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    /* ============================================================
+       PALAVRA PARA HOJE
+       ============================================================ */
+
+    .daily-reference {
+      position: relative;
+      margin: 20px auto 26px;
+      padding: 22px 24px;
+      max-width: 900px;
+
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,.09),
+        rgba(255,255,255,.035)
+      );
+
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+
+      box-shadow:
+        0 15px 40px rgba(0,0,0,.25);
+
+      backdrop-filter: blur(12px);
+
+      text-align: center;
+    }
+
+    .daily-reference strong {
+      display: block;
+      margin-bottom: 8px;
+
+      color: var(--accent-light);
+
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: .4px;
+    }
+
+    .daily-reference .reference {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    /* ============================================================
+       SEPARADOR ELEGANTE
+       ============================================================ */
+
+    .reader-separator {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+
+      width: min(900px, 90%);
+      margin: 28px auto;
+
+      color: var(--accent);
+    }
+
+    .reader-separator::before,
+    .reader-separator::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+
+      background:
+        linear-gradient(
+          90deg,
+          transparent,
+          rgba(215,180,106,.65),
+          transparent
+        );
+    }
+
+    .reader-separator span {
+      font-size: 18px;
+      opacity: .9;
+    }
+
+    /* ============================================================
+       LEITOR
+       ============================================================ */
+
+    .reader {
+      margin: 0 auto 30px;
+      padding: 24px;
+
+      background: var(--card);
+
+      border: 1px solid var(--card-border);
+      border-radius: 18px;
+
+      box-shadow:
+        0 12px 35px rgba(0,0,0,.22);
+
+      backdrop-filter: blur(10px);
+    }
+
+    .reader h2 {
+      margin-top: 0;
+      color: var(--accent-light);
+    }
+
+    .reader p {
+      line-height: 1.8;
+      font-size: 18px;
+    }
+
+    /* ============================================================
        PESQUISA
        ============================================================ */
 
@@ -15,48 +189,147 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      margin: 15px 0;
+      margin: 18px auto;
+      width: min(900px, 94%);
     }
 
     .search input {
       flex: 1;
-      padding: 12px 14px;
-      border-radius: 10px;
+
+      padding: 13px 15px;
+
+      border-radius: 11px;
       border: 1px solid rgba(255,255,255,.16);
+
       background: rgba(255,255,255,.08);
+
       color: #fff;
+
       outline: none;
+
+      font-size: 15px;
+    }
+
+    .search input:focus {
+      border-color: rgba(215,180,106,.65);
+
+      box-shadow:
+        0 0 0 3px rgba(215,180,106,.10);
     }
 
     .search input::placeholder {
       color: #c4baad;
     }
 
-    /* Botão Limpar */
+    /* ============================================================
+       BOTÃO LIMPAR
+       ============================================================ */
+
     .search .secondary {
       background: rgba(255,255,255,.08);
       color: #fff;
+
       border: 1px solid rgba(255,255,255,.16);
+
       box-shadow: none;
-      padding: 11px 15px;
+
+      padding: 11px 16px;
+
       border-radius: 10px;
+
       cursor: pointer;
-      transition: .2s ease;
-      white-space: nowrap;
+
+      transition:
+        background .2s ease,
+        transform .2s ease;
     }
 
     .search .secondary:hover {
       background: rgba(255,255,255,.15);
+      transform: translateY(-1px);
     }
 
-    .search-results {
+    .search .secondary:active {
+      transform: translateY(0);
+    }
+
+    /* ============================================================
+       RESULTADOS DA PESQUISA
+       ============================================================ */
+
+    #searchResults {
       display: none;
-      margin-top: 10px;
+
+      width: min(900px, 94%);
+      margin: 10px auto 20px;
+    }
+
+    /* ============================================================
+       RESPONSIVO
+       ============================================================ */
+
+    @media (max-width: 600px) {
+
+      .search {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .search .secondary {
+        width: 100%;
+      }
+
+      .daily-reference {
+        padding: 18px;
+      }
+
+      .reader {
+        padding: 18px;
+      }
+
+      .reader p {
+        font-size: 17px;
+      }
+
     }
   </style>
 </head>
 
 <body>
+
+  <!-- ============================================================
+       CABEÇALHO
+       ============================================================ -->
+
+  <header>
+
+    <h1>
+      Bíblia King James
+    </h1>
+
+    <p>
+      Uma palavra para cada dia
+    </p>
+
+  </header>
+
+
+  <!-- ============================================================
+       PALAVRA PARA HOJE
+       ============================================================ -->
+
+  <section class="daily-reference">
+
+    <strong>
+      ✦ Palavra para hoje
+    </strong>
+
+    <div class="reference">
+      Texto bíblico para sua meditação diária
+    </div>
+
+  </section>
+
 
   <!-- ============================================================
        PESQUISA
@@ -69,13 +342,11 @@
       id="searchInput"
       placeholder="Pesquisar na Bíblia..."
       autocomplete="off"
-      oninput="pesquisarBiblia()"
     >
 
     <button
       type="button"
       class="secondary"
-      id="clearSearch"
       onclick="limparPesquisa()"
     >
       Limpar
@@ -83,11 +354,38 @@
 
   </div>
 
-  <!-- Resultados da pesquisa -->
-  <div
-    id="searchResults"
-    class="search-results">
+
+  <!-- ============================================================
+       RESULTADOS
+       ============================================================ -->
+
+  <div id="searchResults"></div>
+
+
+  <!-- ============================================================
+       SEPARADOR ANTES DO LEITOR
+       ============================================================ -->
+
+  <div class="reader-separator">
+    <span>✦</span>
   </div>
+
+
+  <!-- ============================================================
+       LEITOR
+       ============================================================ -->
+
+  <main class="reader" id="reader">
+
+    <h2>
+      Leitura bíblica
+    </h2>
+
+    <div id="textoBiblico">
+      Selecione um livro e capítulo para iniciar a leitura.
+    </div>
+
+  </main>
 
 
   <!-- ============================================================
@@ -103,10 +401,14 @@
     function limparPesquisa() {
 
       const campo =
-        document.getElementById('searchInput');
+        document.getElementById(
+          'searchInput'
+        );
 
       const caixa =
-        document.getElementById('searchResults');
+        document.getElementById(
+          'searchResults'
+        );
 
       if (campo) {
         campo.value = '';
@@ -120,65 +422,31 @@
       if (campo) {
         campo.focus();
       }
+
     }
 
 
     /* ============================================================
-       PESQUISAR BÍBLIA
+       PESQUISA
        ============================================================ */
 
-    function pesquisarBiblia() {
+    const searchInput =
+      document.getElementById(
+        'searchInput'
+      );
 
-      const campo =
-        document.getElementById('searchInput');
+    if (searchInput) {
 
-      const caixa =
-        document.getElementById('searchResults');
+      searchInput.addEventListener(
+        'keydown',
+        function(event) {
 
-      if (!campo || !caixa) {
-        return;
-      }
+          if (event.key === 'Escape') {
+            limparPesquisa();
+          }
 
-      const termo =
-        campo.value.trim();
-
-      if (!termo) {
-        caixa.innerHTML = '';
-        caixa.style.display = 'none';
-        return;
-      }
-
-      /*
-       * Coloque aqui a sua rotina atual
-       * de pesquisa da Bíblia.
-       *
-       * Esta parte é apenas um exemplo
-       * para demonstrar o funcionamento.
-       */
-
-      caixa.style.display = 'block';
-
-      caixa.innerHTML =
-        '<div style="padding:12px;">' +
-        'Pesquisando por: <strong>' +
-        escaparHTML(termo) +
-        '</strong>' +
-        '</div>';
-    }
-
-
-    /* ============================================================
-       PROTEÇÃO DE HTML
-       ============================================================ */
-
-    function escaparHTML(texto) {
-
-      return String(texto)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#039;');
+        }
+      );
 
     }
 
