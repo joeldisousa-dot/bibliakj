@@ -12,7 +12,7 @@
 
 <meta
   name="theme-color"
-  content="#181715"
+  content="#151515"
 >
 
 <meta
@@ -22,51 +22,34 @@
 
 <title>Bíblia King James</title>
 
+<!-- API JSONP compatível com GitHub Pages + Google Apps Script -->
+
 
 <style>
 
 /* ============================================================
-   BÍBLIA KING JAMES — VISUAL PREMIUM
+   VARIÁVEIS
    ============================================================ */
 
 :root {
 
-  --bg: #f4f1ea;
-  --bg-soft: #ebe6dc;
-
+  --bg: #f3f0e9;
   --surface: #fffdf8;
-  --surface-soft: #f8f5ef;
-  --surface-hover: #f3eee5;
+  --surface2: #f8f4ec;
 
-  --text: #2d2924;
-  --text-soft: #5f584f;
-  --muted: #81786d;
+  --text: #29251f;
+  --muted: #766e63;
 
-  --line: #e2dbd0;
+  --line: #ded7cb;
 
-  --gold: #a97838;
-  --gold-light: #c79a5b;
-  --gold-dark: #785221;
+  --accent: #8b5e34;
+  --accentDark: #684421;
 
-  --dark: #181715;
-  --dark-soft: #24211d;
-
+  --dark: #151515;
   --white: #ffffff;
 
-  --danger: #a43d3d;
-
-  --shadow-sm:
-    0 4px 15px rgba(47, 38, 26, .06);
-
   --shadow:
-    0 12px 35px rgba(47, 38, 26, .10);
-
-  --shadow-lg:
-    0 20px 55px rgba(47, 38, 26, .14);
-
-  --radius-sm: 10px;
-  --radius: 16px;
-  --radius-lg: 22px;
+    0 12px 35px rgba(35, 29, 20, .10);
 
 }
 
@@ -89,21 +72,7 @@ body {
 
   margin: 0;
 
-  min-height: 100vh;
-
-  background:
-
-    radial-gradient(
-      circle at 15% 0%,
-      rgba(201, 169, 119, .16),
-      transparent 30%
-    ),
-
-    linear-gradient(
-      180deg,
-      #f7f4ee 0%,
-      #f1ede5 100%
-    );
+  background: var(--bg);
 
   color: var(--text);
 
@@ -111,8 +80,6 @@ body {
     Georgia,
     "Times New Roman",
     serif;
-
-  -webkit-font-smoothing: antialiased;
 
 }
 
@@ -128,17 +95,6 @@ button {
 }
 
 
-::selection {
-
-  background:
-    rgba(169, 120, 56, .20);
-
-  color:
-    var(--text);
-
-}
-
-
 /* ============================================================
    TOPO
    ============================================================ */
@@ -149,76 +105,37 @@ button {
 
   top: 0;
 
-  z-index: 1000;
+  z-index: 100;
 
   background:
-
-    linear-gradient(
-      135deg,
-      rgba(24, 23, 21, .98),
-      rgba(38, 34, 29, .98)
-    );
+    rgba(21, 21, 21, .97);
 
   color: white;
 
-  border-bottom:
-    1px solid
-    rgba(255, 255, 255, .08);
-
   box-shadow:
-    0 6px 25px rgba(0, 0, 0, .20);
-
-  backdrop-filter:
-    blur(14px);
-
-}
-
-
-.topbar::after {
-
-  content: "";
-
-  display: block;
-
-  height: 2px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      var(--gold),
-      var(--gold-light),
-      var(--gold),
-      transparent
-    );
-
-  opacity: .8;
+    0 4px 18px rgba(0, 0, 0, .18);
 
 }
 
 
 .topbar-inner {
 
-  max-width: 1280px;
+  max-width: 1200px;
 
   margin: auto;
 
-  min-height: 76px;
+  min-height: 70px;
 
-  padding: 12px 22px;
+  padding: 12px 18px;
 
   display: flex;
 
   align-items: center;
 
-  gap: 24px;
+  gap: 18px;
 
 }
 
-
-/* ============================================================
-   MARCA
-   ============================================================ */
 
 .brand {
 
@@ -226,18 +143,18 @@ button {
 
   align-items: center;
 
-  gap: 13px;
+  gap: 11px;
 
-  min-width: 265px;
+  min-width: 240px;
 
 }
 
 
 .brand-icon {
 
-  width: 46px;
+  width: 42px;
 
-  height: 46px;
+  height: 42px;
 
   display: grid;
 
@@ -245,24 +162,11 @@ button {
 
   border:
     1px solid
-    rgba(213, 177, 117, .45);
+    rgba(255, 255, 255, .25);
 
-  border-radius: 14px;
+  border-radius: 10px;
 
-  background:
-    linear-gradient(
-      145deg,
-      rgba(201, 160, 92, .20),
-      rgba(255, 255, 255, .04)
-    );
-
-  color: #e4c38d;
-
-  font-size: 22px;
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.08),
-    0 5px 15px rgba(0,0,0,.18);
+  font-size: 21px;
 
 }
 
@@ -271,11 +175,7 @@ button {
 
   display: block;
 
-  font-size: 20px;
-
-  font-weight: 700;
-
-  letter-spacing: .2px;
+  font-size: 19px;
 
 }
 
@@ -284,19 +184,17 @@ button {
 
   display: block;
 
-  color: #bdb5aa;
+  color: #cfc8bd;
 
   font-size: 12px;
 
-  margin-top: 4px;
-
-  letter-spacing: .25px;
+  margin-top: 2px;
 
 }
 
 
 /* ============================================================
-   PESQUISA DO TOPO
+   PESQUISA
    ============================================================ */
 
 .search {
@@ -305,11 +203,7 @@ button {
 
   display: flex;
 
-  gap: 9px;
-
-  max-width: 720px;
-
-  margin-left: auto;
+  gap: 8px;
 
 }
 
@@ -318,58 +212,26 @@ button {
 
   width: 100%;
 
-  min-width: 0;
-
   border:
     1px solid
-    rgba(255,255,255,.14);
+    #444;
 
-  background:
-    rgba(255,255,255,.075);
+  background: #242424;
 
   color: white;
 
-  border-radius: 12px;
+  border-radius: 10px;
 
-  padding: 13px 16px;
+  padding: 12px 14px;
 
   outline: none;
-
-  transition:
-    border-color .2s ease,
-    background .2s ease,
-    box-shadow .2s ease;
-
-}
-
-
-.search input::placeholder {
-
-  color:
-    #a9a198;
-
-}
-
-
-.search input:hover {
-
-  background:
-    rgba(255,255,255,.10);
 
 }
 
 
 .search input:focus {
 
-  border-color:
-    rgba(211, 170, 104, .75);
-
-  background:
-    rgba(255,255,255,.11);
-
-  box-shadow:
-    0 0 0 3px
-    rgba(201, 160, 92, .12);
+  border-color: #b58a60;
 
 }
 
@@ -382,85 +244,38 @@ button {
 
   border: 0;
 
-  border-radius: 11px;
+  border-radius: 9px;
 
-  padding: 10px 15px;
+  padding: 10px 14px;
 
-  background:
-
-    linear-gradient(
-      135deg,
-      var(--gold-light),
-      var(--gold)
-    );
+  background: var(--accent);
 
   color: white;
 
-  font-weight: 600;
-
-  box-shadow:
-    0 5px 14px
-    rgba(126, 87, 42, .18);
-
-  transition:
-    transform .18s ease,
-    box-shadow .18s ease,
-    filter .18s ease;
+  transition: .2s;
 
 }
 
 
 .btn:hover {
 
-  filter:
-    brightness(1.05);
-
-  transform:
-    translateY(-1px);
-
-  box-shadow:
-    0 8px 18px
-    rgba(126, 87, 42, .24);
-
-}
-
-
-.btn:active {
-
-  transform:
-    translateY(0);
+  background: var(--accentDark);
 
 }
 
 
 .btn.secondary {
 
-  background:
-    var(--surface-soft);
+  background: #eee8dd;
 
-  color:
-    var(--text-soft);
-
-  border:
-    1px solid
-    var(--line);
-
-  box-shadow:
-    none;
+  color: #3c352d;
 
 }
 
 
 .btn.secondary:hover {
 
-  background:
-    var(--surface-hover);
-
-  color:
-    var(--gold-dark);
-
-  border-color:
-    #d2c3ae;
+  background: #e2d9ca;
 
 }
 
@@ -471,22 +286,19 @@ button {
 
 .layout {
 
-  max-width: 1280px;
+  max-width: 1200px;
 
   margin: auto;
 
-  padding:
-    28px
-    22px
-    60px;
+  padding: 24px 18px 50px;
 
   display: grid;
 
   grid-template-columns:
-    265px
+    255px
     minmax(0, 1fr);
 
-  gap: 26px;
+  gap: 24px;
 
 }
 
@@ -497,84 +309,47 @@ button {
 
 .sidebar {
 
-  background:
-    rgba(255, 253, 248, .88);
+  background: var(--surface);
 
   border:
     1px solid
     var(--line);
 
-  border-radius:
-    var(--radius);
+  border-radius: 16px;
 
-  padding: 17px;
+  padding: 16px;
 
   height: fit-content;
 
   position: sticky;
 
-  top: 102px;
+  top: 94px;
 
-  box-shadow:
-    var(--shadow);
-
-  backdrop-filter:
-    blur(8px);
+  box-shadow: var(--shadow);
 
 }
 
 
 .sidebar-title {
 
-  display: flex;
-
-  align-items: center;
-
-  gap: 8px;
-
   font-weight: bold;
 
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 
   font-size: 16px;
 
-  color:
-    var(--text);
-
 }
 
-
-.sidebar-title::before {
-
-  content:
-    "✦";
-
-  color:
-    var(--gold);
-
-  font-size:
-    14px;
-
-}
-
-
-/* ============================================================
-   TESTAMENTOS
-   ============================================================ */
 
 .testament-tabs {
 
-  display:
-    grid;
+  display: grid;
 
-  grid-template-columns:
-    1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 
-  gap:
-    7px;
+  gap: 6px;
 
-  margin-bottom:
-    14px;
+  margin-bottom: 12px;
 
 }
 
@@ -585,168 +360,68 @@ button {
     1px solid
     var(--line);
 
-  background:
-    var(--surface-soft);
+  background: var(--surface2);
 
-  color:
-    var(--text-soft);
+  color: var(--text);
 
-  padding:
-    10px 6px;
+  padding: 9px 5px;
 
-  border-radius:
-    10px;
-
-  transition:
-    .2s ease;
-
-}
-
-
-.tab:hover {
-
-  background:
-    var(--surface-hover);
+  border-radius: 8px;
 
 }
 
 
 .tab.active {
 
-  background:
-    linear-gradient(
-      135deg,
-      var(--gold-light),
-      var(--gold)
-    );
+  background: var(--accent);
 
-  color:
-    white;
+  color: white;
 
-  border-color:
-    transparent;
-
-  box-shadow:
-    0 5px 12px
-    rgba(126, 87, 42, .18);
+  border-color: var(--accent);
 
 }
 
-
-/* ============================================================
-   LISTA DE LIVROS
-   ============================================================ */
 
 #bookList {
 
-  display:
-    grid;
+  display: grid;
 
-  gap:
-    3px;
+  gap: 4px;
 
-  max-height:
-    62vh;
+  max-height: 62vh;
 
-  overflow-y:
-    auto;
-
-  padding-right:
-    3px;
-
-}
-
-
-#bookList::-webkit-scrollbar {
-
-  width:
-    5px;
-
-}
-
-
-#bookList::-webkit-scrollbar-track {
-
-  background:
-    transparent;
-
-}
-
-
-#bookList::-webkit-scrollbar-thumb {
-
-  background:
-    #d5c9b9;
-
-  border-radius:
-    20px;
+  overflow: auto;
 
 }
 
 
 .book {
 
-  width:
-    100%;
+  width: 100%;
 
-  text-align:
-    left;
+  text-align: left;
 
-  background:
-    transparent;
+  background: transparent;
 
-  border:
-    0;
+  border: 0;
 
-  border-radius:
-    9px;
+  border-radius: 8px;
 
-  padding:
-    9px 11px;
+  padding: 9px 10px;
 
-  color:
-    var(--text-soft);
-
-  transition:
-    background .18s ease,
-    color .18s ease,
-    transform .18s ease;
+  color: var(--text);
 
 }
 
 
-.book:hover {
-
-  background:
-    var(--surface-hover);
-
-  color:
-    var(--gold-dark);
-
-  transform:
-    translateX(2px);
-
-}
-
-
+.book:hover,
 .book.active {
 
-  background:
-    linear-gradient(
-      90deg,
-      rgba(169, 120, 56, .14),
-      rgba(169, 120, 56, .04)
-    );
+  background: #eee6da;
 
-  color:
-    var(--gold-dark);
+  color: var(--accentDark);
 
-  font-weight:
-    bold;
-
-  box-shadow:
-    inset 3px 0 0
-    var(--gold);
+  font-weight: bold;
 
 }
 
@@ -757,206 +432,79 @@ button {
 
 .content {
 
-  min-width:
-    0;
+  min-width: 0;
 
 }
 
 
 /* ============================================================
-   PALAVRA PARA HOJE
+   TEXTO DO DIA
    ============================================================ */
 
 .daily {
 
-  position:
-    relative;
-
-  overflow:
-    hidden;
-
   background:
-
-    radial-gradient(
-      circle at 90% 10%,
-      rgba(215, 177, 111, .18),
-      transparent 32%
-    ),
-
     linear-gradient(
       135deg,
       #211c17,
-      #33261b 55%,
-      #42301f
+      #3d2b1d
     );
 
-  color:
-    white;
+  color: white;
 
-  border:
-    1px solid
-    rgba(255,255,255,.08);
+  border-radius: 18px;
 
-  border-radius:
-    var(--radius-lg);
+  padding: 25px;
 
-  padding:
-    29px 30px;
+  margin-bottom: 22px;
 
-  margin-bottom:
-    24px;
-
-  box-shadow:
-    var(--shadow-lg);
-
-}
-
-
-.daily::before {
-
-  content:
-    "✦";
-
-  position:
-    absolute;
-
-  right:
-    25px;
-
-  top:
-    14px;
-
-  color:
-    rgba(224, 186, 123, .18);
-
-  font-size:
-    76px;
-
-  line-height:
-    1;
-
-}
-
-
-.daily::after {
-
-  content:
-    "";
-
-  position:
-    absolute;
-
-  left:
-    0;
-
-  bottom:
-    0;
-
-  width:
-    100%;
-
-  height:
-    2px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      var(--gold-light),
-      transparent
-    );
+  box-shadow: var(--shadow);
 
 }
 
 
 .daily-label {
 
-  position:
-    relative;
+  color: #d8b895;
 
-  z-index:
-    1;
+  text-transform: uppercase;
 
-  color:
-    #d9b986;
+  letter-spacing: 1.4px;
 
-  text-transform:
-    uppercase;
+  font-size: 12px;
 
-  letter-spacing:
-    1.8px;
-
-  font-size:
-    11px;
-
-  font-weight:
-    bold;
+  font-weight: bold;
 
 }
 
 
 .daily h2 {
 
-  position:
-    relative;
+  margin: 7px 0 13px;
 
-  z-index:
-    1;
-
-  margin:
-    8px 0 13px;
-
-  font-size:
-    clamp(23px, 3vw, 29px);
-
-  font-weight:
-    700;
+  font-size: 25px;
 
 }
 
 
 .daily p {
 
-  position:
-    relative;
+  font-size: 19px;
 
-  z-index:
-    1;
+  line-height: 1.75;
 
-  max-width:
-    900px;
-
-  font-size:
-    19px;
-
-  line-height:
-    1.8;
-
-  color:
-    #f5eee4;
-
-  margin:
-    0 0 20px;
+  margin: 0 0 18px;
 
 }
 
 
 .daily-actions {
 
-  position:
-    relative;
+  display: flex;
 
-  z-index:
-    2;
+  gap: 8px;
 
-  display:
-    flex;
-
-  gap:
-    9px;
-
-  flex-wrap:
-    wrap;
+  flex-wrap: wrap;
 
 }
 
@@ -967,102 +515,65 @@ button {
 
 .reader {
 
-  background:
-    rgba(255, 253, 248, .94);
+  background: var(--surface);
 
   border:
     1px solid
     var(--line);
 
-  border-radius:
-    var(--radius-lg);
+  border-radius: 18px;
 
-  box-shadow:
-    var(--shadow);
+  box-shadow: var(--shadow);
 
-  overflow:
-    hidden;
+  overflow: hidden;
 
 }
 
 
 .reader-head {
 
-  padding:
-    25px 27px 19px;
+  padding: 22px 24px 16px;
 
   border-bottom:
     1px solid
     var(--line);
-
-  background:
-
-    linear-gradient(
-      180deg,
-      rgba(248,245,239,.75),
-      rgba(255,253,248,.95)
-    );
 
 }
 
 
 .breadcrumb {
 
-  color:
-    var(--muted);
+  color: var(--muted);
 
-  font-size:
-    12px;
+  font-size: 13px;
 
-  margin-bottom:
-    7px;
-
-  letter-spacing:
-    .35px;
+  margin-bottom: 5px;
 
 }
 
 
 .reader-title {
 
-  margin:
-    0;
+  margin: 0;
 
-  font-size:
-    clamp(27px, 4vw, 34px);
-
-  color:
-    var(--text);
-
-  letter-spacing:
-    -.3px;
+  font-size: 30px;
 
 }
 
 
-/* ============================================================
-   CONTROLES
-   ============================================================ */
-
 .chapter-controls {
 
-  display:
-    flex;
+  display: flex;
 
-  align-items:
-    center;
+  align-items: center;
 
-  justify-content:
-    space-between;
+  justify-content: space-between;
 
-  gap:
-    12px;
+  gap: 10px;
 
-  padding:
-    12px 20px;
+  padding: 13px 24px;
 
-  background:
-    var(--surface-soft);
+  background: var(--surface2);
 
   border-bottom:
     1px solid
@@ -1073,250 +584,155 @@ button {
 
 .chapter-controls .center {
 
-  flex:
-    1;
+  font-weight: bold;
 
-  font-weight:
-    bold;
-
-  text-align:
-    center;
-
-  color:
-    var(--text-soft);
-
-  font-size:
-    14px;
+  text-align: center;
 
 }
 
 
-/* ============================================================
-   VERSÍCULOS
-   ============================================================ */
-
 .verses {
 
-  padding:
-    21px 27px 35px;
+  padding: 18px 24px 30px;
 
 }
 
 
 .verse {
 
-  position:
-    relative;
+  position: relative;
 
-  padding:
-    10px 10px 10px 58px;
+  padding: 8px 8px 8px 53px;
 
-  border-radius:
-    11px;
+  border-radius: 9px;
 
-  line-height:
-    1.9;
+  line-height: 1.85;
 
-  font-size:
-    19px;
-
-  color:
-    var(--text);
-
-  transition:
-    background .18s ease,
-    box-shadow .18s ease;
+  font-size: 19px;
 
 }
 
 
 .verse:hover {
 
-  background:
-    #faf6ee;
-
-  box-shadow:
-    inset 3px 0 0
-    rgba(169,120,56,.28);
+  background: #faf7f1;
 
 }
 
 
 .verse-number {
 
-  position:
-    absolute;
+  position: absolute;
 
-  left:
-    8px;
+  left: 8px;
 
-  top:
-    13px;
+  top: 10px;
 
-  width:
-    37px;
+  width: 35px;
 
-  text-align:
-    right;
+  text-align: right;
 
-  color:
-    var(--gold);
+  color: var(--accent);
 
-  font-size:
-    13px;
+  font-size: 14px;
 
-  font-weight:
-    bold;
+  font-weight: bold;
 
 }
 
 
 .verse-actions {
 
-  display:
-    inline-flex;
+  display: inline-flex;
 
-  margin-left:
-    8px;
+  margin-left: 8px;
 
-  opacity:
-    0;
+  opacity: 0;
 
-  transition:
-    opacity .2s ease;
+  transition: .2s;
 
 }
 
 
 .verse:hover .verse-actions {
 
-  opacity:
-    1;
+  opacity: 1;
 
 }
 
 
 .small-share {
 
-  border:
-    0;
+  border: 0;
 
-  background:
-    rgba(169,120,56,.08);
+  background: transparent;
 
-  color:
-    var(--gold);
+  color: var(--accent);
 
-  padding:
-    3px 7px;
+  padding: 2px 5px;
 
-  border-radius:
-    7px;
-
-  font-size:
-    16px;
-
-  transition:
-    .18s ease;
+  font-size: 17px;
 
 }
 
 
 .small-share:hover {
 
-  background:
-    rgba(169,120,56,.16);
+  color: var(--accentDark);
 
-  color:
-    var(--gold-dark);
-
-  transform:
-    scale(1.08);
+  transform: scale(1.1);
 
 }
 
 
 /* ============================================================
-   RESULTADOS
+   PESQUISA
    ============================================================ */
 
 .search-results {
 
-  margin-top:
-    22px;
+  margin-top: 20px;
 
-  margin-bottom:
-    22px;
-
-  display:
-    none;
+  display: none;
 
 }
 
 
 .result {
 
-  position:
-    relative;
-
-  background:
-    rgba(255,253,248,.94);
+  background: var(--surface);
 
   border:
     1px solid
     var(--line);
 
-  border-radius:
-    14px;
+  border-radius: 12px;
 
-  padding:
-    17px 18px;
+  padding: 15px;
 
-  margin-bottom:
-    10px;
+  margin-bottom: 10px;
 
-  cursor:
-    pointer;
-
-  box-shadow:
-    var(--shadow-sm);
-
-  transition:
-    .2s ease;
+  cursor: pointer;
 
 }
 
 
 .result:hover {
 
-  border-color:
-    #c9ad87;
+  border-color: #bda98f;
 
-  background:
-    #fffaf2;
-
-  transform:
-    translateY(-1px);
-
-  box-shadow:
-    var(--shadow);
+  background: #fffaf2;
 
 }
 
 
 .result-ref {
 
-  color:
-    var(--gold-dark);
+  color: var(--accent);
 
-  font-weight:
-    bold;
+  font-weight: bold;
 
-  margin-bottom:
-    7px;
-
-  font-size:
-    15px;
+  margin-bottom: 5px;
 
 }
 
@@ -1329,42 +745,18 @@ button {
 .loading,
 .error {
 
-  padding:
-    38px 25px;
+  padding: 35px;
 
-  text-align:
-    center;
+  text-align: center;
 
-  color:
-    var(--muted);
-
-}
-
-
-.empty::before {
-
-  content:
-    "✦";
-
-  display:
-    block;
-
-  color:
-    var(--gold-light);
-
-  font-size:
-    22px;
-
-  margin-bottom:
-    8px;
+  color: var(--muted);
 
 }
 
 
 .loading {
 
-  animation:
-    pulse 1.4s infinite;
+  animation: pulse 1.2s infinite;
 
 }
 
@@ -1372,7 +764,7 @@ button {
 @keyframes pulse {
 
   0% {
-    opacity: .45;
+    opacity: .55;
   }
 
   50% {
@@ -1380,7 +772,7 @@ button {
   }
 
   100% {
-    opacity: .45;
+    opacity: .55;
   }
 
 }
@@ -1388,8 +780,7 @@ button {
 
 .error {
 
-  color:
-    var(--danger);
+  color: #9b2c2c;
 
 }
 
@@ -1400,122 +791,42 @@ button {
 
 .status {
 
-  position:
-    fixed;
+  position: fixed;
 
-  right:
-    20px;
+  right: 18px;
 
-  bottom:
-    20px;
+  bottom: 18px;
 
-  background:
-    rgba(31,29,26,.96);
+  background: #202020;
 
-  color:
-    white;
+  color: white;
 
-  padding:
-    12px 17px;
+  padding: 11px 15px;
 
-  border-radius:
-    11px;
+  border-radius: 9px;
 
-  border:
-    1px solid
-    rgba(255,255,255,.08);
+  box-shadow: var(--shadow);
 
-  box-shadow:
-    var(--shadow-lg);
+  opacity: 0;
 
-  opacity:
-    0;
+  pointer-events: none;
 
-  pointer-events:
-    none;
+  transform: translateY(8px);
 
-  transform:
-    translateY(10px);
+  transition: .25s;
 
-  transition:
-    .25s ease;
+  z-index: 500;
 
-  z-index:
-    5000;
-
-  max-width:
-    380px;
-
-  font-family:
-    Arial,
-    sans-serif;
-
-  font-size:
-    14px;
+  max-width: 360px;
 
 }
 
 
 .status.show {
 
-  opacity:
-    1;
+  opacity: 1;
 
-  transform:
-    translateY(0);
-
-}
-
-
-/* ============================================================
-   TABLET
-   ============================================================ */
-
-@media (max-width: 950px) {
-
-  .topbar-inner {
-
-    flex-wrap:
-      wrap;
-
-  }
-
-
-  .brand {
-
-    min-width:
-      0;
-
-  }
-
-
-  .search {
-
-    order:
-      3;
-
-    flex-basis:
-      100%;
-
-    max-width:
-      none;
-
-    margin-left:
-      0;
-
-  }
-
-
-  .layout {
-
-    grid-template-columns:
-      225px
-      minmax(0, 1fr);
-
-    gap:
-      18px;
-
-  }
+  transform: translateY(0);
 
 }
 
@@ -1524,72 +835,48 @@ button {
    CELULAR
    ============================================================ */
 
-@media (max-width: 760px) {
+@media (max-width: 850px) {
 
   .topbar-inner {
 
-    padding:
-      11px 14px;
-
-    gap:
-      12px;
+    flex-wrap: wrap;
 
   }
 
 
   .brand {
 
-    width:
-      100%;
+    min-width: 0;
 
   }
 
 
-  .brand-icon {
+  .search {
 
-    width:
-      42px;
+    order: 3;
 
-    height:
-      42px;
-
-  }
-
-
-  .brand strong {
-
-    font-size:
-      18px;
+    flex-basis: 100%;
 
   }
 
 
   .layout {
 
-    grid-template-columns:
-      1fr;
-
-    padding:
-      18px 12px 45px;
+    grid-template-columns: 1fr;
 
   }
 
 
   .sidebar {
 
-    position:
-      static;
-
-    border-radius:
-      15px;
+    position: static;
 
   }
 
 
   #bookList {
 
-    max-height:
-      250px;
+    max-height: 220px;
 
     grid-template-columns:
       repeat(
@@ -1600,37 +887,60 @@ button {
   }
 
 
-  .daily {
-
-    padding:
-      23px 21px;
-
-    border-radius:
-      18px;
-
-  }
-
-
   .daily h2 {
 
-    font-size:
-      23px;
+    font-size: 22px;
 
   }
 
 
-  .daily p {
+  .reader-title {
 
-    font-size:
-      18px;
+    font-size: 25px;
 
   }
 
 
-  .reader {
+  .verse {
 
-    border-radius:
-      18px;
+    padding-left: 43px;
+
+    font-size: 18px;
+
+  }
+
+
+  .verse-actions {
+
+    opacity: 1;
+
+  }
+
+}
+
+
+@media (max-width: 500px) {
+
+  .topbar-inner {
+
+    padding: 10px 12px;
+
+  }
+
+
+  .layout {
+
+    padding:
+      15px
+      10px
+      35px;
+
+  }
+
+
+  .daily {
+
+    padding: 19px;
 
   }
 
@@ -1638,15 +948,9 @@ button {
   .reader-head {
 
     padding:
-      20px 18px 16px;
-
-  }
-
-
-  .reader-title {
-
-    font-size:
-      27px;
+      18px
+      17px
+      14px;
 
   }
 
@@ -1654,7 +958,8 @@ button {
   .chapter-controls {
 
     padding:
-      10px 11px;
+      10px
+      12px;
 
   }
 
@@ -1662,18 +967,10 @@ button {
   .chapter-controls .btn {
 
     padding:
-      8px 10px;
+      8px
+      9px;
 
-    font-size:
-      13px;
-
-  }
-
-
-  .chapter-controls .center {
-
-    font-size:
-      13px;
+    font-size: 13px;
 
   }
 
@@ -1681,148 +978,17 @@ button {
   .verses {
 
     padding:
-      13px 12px 28px;
+      12px
+      12px
+      25px;
 
   }
 
 
   .verse {
 
-    padding:
-      10px 6px 10px 45px;
+    padding-left: 39px;
 
-    font-size:
-      18px;
-
-    line-height:
-      1.85;
-
-  }
-
-
-  .verse-number {
-
-    left:
-      4px;
-
-    width:
-      32px;
-
-  }
-
-
-  .verse-actions {
-
-    opacity:
-      1;
-
-  }
-
-}
-
-
-/* ============================================================
-   CELULARES PEQUENOS
-   ============================================================ */
-
-@media (max-width: 480px) {
-
-  .search {
-
-    flex-direction:
-      column;
-
-  }
-
-
-  .search .btn {
-
-    width:
-      100%;
-
-  }
-
-
-  .daily-actions {
-
-    display:
-      grid;
-
-    grid-template-columns:
-      1fr 1fr;
-
-  }
-
-
-  .daily-actions .btn {
-
-    width:
-      100%;
-
-  }
-
-
-  #bookList {
-
-    grid-template-columns:
-      1fr 1fr;
-
-  }
-
-
-  .chapter-controls .btn {
-
-    font-size:
-      12px;
-
-  }
-
-
-  .chapter-controls .center {
-
-    font-size:
-      12px;
-
-  }
-
-
-  .status {
-
-    left:
-      12px;
-
-    right:
-      12px;
-
-    bottom:
-      12px;
-
-    max-width:
-      none;
-
-  }
-
-}
-
-
-/* ============================================================
-   ACESSIBILIDADE
-   ============================================================ */
-
-@media (prefers-reduced-motion: reduce) {
-
-  html {
-    scroll-behavior: auto;
-  }
-
-  *,
-  *::before,
-  *::after {
-    transition:
-      none !important;
-
-    animation:
-      none !important;
   }
 
 }
@@ -1871,24 +1037,13 @@ button {
         id="searchInput"
         type="search"
         placeholder="Pesquisar uma palavra ou expressão..."
-        autocomplete="off"
       >
 
       <button
         class="btn"
-        type="button"
         onclick="pesquisar()"
       >
         Pesquisar
-      </button>
-
-      <button
-        class="btn secondary"
-        type="button"
-        onclick="limparPesquisa()"
-        title="Limpar pesquisa"
-      >
-        Limpar
       </button>
 
     </div>
@@ -1922,7 +1077,6 @@ button {
       <button
         id="tabAT"
         class="tab active"
-        type="button"
         onclick="selecionarTestamento('AT')"
       >
         Antigo
@@ -1932,7 +1086,6 @@ button {
       <button
         id="tabNT"
         class="tab"
-        type="button"
         onclick="selecionarTestamento('NT')"
       >
         Novo
@@ -1960,13 +1113,13 @@ button {
 
 
     <!-- ======================================================
-         PALAVRA PARA HOJE
+         TEXTO DO DIA
          ======================================================= -->
 
     <section class="daily">
 
       <div class="daily-label">
-        ✦ Palavra para hoje
+        Texto do dia
       </div>
 
 
@@ -1984,7 +1137,6 @@ button {
 
         <button
           class="btn"
-          type="button"
           onclick="compartilharDiario()"
         >
           ↗ Compartilhar
@@ -1992,8 +1144,7 @@ button {
 
 
         <button
-          class="btn secondary"
-          type="button"
+          class="btn"
           onclick="abrirDiario()"
         >
           Ler versículo
@@ -2046,7 +1197,6 @@ button {
 
         <button
           class="btn secondary"
-          type="button"
           onclick="capituloAnterior()"
         >
           ← Anterior
@@ -2063,7 +1213,6 @@ button {
 
         <button
           class="btn secondary"
-          type="button"
           onclick="proximoCapitulo()"
         >
           Próximo →
@@ -2095,15 +1244,9 @@ button {
 </main>
 
 
-<!-- ==========================================================
-     STATUS
-     =========================================================== -->
-
 <div
   id="status"
   class="status"
-  role="status"
-  aria-live="polite"
 ></div>
 
 
@@ -2115,7 +1258,6 @@ button {
 
 const API_URL =
   'https://script.google.com/macros/s/AKfycbyACS3Hi-BjcYFvCA1j8FzjMcEdc26-j2jc557fhdCmvHNz3qdhdRvXhTxVn9yAnxwm1w/exec';
-
 
 /* ============================================================
    VARIÁVEIS
@@ -2146,32 +1288,20 @@ document.addEventListener(
       );
 
 
-    if (campo) {
+    campo.addEventListener(
+      'keydown',
+      evento => {
 
-      campo.addEventListener(
-        'keydown',
-        evento => {
+        if (
+          evento.key === 'Enter'
+        ) {
 
-          if (
-            evento.key === 'Enter'
-          ) {
-
-            pesquisar();
-
-          }
-
-          if (
-            evento.key === 'Escape'
-          ) {
-
-            limparPesquisa();
-
-          }
+          pesquisar();
 
         }
-      );
 
-    }
+      }
+    );
 
 
     await Promise.allSettled([
@@ -2187,49 +1317,6 @@ document.addEventListener(
 
 
 /* ============================================================
-   LIMPAR PESQUISA
-   ============================================================ */
-
-function limparPesquisa() {
-
-  const campo =
-    document.getElementById(
-      'searchInput'
-    );
-
-
-  const caixa =
-    document.getElementById(
-      'searchResults'
-    );
-
-
-  if (campo) {
-
-    campo.value = '';
-
-  }
-
-
-  if (caixa) {
-
-    caixa.innerHTML = '';
-
-    caixa.style.display = 'none';
-
-  }
-
-
-  if (campo) {
-
-    campo.focus();
-
-  }
-
-}
-
-
-/* ============================================================
    API
    ============================================================ */
 
@@ -2239,11 +1326,9 @@ function api(parametros) {
 
     if (!API_URL) {
 
-      reject(
-        new Error(
-          'URL da API do Google Apps Script não configurada.'
-        )
-      );
+      reject(new Error(
+        'URL da API do Google Apps Script não configurada.'
+      ));
 
       return;
 
@@ -2252,8 +1337,7 @@ function api(parametros) {
 
     const callback =
       'kjsApi_' +
-      Date.now() +
-      '_' +
+      Date.now() + '_' +
       Math.random()
         .toString(36)
         .slice(2);
@@ -2264,7 +1348,6 @@ function api(parametros) {
         parametros || {}
       );
 
-
     params.set(
       'callback',
       callback
@@ -2272,30 +1355,20 @@ function api(parametros) {
 
 
     const script =
-      document.createElement(
-        'script'
-      );
+      document.createElement('script');
 
-
-    let finalizado =
-      false;
-
+    let finalizado = false;
 
     const timeout =
-      setTimeout(
-        function() {
+      setTimeout(function() {
 
-          finalizar();
+        finalizar();
 
-          reject(
-            new Error(
-              'Tempo esgotado ao comunicar com o Google Apps Script.'
-            )
-          );
+        reject(new Error(
+          'Tempo esgotado ao comunicar com o Google Apps Script.'
+        ));
 
-        },
-        15000
-      );
+      }, 15000);
 
 
     function finalizar() {
@@ -2304,28 +1377,16 @@ function api(parametros) {
         return;
       }
 
+      finalizado = true;
 
-      finalizado =
-        true;
-
-
-      clearTimeout(
-        timeout
-      );
-
+      clearTimeout(timeout);
 
       script.remove();
 
-
       try {
-
         delete window[callback];
-
       } catch (erro) {
-
-        window[callback] =
-          undefined;
-
+        window[callback] = undefined;
       }
 
     }
@@ -2338,41 +1399,27 @@ function api(parametros) {
           return;
         }
 
-
         finalizar();
 
+        dados = dados || {};
 
-        dados =
-          dados || {};
+        if (dados.sucesso === false || dados.ok === false) {
 
-
-        if (
-          dados.sucesso === false ||
-          dados.ok === false
-        ) {
-
-          reject(
-            new Error(
-              dados.erro ||
-              'Erro retornado pela API.'
-            )
-          );
+          reject(new Error(
+            dados.erro ||
+            'Erro retornado pela API.'
+          ));
 
           return;
 
         }
 
-
-        resolve(
-          dados
-        );
+        resolve(dados);
 
       };
 
 
-    script.async =
-      true;
-
+    script.async = true;
 
     script.src =
       API_URL +
@@ -2387,15 +1434,11 @@ function api(parametros) {
           return;
         }
 
-
         finalizar();
 
-
-        reject(
-          new Error(
-            'Não foi possível comunicar com o Google Apps Script.'
-          )
-        );
+        reject(new Error(
+          'Não foi possível comunicar com o Google Apps Script.'
+        ));
 
       };
 
@@ -2407,6 +1450,7 @@ function api(parametros) {
   });
 
 }
+
 
 
 /* ============================================================
@@ -2439,40 +1483,27 @@ async function carregarLivros() {
       Array.isArray(
         dados.livros
       )
+        ? dados.livros.map(function(livro) {
+            const codigo =
+              livro.livro ||
+              livro.codigo ||
+              '';
 
-        ? dados.livros.map(
-            function(livro) {
+            const nome =
+              livro.nome ||
+              livro.nomeLivro ||
+              codigo;
 
-              const codigo =
-                livro.livro ||
-                livro.codigo ||
-                '';
-
-
-              const nome =
-                livro.nome ||
-                livro.nomeLivro ||
-                codigo;
-
-
-              return Object.assign(
-                {},
-                livro,
-                {
-                  livro:
-                    String(codigo),
-
-                  codigo:
-                    String(codigo),
-
-                  nome:
-                    String(nome)
-                }
-              );
-
-            }
-          )
-
+            return Object.assign(
+              {},
+              livro,
+              {
+                livro: String(codigo),
+                codigo: String(codigo),
+                nome: String(nome)
+              }
+            );
+          })
         : [];
 
 
@@ -2538,9 +1569,7 @@ function selecionarTestamento(
 
 
   document
-    .getElementById(
-      'tabAT'
-    )
+    .getElementById('tabAT')
     .classList.toggle(
       'active',
       testamentoAtual === 'AT'
@@ -2548,9 +1577,7 @@ function selecionarTestamento(
 
 
   document
-    .getElementById(
-      'tabNT'
-    )
+    .getElementById('tabNT')
     .classList.toggle(
       'active',
       testamentoAtual === 'NT'
@@ -2617,7 +1644,6 @@ function renderizarLivros() {
 
             <button
               class="book ${ativo ? 'active' : ''}"
-              type="button"
               data-livro="${esc(livro.livro)}"
             >
               ${esc(livro.nome)}
@@ -2631,9 +1657,7 @@ function renderizarLivros() {
 
 
   container
-    .querySelectorAll(
-      '.book'
-    )
+    .querySelectorAll('.book')
     .forEach(
       botao => {
 
@@ -2691,8 +1715,7 @@ async function selecionarLivro(
     livro;
 
 
-  capituloAtual =
-    1;
+  capituloAtual = 1;
 
 
   selecionarTestamento(
@@ -2736,8 +1759,7 @@ async function carregarCapitulo() {
     const dados =
       await api({
 
-        action:
-          'capitulo',
+        action: 'capitulo',
 
         livro:
           livroAtual.livro,
@@ -2842,7 +1864,7 @@ function renderizarCapitulo(
 
               <article
                 class="verse"
-                id="v-${esc(verso.versiculo)}"
+                id="v-${verso.versiculo}"
               >
 
                 <span class="verse-number">
@@ -2859,9 +1881,7 @@ function renderizarCapitulo(
 
                   <button
                     class="small-share"
-                    type="button"
                     title="Compartilhar versículo"
-                    aria-label="Compartilhar ${esc(referencia)}"
                     onclick='compartilharTexto(
                       ${JSON.stringify(referencia)},
                       ${JSON.stringify(verso.texto)}
@@ -2882,13 +1902,8 @@ function renderizarCapitulo(
 
 
   window.scrollTo({
-
-    top:
-      0,
-
-    behavior:
-      'smooth'
-
+    top: 0,
+    behavior: 'smooth'
   });
 
 }
@@ -2949,8 +1964,7 @@ async function carregarDiario() {
 
     ultimoDiario =
       await api({
-        action:
-          'diario'
+        action: 'diario'
       });
 
 
@@ -2976,7 +1990,7 @@ async function carregarDiario() {
         'dailyReference'
       )
       .textContent =
-        'Palavra para hoje';
+        'Texto do dia';
 
 
     document
@@ -3063,13 +2077,8 @@ async function abrirDiario() {
       if (elemento) {
 
         elemento.scrollIntoView({
-
-          behavior:
-            'smooth',
-
-          block:
-            'center'
-
+          behavior: 'smooth',
+          block: 'center'
         });
 
       }
@@ -3177,30 +2186,18 @@ Bíblia King James`;
           'textarea'
         );
 
-
       area.value =
         mensagem;
-
-
-      area.style.position =
-        'fixed';
-
-      area.style.left =
-        '-9999px';
-
 
       document.body.appendChild(
         area
       );
 
-
       area.select();
-
 
       document.execCommand(
         'copy'
       );
-
 
       area.remove();
 
@@ -3309,8 +2306,7 @@ async function pesquisar() {
       <div
         style="
           margin-bottom:10px;
-          color:var(--muted);
-          font-size:14px;
+          color:var(--muted)
         "
       >
 
@@ -3360,9 +2356,7 @@ async function pesquisar() {
 
 
     caixa
-      .querySelectorAll(
-        '.result'
-      )
+      .querySelectorAll('.result')
       .forEach(
         elemento => {
 
@@ -3395,13 +2389,8 @@ async function pesquisar() {
 
 
     caixa.scrollIntoView({
-
-      behavior:
-        'smooth',
-
-      block:
-        'start'
-
+      behavior: 'smooth',
+      block: 'start'
     });
 
   } catch (erro) {
@@ -3481,11 +2470,9 @@ async function abrirResultado(
 
         elemento.scrollIntoView({
 
-          behavior:
-            'smooth',
+          behavior: 'smooth',
 
-          block:
-            'center'
+          block: 'center'
 
         });
 
@@ -3499,7 +2486,7 @@ async function abrirResultado(
 
 
 /* ============================================================
-   MENSAGEM DE STATUS
+   MENSAGEM
    ============================================================ */
 
 function mostrarStatus(
@@ -3552,16 +2539,12 @@ function normalizar(
   return String(
     valor || ''
   )
-
   .normalize('NFD')
-
   .replace(
     /[\u0300-\u036f]/g,
     ''
   )
-
   .toUpperCase()
-
   .trim();
 
 }
