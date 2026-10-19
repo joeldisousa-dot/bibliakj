@@ -44,7 +44,7 @@
   </aside>
   <section class="content">
     <section class="daily"><div class="daily-label">✦ Palavra para hoje</div><h2 id="dailyReference">Carregando...</h2><p id="dailyText">Carregando o texto bíblico para hoje...</p>
-      <div class="daily-actions"><button class="btn" onclick="compartilharDiario()">↗ Compartilhar</button><button class="btn" onclick="abrirDiario()">Ler versículo</button></div>
+      <div class="daily-actions"><button class="btn" id="refreshDailyButton" onclick="atualizarPalavraHoje()">↻ Atualizar Palavra para hoje</button><button class="btn" onclick="compartilharDiario()">↗ Compartilhar</button><button class="btn" onclick="abrirDiario()">Ler versículo</button></div>
     </section>
     <section id="searchResults" class="search-results"></section>
     <section class="reader"><div class="reader-head"><div class="breadcrumb" id="readerBreadcrumb">Bíblia King James</div><h1 class="reader-title" id="readerTitle">Selecione um livro</h1></div>
@@ -206,7 +206,40 @@ function renderizarCapitulo(dados){if(!dados||!dados.livro){document.getElementB
 function capituloAnterior(){if(!livroAtual||capituloAtual<=1){mostrarStatus('Você já está no primeiro capítulo.');return;}capituloAtual--;carregarCapitulo();}
 function proximoCapitulo(){if(!livroAtual)return;capituloAtual++;carregarCapitulo();}
 
-async function carregarDiario(){try{ultimoDiario=await api({action:'diario'});document.getElementById('dailyReference').textContent=ultimoDiario.referencia||'Texto do dia';document.getElementById('dailyText').textContent=ultimoDiario.texto||'';}catch(erro){document.getElementById('dailyReference').textContent='Texto do dia';document.getElementById('dailyText').textContent=erro.message;}}
+async function carregarDiario(forcarAtualizacao=false){
+  const referencia=document.getElementById('dailyReference');
+  const texto=document.getElementById('dailyText');
+  try{
+    const parametros={action:'diario'};
+    // Evita reutilizar uma resposta em cache quando o usuário clica em atualizar.
+    if(forcarAtualizacao)parametros._=Date.now();
+    const dados=await api(parametros);
+    ultimoDiario=dados;
+    referencia.textContent=ultimoDiario.referencia||'Texto do dia';
+    texto.textContent=ultimoDiario.texto||'Nenhum texto foi retornado pela API.';
+  }catch(erro){
+    referencia.textContent='Texto do dia';
+    texto.textContent=erro.message;
+    if(forcarAtualizacao)mostrarStatus('Não foi possível atualizar a Palavra para hoje.');
+  }
+}
+
+async function atualizarPalavraHoje(){
+  const botao=document.getElementById('refreshDailyButton');
+  if(!botao)return;
+  const textoOriginal=botao.textContent;
+  botao.disabled=true;
+  botao.textContent='Atualizando...';
+  try{
+    await carregarDiario(true);
+    if(ultimoDiario&&ultimoDiario.referencia&&ultimoDiario.texto){
+      mostrarStatus('Palavra para hoje atualizada.');
+    }
+  }finally{
+    botao.disabled=false;
+    botao.textContent=textoOriginal;
+  }
+}
 async function abrirDiario(){if(!ultimoDiario)return;const codigo=ultimoDiario.livro&&ultimoDiario.livro.livro;const livro=livros.find(l=>String(l.livro)===String(codigo));if(!livro){mostrarStatus('Livro do texto diário não encontrado.');return;}selecionarTestamento(livro.qual||'AT');livroAtual=livro;capituloAtual=Number(ultimoDiario.capitulo);renderizarLivros();await carregarCapitulo();setTimeout(()=>{const el=document.getElementById(`v-${ultimoDiario.versiculo}`);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},300);}
 async function compartilharDiario(){if(ultimoDiario)await compartilharTexto(ultimoDiario.referencia,ultimoDiario.texto);}
 async function compartilharTexto(referencia,texto){const mensagem=`${referencia}\n\n"${texto}"\n\nBíblia King James`;if(navigator.share){try{await navigator.share({title:referencia,text:mensagem,url:location.href});return;}catch(e){if(e&&e.name==='AbortError')return;}}
