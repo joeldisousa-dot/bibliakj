@@ -14,10 +14,10 @@
 .btn{border:0;border-radius:9px;padding:10px 14px;background:var(--accent);color:white;transition:.2s;white-space:nowrap}.btn:hover{background:var(--accentDark)}.btn.secondary{background:#eee8dd;color:#3c352d}.btn.secondary:hover{background:#e2d9ca}
 .layout{max-width:1200px;margin:auto;padding:24px 18px 50px;display:grid;grid-template-columns:255px minmax(0,1fr);gap:24px}.sidebar{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;height:fit-content;position:sticky;top:94px;box-shadow:var(--shadow)}.sidebar-title{font-weight:bold;margin-bottom:12px;font-size:16px}.testament-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}.tab{border:1px solid var(--line);background:var(--surface2);color:var(--text);padding:9px 5px;border-radius:8px}.tab.active{background:var(--accent);color:white;border-color:var(--accent)}#bookList{display:grid;gap:4px;max-height:62vh;overflow:auto}.book{width:100%;text-align:left;background:transparent;border:0;border-radius:8px;padding:9px 10px;color:var(--text)}.book:hover,.book.active{background:#eee6da;color:var(--accentDark);font-weight:bold}.content{min-width:0}
 .daily{background:linear-gradient(135deg,#211c17,#3d2b1d);color:white;border-radius:18px;padding:25px;margin-bottom:22px;box-shadow:var(--shadow)}.daily-label{color:#d8b895;text-transform:uppercase;letter-spacing:1.4px;font-size:12px;font-weight:bold}.daily h2{margin:7px 0 13px;font-size:25px}.daily p{font-size:19px;line-height:1.75;margin:0 0 18px}.daily-actions{display:flex;gap:8px;flex-wrap:wrap}
-.reader{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.reader-head{padding:22px 24px 16px;border-bottom:1px solid var(--line)}.breadcrumb{color:var(--muted);font-size:13px;margin-bottom:5px}.reader-title{margin:0;font-size:30px}.chapter-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 24px;background:var(--surface2);border-bottom:1px solid var(--line)}.chapter-controls .center{font-weight:bold;text-align:center}.verses{padding:18px 24px 30px}.verse{position:relative;padding:8px 8px 8px 53px;border-radius:9px;line-height:1.85;font-size:19px}.verse:hover{background:#faf7f1}.verse-number{position:absolute;left:8px;top:10px;width:35px;text-align:right;color:var(--accent);font-size:14px;font-weight:bold}.verse-actions{display:inline-flex;margin-left:8px;opacity:0;transition:.2s}.verse:hover .verse-actions{opacity:1}.small-share{border:0;background:transparent;color:var(--accent);padding:2px 5px;font-size:17px}.small-share:hover{color:var(--accentDark);transform:scale(1.1)}
+.reader{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden}.reader-head{padding:22px 24px 16px;border-bottom:1px solid var(--line)}.breadcrumb{color:var(--muted);font-size:13px;margin-bottom:5px}.reader-title{margin:0;font-size:30px}.chapter-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 24px;background:var(--surface2);border-bottom:1px solid var(--line)}.chapter-picker{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:bold;text-align:center}.chapter-picker label{white-space:nowrap}.chapter-picker select{max-width:190px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;cursor:pointer}.chapter-picker select:focus{outline:2px solid var(--accent);outline-offset:2px}.verses{padding:18px 24px 30px}.verse{position:relative;padding:8px 8px 8px 53px;border-radius:9px;line-height:1.85;font-size:19px}.verse:hover{background:#faf7f1}.verse-number{position:absolute;left:8px;top:10px;width:35px;text-align:right;color:var(--accent);font-size:14px;font-weight:bold}.verse-actions{display:inline-flex;margin-left:8px;opacity:0;transition:.2s}.verse:hover .verse-actions{opacity:1}.small-share{border:0;background:transparent;color:var(--accent);padding:2px 5px;font-size:17px}.small-share:hover{color:var(--accentDark);transform:scale(1.1)}
 .search-results{margin-top:20px;display:none}.result{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:10px;cursor:pointer}.result:hover{border-color:#bda98f;background:#fffaf2}.result-ref{color:var(--accent);font-weight:bold;margin-bottom:5px}.empty,.loading,.error{padding:35px;text-align:center;color:var(--muted)}.loading{animation:pulse 1.2s infinite}@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}.error{color:#9b2c2c}.status{position:fixed;right:18px;bottom:18px;background:#202020;color:white;padding:11px 15px;border-radius:9px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s;z-index:500;max-width:360px}.status.show{opacity:1;transform:translateY(0)}.search-highlight{display:inline;padding:1px 3px;border-radius:4px;color:#14532d!important;background:#bbf7d0;font-weight:800;-webkit-box-decoration-break:clone;box-decoration-break:clone}.result .search-highlight{box-shadow:inset 0 -1px 0 #4ade80}
 @media(max-width:850px){.topbar-inner{flex-wrap:wrap}.brand{min-width:0}.search{order:3;flex-basis:100%}.layout{grid-template-columns:1fr}.sidebar{position:static}#bookList{max-height:220px;grid-template-columns:repeat(2,minmax(0,1fr))}.daily h2{font-size:22px}.reader-title{font-size:25px}.verse{padding-left:43px;font-size:18px}.verse-actions{opacity:1}}
-@media(max-width:500px){.topbar-inner{padding:10px 12px}.search{flex-wrap:wrap}.search select{width:100%;max-width:none}.search input{flex:1;min-width:0}.layout{padding:15px 10px 35px}.daily{padding:19px}.reader-head{padding:18px 17px 14px}.chapter-controls{padding:10px 12px}.chapter-controls .btn{padding:8px 9px;font-size:13px}.verses{padding:12px 12px 25px}.verse{padding-left:39px}}
+@media(max-width:500px){.topbar-inner{padding:10px 12px}.search{flex-wrap:wrap}.search select{width:100%;max-width:none}.search input{flex:1;min-width:0}.layout{padding:15px 10px 35px}.daily{padding:19px}.reader-head{padding:18px 17px 14px}.chapter-controls{padding:10px 8px;gap:5px}.chapter-controls .btn{padding:8px 7px;font-size:12px}.chapter-picker{gap:4px;font-size:13px}.chapter-picker select{max-width:105px;padding:8px 5px;font-size:13px}.verses{padding:12px 12px 25px}.verse{padding-left:39px}}
 </style>
 </head>
 <body>
@@ -48,7 +48,16 @@
     </section>
     <section id="searchResults" class="search-results"></section>
     <section class="reader"><div class="reader-head"><div class="breadcrumb" id="readerBreadcrumb">Bíblia King James</div><h1 class="reader-title" id="readerTitle">Selecione um livro</h1></div>
-      <div class="chapter-controls"><button class="btn secondary" onclick="capituloAnterior()">← Anterior</button><div class="center" id="chapterLabel">Capítulo</div><button class="btn secondary" onclick="proximoCapitulo()">Próximo →</button></div>
+      <div class="chapter-controls">
+        <button class="btn secondary" onclick="capituloAnterior()">← Anterior</button>
+        <div class="chapter-picker">
+          <label for="chapterSelect">Capítulo</label>
+          <select id="chapterSelect" aria-label="Selecionar capítulo" onchange="selecionarCapitulo(this.value)">
+            <option value="1">Capítulo 1</option>
+          </select>
+        </div>
+        <button class="btn secondary" onclick="proximoCapitulo()">Próximo →</button>
+      </div>
       <div id="verses" class="verses"><div class="empty">Escolha um livro e um capítulo para começar a leitura.</div></div>
     </section>
   </section>
@@ -85,14 +94,59 @@ function renderizarLivros(){const container=document.getElementById('bookList');
   container.innerHTML=lista.map(l=>`<button class="book ${livroAtual&&String(l.livro)===String(livroAtual.livro)?'active':''}" data-livro="${esc(l.livro)}">${esc(l.nome)}</button>`).join('');
   container.querySelectorAll('.book').forEach(b=>b.addEventListener('click',()=>{const l=livros.find(x=>String(x.livro)===String(b.dataset.livro));if(l)selecionarLivro(l);}));}
 async function selecionarLivro(livro){if(!livro)return;livroAtual=livro;capituloAtual=1;selecionarTestamento(livro.qual||'AT');renderizarLivros();await carregarCapitulo();}
+
+function atualizarSeletorCapitulos(capitulo){
+  const seletor=document.getElementById('chapterSelect');
+  if(!seletor)return;
+  const atual=Number(capitulo)||1;
+  // O total de capítulos é descoberto a partir dos capítulos existentes
+  // na aba Texto da planilha, por meio da ação "capitulos" da API.
+  seletor.innerHTML='<option value="">Carregando capítulos...</option>';
+  seletor.disabled=true;
+  api({action:'capitulos',livro:livroAtual.livro}).then(dados=>{
+    let capitulos=Array.isArray(dados.capitulos)?dados.capitulos:[];
+    capitulos=capitulos.map(Number).filter(n=>Number.isInteger(n)&&n>0);
+    if(!capitulos.length && Number(dados.totalCapitulos)>0){
+      capitulos=Array.from({length:Number(dados.totalCapitulos)},(_,i)=>i+1);
+    }
+    // Compatibilidade com APIs que retornam apenas o capítulo atual.
+    if(!capitulos.length)capitulos=[atual];
+    seletor.innerHTML=capitulos.map(n=>`<option value="${n}">Capítulo ${n}</option>`).join('');
+    if(!capitulos.includes(atual)){
+      const option=document.createElement('option');
+      option.value=String(atual);
+      option.textContent=`Capítulo ${atual}`;
+      seletor.appendChild(option);
+    }
+    seletor.value=String(atual);
+    seletor.disabled=false;
+  }).catch(()=>{
+    // Mantém a leitura funcionando caso a API ainda não tenha a ação "capitulos".
+    seletor.innerHTML=`<option value="${atual}">Capítulo ${atual}</option>`;
+    seletor.value=String(atual);
+    seletor.disabled=false;
+  });
+}
+
+function selecionarCapitulo(valor){
+  const numero=Number(valor);
+  if(!livroAtual||!Number.isInteger(numero)||numero<1)return;
+  capituloAtual=numero;
+  carregarCapitulo();
+}
+
 async function carregarCapitulo(){if(!livroAtual)return;const container=document.getElementById('verses');container.innerHTML='<div class="loading">Carregando capítulo...</div>';
   try{const dados=await api({action:'capitulo',livro:livroAtual.livro,cap:capituloAtual});renderizarCapitulo(dados);}catch(erro){container.innerHTML=`<div class="error">${esc(erro.message)}</div>`;}}
+
 function renderizarCapitulo(dados){if(!dados||!dados.livro){document.getElementById('verses').innerHTML='<div class="empty">Este capítulo não foi encontrado.</div>';return;}
+  capituloAtual=Number(dados.capitulo)||capituloAtual;
   document.getElementById('readerBreadcrumb').textContent=`${normalizar(dados.livro.qual)==='NT'?'Novo Testamento':'Antigo Testamento'} • ${dados.livro.nome}`;
-  document.getElementById('readerTitle').textContent=`${dados.livro.nome} ${dados.capitulo}`;document.getElementById('chapterLabel').textContent=`${dados.livro.nome} • Capítulo ${dados.capitulo}`;
+  document.getElementById('readerTitle').textContent=`${dados.livro.nome} ${dados.capitulo}`;
+  atualizarSeletorCapitulos(capituloAtual);
   const versiculos=Array.isArray(dados.versiculos)?dados.versiculos:[];if(!versiculos.length){document.getElementById('verses').innerHTML='<div class="empty">Este capítulo não foi encontrado.</div>';return;}
   document.getElementById('verses').innerHTML=versiculos.map(v=>{const ref=`${dados.livro.nome} ${dados.capitulo}:${v.versiculo}`;return `<article class="verse" id="v-${esc(v.versiculo)}"><span class="verse-number">${esc(v.versiculo)}</span><span class="verse-text">${destacarTexto(v.texto,termoPesquisado)}</span><span class="verse-actions"><button class="small-share" title="Compartilhar versículo" data-ref="${esc(ref)}" data-texto="${esc(v.texto)}">↗</button></span></article>`;}).join('');
   document.querySelectorAll('.small-share').forEach(b=>b.addEventListener('click',()=>compartilharTexto(b.dataset.ref,b.dataset.texto)));window.scrollTo({top:0,behavior:'smooth'});}
+
 function capituloAnterior(){if(!livroAtual||capituloAtual<=1){mostrarStatus('Você já está no primeiro capítulo.');return;}capituloAtual--;carregarCapitulo();}
 function proximoCapitulo(){if(!livroAtual)return;capituloAtual++;carregarCapitulo();}
 
