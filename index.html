@@ -1151,14 +1151,14 @@ function criarReferenciasHTML(referencias) {
    ABRIR UMA REFERÊNCIA, EX.: JOÃO 1:1
 ===================================================== */
 
-function abrirReferencia(referencia) {
-  const resultado = String(referencia).match(
+async function abrirReferencia(referencia) {
+  const resultado = String(referencia).trim().match(
     /^(.+?)\s+(\d+):(\d+)(?:-(\d+))?$/
   );
 
   if (!resultado) {
     mostrarMensagem(
-      "Formato de referência inválido: " + referencia,
+      "Referência inválida: " + referencia,
       "erro"
     );
     return;
@@ -1168,23 +1168,51 @@ function abrirReferencia(referencia) {
   const numeroCapitulo = Number(resultado[2]);
   const numeroVersiculo = Number(resultado[3]);
 
-  const livro = localizarLivro(nomeLivro);
+  let livro = localizarLivro(nomeLivro);
+
+  // Também aceita códigos retornados pela API, mas sempre converte
+  // para o nome legível do livro antes de exibir ou abrir a referência.
+  if (!livro && Array.isArray(livrosDaAPI)) {
+    const token = normalizarTexto(nomeLivro).replace(/^-+/, "");
+    const registro = livrosDaAPI.find(function(item) {
+      const valores = [item.codigo, item.livro, item.id, item.bookId]
+        .filter(value => value != null)
+        .map(value => normalizarTexto(String(value)).replace(/^-+/, ""));
+      return valores.includes(token);
+    });
+    if (registro) {
+      livro = localizarLivro(registro.nome || registro.nomeLivro || "");
+    }
+  }
 
   if (!livro) {
     mostrarMensagem(
-      "Livro não identificado: " + nomeLivro,
+      "Não foi possível identificar o livro da referência: " + referencia,
       "erro"
     );
     return;
   }
 
   const indice = LIVROS.indexOf(livro);
-
   elementoLivro.value = String(indice);
   preencherCapitulos(indice);
   elementoCapitulo.value = String(numeroCapitulo);
 
-  carregarCapitulo();
+  await carregarCapitulo();
+
+  // Leva o usuário ao versículo indicado, não apenas ao início do capítulo.
+  window.setTimeout(function() {
+    const alvo = elementoListaVersiculos.querySelector(
+      '[data-versiculo="' + numeroVersiculo + '"]'
+    );
+    if (alvo) {
+      alvo.scrollIntoView({ behavior: "smooth", block: "center" });
+      alvo.classList.add("versiculo-selecionado");
+      window.setTimeout(function() {
+        alvo.classList.remove("versiculo-selecionado");
+      }, 2200);
+    }
+  }, 100);
 }
 
 /* =====================================================
@@ -1372,9 +1400,82 @@ function obterSinonimosPalavra(palavra) {
     [];
 }
 
+function resolverNomeLivroDaAPI(valor) {
+  if (valor == null || String(valor).trim() === "") return "";
+
+  const texto = String(valor).trim();
+  const livroConhecido = localizarLivro(texto);
+  if (livroConhecido) return livroConhecido.nome;
+
+  if (Array.isArray(livrosDaAPI)) {
+    const codigoProcurado = normalizarTexto(texto).replace(/^-+/, "");
+    const registro = livrosDaAPI.find(function(item) {
+      const codigos = [item.codigo, item.livro, item.id, item.bookId]
+        .filter(value => value != null)
+        .map(value => normalizarTexto(String(value)).replace(/^-+/, ""));
+      return codigos.includes(codigoProcurado);
+    });
+
+    if (registro) {
+      const nome = registro.nome || registro.nomeLivro || registro.book || "";
+      const livroPorNome = localizarLivro(nome);
+      if (livroPorNome) return livroPorNome.nome;
+    }
+  }
+
+  return "";
+}
+
+function normalizarReferenciaBiblica(valor) {
+  if (!valor) return "";
+
+  const texto = String(valor).trim();
+  const partes = texto.match(/^(.+?)\s+(\d+):(\d+)(?:-(\d+))?$/);
+  if (!partes) return "";
+
+  const nomeLivro = resolverNomeLivroDaAPI(partes[1].trim());
+  if (!nomeLivro) return "";
+
+  return nomeLivro + " " + Number(partes[2]) + ":" + Number(partes[3]) +
+    (partes[4] ? "-" + Number(partes[4]) : "");
+}
+
 function obterReferenciaDeItemPesquisa(item) {
-  if (typeof item === "string") return "";
-  return obterReferenciaResultado(item);
+  if (!item || typeof item !== "object") return "";
+
+  // Prefere os campos separados, pois o campo "referencia" da API pode
+  // vir com códigos internos (por exemplo "-10 5:18") em vez do nome do livro.
+  const livroValor =
+    item.nomeLivro || item.livroNome || item.bookName || item.nome_livro ||
+    item.livro || item.book || item.codigoLivro || item.codigo_livro;
+
+  const capitulo =
+    item.capitulo ?? item.capítulo ?? item.chapter ?? item.cap;
+
+  const versiculo =
+    item.versiculo ?? item.versículo ?? item.verse ?? item.vers;
+
+  if (livroValor != null && capitulo != null && versiculo != null) {
+    const nomeLivro = resolverNomeLivroDaAPI(livroValor);
+    if (nomeLivro) {
+      return nomeLivro + " " + Number(capitulo) + ":" + Number(versiculo);
+    }
+  }
+
+  const referenciasPossiveis = [
+    item.referencia,
+    item.ref,
+    item.reference,
+    item.endereco,
+    item.citacao
+  ];
+
+  for (const possivel of referenciasPossiveis) {
+    const referencia = normalizarReferenciaBiblica(possivel);
+    if (referencia) return referencia;
+  }
+
+  return "";
 }
 
 function adicionarBotaoReferencia(container, referencia) {
@@ -1787,35 +1888,14 @@ function exibirResultadosPesquisa(resultados) {
 }
 
 function obterReferenciaResultado(item) {
-  if (!item || typeof item !== "object") {
-    return "";
-  }
+  if (!item || typeof item !== "object") return "";
 
-  if (item.referencia || item.ref) {
-    return String(item.referencia || item.ref);
-  }
+  const referencia = obterReferenciaDeItemPesquisa(item);
+  if (referencia) return referencia;
 
-  const livro =
-    item.livro ||
-    item.nomeLivro ||
-    item.book ||
-    "";
-
-  const capitulo =
-    item.capitulo ??
-    item.capítulo ??
-    item.chapter;
-
-  const versiculo =
-    item.versiculo ??
-    item.versículo ??
-    item.verse;
-
-  if (livro && capitulo != null && versiculo != null) {
-    return livro + " " + capitulo + ":" + versiculo;
-  }
-
-  return "";
+  return normalizarReferenciaBiblica(
+    item.referencia || item.ref || item.reference || ""
+  );
 }
 
 document
