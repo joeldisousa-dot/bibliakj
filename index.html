@@ -1,154 +1,1580 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#151515">
-<meta name="description" content="Bíblia King James - leitura, pesquisa, texto diário e marcação por cores.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>Bíblia King James</title>
+
 <style>
-:root{--bg:#f3f0e9;--surface:#fffdf8;--surface2:#f8f4ec;--text:#29251f;--muted:#766e63;--line:#ded7cb;--accent:#8b5e34;--accentDark:#684421;--dark:#151515;--white:#fff;--shadow:0 12px 35px rgba(35,29,20,.10)}
-*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:180px}body{margin:0;background:var(--bg);color:var(--text);font-family:Georgia,"Times New Roman",serif}button,input,select{font:inherit}button{cursor:pointer}
-.topbar{position:sticky;top:0;z-index:100;background:rgba(21,21,21,.98);color:white;box-shadow:0 4px 18px rgba(0,0,0,.18)}.topbar-inner{max-width:1200px;margin:auto;min-height:70px;padding:12px 18px;display:flex;align-items:center;gap:18px}.brand{display:flex;align-items:center;gap:11px;min-width:240px}.brand-icon{width:42px;height:42px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.25);border-radius:10px;font-size:21px}.brand strong{display:block;font-size:19px}.brand small{display:block;color:#cfc8bd;font-size:12px;margin-top:2px}
-.search{flex:1;display:flex;gap:8px;min-width:0}.search input,.search select{border:1px solid #444;background:#242424;color:white;border-radius:10px;padding:12px 14px;outline:none}.search input{width:100%;min-width:100px}.search select{flex-shrink:0;max-width:190px}.search input:focus,.search select:focus{border-color:#b58a60}.search select option{background:#242424;color:white}.btn{border:0;border-radius:9px;padding:10px 14px;background:var(--accent);color:white;transition:background .2s;white-space:nowrap}.btn:hover{background:var(--accentDark)}.btn:disabled{opacity:.6;cursor:wait}.btn.secondary{background:#eee8dd;color:#3c352d}.btn.secondary:hover{background:#e2d9ca}
-.layout{max-width:1200px;margin:auto;padding:24px 18px 50px;display:grid;grid-template-columns:255px minmax(0,1fr);gap:24px}.sidebar{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;height:fit-content;position:sticky;top:94px;box-shadow:var(--shadow)}.sidebar-title{font-weight:bold;margin-bottom:12px;font-size:16px}.testament-tabs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}.tab{border:1px solid var(--line);background:var(--surface2);color:var(--text);padding:9px 5px;border-radius:8px}.tab.active{background:var(--accent);color:white;border-color:var(--accent)}#bookList{display:grid;gap:4px;max-height:62vh;overflow:auto}.book{width:100%;text-align:left;background:transparent;border:0;border-radius:8px;padding:9px 10px;color:var(--text)}.book:hover,.book.active{background:#eee6da;color:var(--accentDark);font-weight:bold}.content{min-width:0}
-.daily{background:linear-gradient(135deg,#211c17,#3d2b1d);color:white;border-radius:18px;padding:25px;margin-bottom:22px;box-shadow:var(--shadow)}.daily-label{color:#d8b895;text-transform:uppercase;letter-spacing:1.4px;font-size:12px;font-weight:bold}.daily h2{margin:7px 0 13px;font-size:25px}.daily p{font-size:19px;line-height:1.75;margin:0 0 18px}.daily-actions{display:flex;gap:8px;flex-wrap:wrap}
-.reader{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:visible}.reader-head{padding:22px 24px 16px;border-bottom:1px solid var(--line);border-radius:18px 18px 0 0}.breadcrumb{color:var(--muted);font-size:13px;margin-bottom:5px}.reader-title{margin:0;font-size:30px}.chapter-controls{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 24px;background:var(--surface2);border-bottom:1px solid var(--line)}.chapter-picker{display:flex;align-items:center;justify-content:center;gap:8px;font-weight:bold;text-align:center}.chapter-picker label{white-space:nowrap}.chapter-picker select{max-width:190px;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--text);font:inherit;cursor:pointer}.chapter-picker select:focus{outline:2px solid var(--accent);outline-offset:2px}.verses{padding:18px 24px 30px}.verse{position:relative;padding:8px 8px 8px 53px;border-radius:9px;line-height:1.85;font-size:19px;scroll-margin-top:200px}.verse:hover{background:#faf7f1}.verse-number{position:absolute;left:8px;top:10px;width:35px;text-align:right;color:var(--accent);font-size:14px;font-weight:bold}.verse-actions{display:inline-flex;margin-left:8px;opacity:0;transition:.2s}.verse:hover .verse-actions{opacity:1}.small-share{border:0;background:transparent;color:var(--accent);padding:2px 5px;font-size:17px}.small-share:hover{color:var(--accentDark);transform:scale(1.1)}
-.search-results{margin-top:20px;display:none}.result{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:15px;margin-bottom:10px;cursor:pointer}.result:hover{border-color:#bda98f;background:#fffaf2}.result-ref{color:var(--accent);font-weight:bold;margin-bottom:5px}.empty,.loading,.error{padding:35px;text-align:center;color:var(--muted)}.loading{animation:pulse 1.2s infinite}@keyframes pulse{0%,100%{opacity:.55}50%{opacity:1}}.error{color:#9b2c2c}.status{position:fixed;right:18px;bottom:18px;background:#202020;color:white;padding:11px 15px;border-radius:9px;box-shadow:var(--shadow);opacity:0;pointer-events:none;transform:translateY(8px);transition:.25s;z-index:500;max-width:360px}.status.show{opacity:1;transform:translateY(0)}.search-highlight{display:inline;padding:1px 3px;border-radius:4px;color:#14532d!important;background:#bbf7d0;font-weight:800;-webkit-box-decoration-break:clone;box-decoration-break:clone}.result .search-highlight{box-shadow:inset 0 -1px 0 #4ade80}
-/* Barra fixa de marcação por cores */
-.color-tools{position:sticky;top:82px;z-index:90;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px;margin:0 0 16px;box-shadow:0 6px 20px rgba(35,29,20,.16);isolation:isolate}.color-tools-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px}.color-tools-title{font-weight:bold}.color-actions{display:flex;gap:8px;flex-wrap:wrap}.color-palette{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.color-choice{display:flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface2);color:var(--text);border-radius:9px;padding:7px 9px;font-size:13px}.color-choice.active{outline:2px solid var(--accent);outline-offset:2px}.color-dot{width:17px;height:17px;border-radius:5px;border:1px solid rgba(0,0,0,.2);display:inline-block;flex-shrink:0}.color-help{font-size:13px;color:var(--muted);line-height:1.5;margin:8px 0 0}.verse-mark{border-radius:3px;padding:1px 0;-webkit-box-decoration-break:clone;box-decoration-break:clone}.mark-white{background:#fff;color:#222;border-bottom:2px solid #c7c7c7}.mark-blue{background:#bfdbfe;color:#172554}.mark-red{background:#fecaca;color:#7f1d1d}.mark-purple{background:#e9d5ff;color:#581c87}.mark-gold{background:#fde68a;color:#713f12}.mark-green{background:#bbf7d0;color:#14532d} .mark-black{background:#374151;color:#fff}
-/* Texto que menciona Jesus ou contém fala atribuída a Ele */
-.verse-text.jesus-red{color:#c62828}
-.verse-text.jesus-red .search-highlight{color:#9f1717!important}
-.verse-text.jesus-red .verse-mark{color:inherit}
-.verse-text.jesus-red .mark-white{color:#222}
-.verse-text.jesus-red .mark-blue{color:#172554}
-.verse-text.jesus-red .mark-red{color:#7f1d1d}
-.verse-text.jesus-red .mark-purple{color:#581c87}
-.verse-text.jesus-red .mark-gold{color:#713f12}
-.verse-text.jesus-red .mark-green{color:#14532d}
-.verse-text.jesus-red .mark-black{color:#fff}
-@media(max-width:850px){.topbar-inner{flex-wrap:wrap}.brand{min-width:0}.search{order:3;flex-basis:100%}.layout{grid-template-columns:1fr}.sidebar{position:static}#bookList{max-height:220px;grid-template-columns:repeat(2,minmax(0,1fr))}.daily h2{font-size:22px}.reader-title{font-size:25px}.verse{padding-left:43px;font-size:18px}.verse-actions{opacity:1}.color-tools{top:136px;padding:12px}.color-tools-head{justify-content:flex-start}}
-@media(max-width:500px){.topbar-inner{padding:10px 12px}.search{flex-wrap:wrap}.search select{width:100%;max-width:none}.search input{flex:1;min-width:0}.layout{padding:15px 10px 35px}.daily{padding:19px}.reader-head{padding:18px 17px 14px}.chapter-controls{padding:10px 8px;gap:5px}.chapter-controls .btn{padding:8px 7px;font-size:12px}.chapter-picker{gap:4px;font-size:13px}.chapter-picker select{max-width:105px;padding:8px 5px;font-size:13px}.verses{padding:12px 12px 25px}.verse{padding-left:39px}.color-tools{top:145px;padding:10px;border-radius:10px}.color-tools-head{gap:8px}.color-tools-head .btn{white-space:normal;font-size:12px;padding:8px 10px}.color-palette{gap:6px}.color-choice{padding:6px 8px}.color-help{font-size:12px}}
+:root {
+  --fundo: #f5f3ee;
+  --painel: #fffefa;
+  --texto: #28251f;
+  --secundario: #777166;
+  --borda: #e7e1d7;
+  --destaque: #74552d;
+  --vermelho: #b32121;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fundo);
+  color: var(--texto);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.65;
+}
+
+header {
+  background: #2f291f;
+  color: white;
+  padding: 18px;
+}
+
+.cabecalho {
+  max-width: 1100px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.logo {
+  font-size: 23px;
+  font-weight: bold;
+}
+
+.logo small {
+  display: block;
+  font: 12px Arial, sans-serif;
+  color: #d8cbb8;
+}
+
+main {
+  max-width: 1100px;
+  margin: 24px auto;
+  padding: 0 16px 40px;
+}
+
+.painel {
+  background: var(--painel);
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.controles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font: 13px Arial, sans-serif;
+  color: var(--secundario);
+}
+
+input, select, button {
+  font: inherit;
+  border: 1px solid var(--borda);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+input, select {
+  width: 100%;
+  background: white;
+  color: var(--texto);
+}
+
+button {
+  cursor: pointer;
+  background: white;
+  color: var(--texto);
+}
+
+button:hover {
+  filter: brightness(.96);
+}
+
+.botao-principal {
+  background: var(--destaque);
+  border-color: var(--destaque);
+  color: white;
+}
+
+.busca {
+  display: flex;
+  align-items: end;
+  gap: 8px;
+  grid-column: span 3;
+}
+
+.busca .campo {
+  flex: 1;
+}
+
+.leitor {
+  background: var(--painel);
+  border: 1px solid var(--borda);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.titulo-capitulo {
+  border-bottom: 1px solid var(--borda);
+  padding-bottom: 14px;
+  margin-bottom: 16px;
+}
+
+.titulo-capitulo small {
+  color: var(--secundario);
+  font: 12px Arial, sans-serif;
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 4px 0;
+  font-size: 30px;
+}
+
+.navegacao {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.versiculo {
+  position: relative;
+  padding: 12px 32px 14px 0;
+  border-bottom: 1px solid #f0ece5;
+  border-radius: 4px;
+}
+
+.numero-versiculo {
+  color: var(--destaque);
+  font: bold 12px Arial, sans-serif;
+  margin-right: 7px;
+}
+
+.texto-versiculo {
+  font-size: 18px;
+  line-height: 1.9;
+}
+
+.fala-jesus {
+  color: var(--vermelho);
+}
+
+/* Referências cruzadas em letra pequena */
+.referencia-cruzada {
+  display: block;
+  margin: 3px 0 0 24px;
+  color: var(--secundario);
+  font: italic 11px/1.45 Arial, sans-serif;
+}
+
+.acoes-versiculo {
+  position: absolute;
+  top: 8px;
+  right: 0;
+  border: none;
+  padding: 3px 6px;
+  color: var(--secundario);
+  background: transparent;
+}
+
+.status {
+  color: var(--secundario);
+  font: 13px Arial, sans-serif;
+  margin: 10px 0;
+}
+
+.resultado {
+  display: block;
+  width: 100%;
+  text-align: left;
+  margin-top: 8px;
+  padding: 10px;
+}
+
+.resultado strong {
+  display: block;
+  color: var(--destaque);
+}
+
+.marcacoes {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--borda);
+  font: 12px Arial, sans-serif;
+}
+
+.cor {
+  width: 23px;
+  height: 23px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.vazio {
+  padding: 25px 10px;
+  text-align: center;
+  color: var(--secundario);
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  color: var(--secundario);
+  font: 12px Arial, sans-serif;
+}
+
+@media (max-width: 650px) {
+  .controles {
+    grid-template-columns: 1fr;
+  }
+
+  .busca {
+    grid-column: span 1;
+  }
+
+  .leitor {
+    padding: 16px;
+  }
+
+  h1 {
+    font-size: 25px;
+  }
+}
 </style>
 </head>
+
 <body>
-<header class="topbar"><div class="topbar-inner">
-  <div class="brand"><div class="brand-icon">✝</div><div><strong>Bíblia King James</strong><small>Leitura e estudo das Escrituras</small></div></div>
-  <div class="search">
-    <select id="searchTestament" aria-label="Escolher onde pesquisar" title="Escolher onde pesquisar"><option value="TODOS">Toda a Bíblia</option><option value="NT">Novo Testamento (NT)</option><option value="AT">Antigo Testamento (AT)</option></select>
-    <input id="searchInput" type="search" placeholder="Pesquisar uma palavra ou expressão..." aria-label="Pesquisar na Bíblia">
-    <button class="btn" id="searchButton" type="button">Pesquisar</button><button class="btn secondary" id="clearSearchButton" type="button">Limpar</button>
+
+<header>
+  <div class="cabecalho">
+    <div class="logo">
+      Bíblia King James
+      <small>Leia • Pesquise • Estude</small>
+    </div>
+
+    <div>
+      <button type="button" id="aumentarFonte">A+</button>
+      <button type="button" id="diminuirFonte">A−</button>
+      <button type="button" id="compartilharPagina">
+        Compartilhar
+      </button>
+    </div>
   </div>
-</div></header>
-<main class="layout">
-  <aside class="sidebar"><div class="sidebar-title">Livros da Bíblia</div><div class="testament-tabs"><button id="tabAT" class="tab active" type="button">Antigo</button><button id="tabNT" class="tab" type="button">Novo</button></div><div id="bookList"><div class="loading">Carregando livros...</div></div></aside>
-  <section class="content">
-    <section class="daily"><div class="daily-label">✦ Palavra para hoje</div><h2 id="dailyReference">Carregando...</h2><p id="dailyText">Carregando o texto bíblico para hoje...</p><div class="daily-actions"><button class="btn" id="refreshDailyButton" type="button">↻ Atualizar Palavra para hoje</button><button class="btn" id="shareDailyButton" type="button">↗ Compartilhar</button><button class="btn" id="openDailyButton" type="button">Ler versículo</button></div></section>
-    <section class="color-tools" aria-label="Marcação por cores">
-      <div class="color-tools-head"><div class="color-tools-title">🎨 Marcar texto por cores</div><div class="color-actions"><button class="btn secondary" id="applyColorButton" type="button">Aplicar cor ao trecho selecionado</button><button class="btn secondary" id="removeColorButton" type="button">Remover marcação</button></div></div>
-      <div class="color-palette" id="colorPalette">
-        <button class="color-choice" type="button" data-color="white" aria-label="Marcar de branco"><span class="color-dot" style="background:#fff"></span>Branco</button>
-        <button class="color-choice" type="button" data-color="blue" aria-label="Marcar de azul"><span class="color-dot" style="background:#60a5fa"></span>Azul</button>
-        <button class="color-choice" type="button" data-color="red" aria-label="Marcar de vermelho"><span class="color-dot" style="background:#ef4444"></span>Vermelho</button>
-        <button class="color-choice" type="button" data-color="purple" aria-label="Marcar de roxo"><span class="color-dot" style="background:#a855f7"></span>Roxo</button>
-        <button class="color-choice" type="button" data-color="gold" aria-label="Marcar de dourado"><span class="color-dot" style="background:#facc15"></span>Dourado</button>
-        <button class="color-choice" type="button" data-color="green" aria-label="Marcar de verde"><span class="color-dot" style="background:#22c55e"></span>Verde</button>
-        <button class="color-choice" type="button" data-color="black" aria-label="Marcar de preto"><span class="color-dot" style="background:#374151"></span>Preto</button>
+</header>
+
+<main>
+
+  <section class="painel">
+    <div class="controles">
+
+      <label class="campo">
+        Livro
+        <select id="livroSelect">
+          <option value="">Carregando livros...</option>
+        </select>
+      </label>
+
+      <label class="campo">
+        Capítulo
+        <select id="capituloSelect">
+          <option value="1">1</option>
+        </select>
+      </label>
+
+      <label class="campo">
+        Versão bíblica
+        <select id="versaoSelect">
+          <option value="KJA">King James Atualizada</option>
+          <option value="KJF">King James Fiel</option>
+        </select>
+      </label>
+
+      <div class="busca">
+        <label class="campo">
+          Pesquisar na Bíblia
+          <input
+            type="search"
+            id="pesquisaInput"
+            placeholder="Digite uma palavra ou referência"
+          >
+        </label>
+
+        <button class="botao-principal"
+                type="button"
+                id="btnPesquisar">
+          Pesquisar
+        </button>
       </div>
-      <p class="color-help">Escolha uma cor, selecione um trecho do versículo e clique em “Aplicar cor ao trecho selecionado” (ou use Ctrl+Shift+M). Para remover, selecione o trecho marcado e clique em “Remover marcação”. As cores são sugestões de estudo e seus significados podem variar conforme o contexto bíblico. As marcações ficam salvas neste navegador.</p>
-    </section>
-    <section id="searchResults" class="search-results"></section>
-    <section class="reader"><div class="reader-head"><div class="breadcrumb" id="readerBreadcrumb">Bíblia King James</div><h1 class="reader-title" id="readerTitle">Selecione um livro</h1></div>
-      <div class="chapter-controls"><button class="btn secondary" id="previousChapterButton" type="button">← Anterior</button><div class="chapter-picker"><label for="chapterSelect">Capítulo</label><select id="chapterSelect" aria-label="Selecionar capítulo"><option value="1">Capítulo 1</option></select></div><button class="btn secondary" id="nextChapterButton" type="button">Próximo →</button></div>
-      <div id="verses" class="verses"><div class="empty">Escolha um livro e um capítulo para começar a leitura.</div></div>
-    </section>
+
+    </div>
   </section>
+
+  <div class="leitor">
+
+    <div class="titulo-capitulo">
+      <small id="nomeLivro">Bíblia Sagrada</small>
+      <h1 id="tituloCapitulo">Carregando capítulo...</h1>
+
+      <div class="navegacao">
+        <button type="button" id="capituloAnterior">
+          ← Anterior
+        </button>
+
+        <button type="button" id="proximoCapitulo">
+          Próximo →
+        </button>
+      </div>
+    </div>
+
+    <div id="status" class="status">
+      Carregando...
+    </div>
+
+    <div id="versiculos">
+      <div class="vazio">Aguarde o carregamento dos versículos.</div>
+    </div>
+
+    <div class="marcacoes">
+      <span>Marcar versículo selecionado:</span>
+
+      <button type="button" class="cor"
+        data-cor="#fff0a8" style="background:#fff0a8"
+        title="Amarelo"></button>
+
+      <button type="button" class="cor"
+        data-cor="#ccebd3" style="background:#ccebd3"
+        title="Verde"></button>
+
+      <button type="button" class="cor"
+        data-cor="#cfe5ff" style="background:#cfe5ff"
+        title="Azul"></button>
+
+      <button type="button" class="cor"
+        data-cor="#f7d2dc" style="background:#f7d2dc"
+        title="Rosa"></button>
+
+      <button type="button" id="limparMarcacao">
+        Limpar marcação
+      </button>
+    </div>
+
+  </div>
+
+  <section class="painel">
+    <h2>Palavra do dia</h2>
+    <p id="palavraDoDia">Carregando versículo...</p>
+    <strong id="referenciaDoDia"></strong>
+    <br><br>
+    <button type="button" id="atualizarPalavra">
+      Novo versículo
+    </button>
+  </section>
+
+  <section class="painel">
+    <h2>Resultados da pesquisa</h2>
+    <p id="resumoPesquisa">
+      Digite uma palavra para pesquisar.
+    </p>
+    <div id="resultadosPesquisa"></div>
+  </section>
+
 </main>
-<div id="status" class="status" role="status" aria-live="polite"></div>
+
+<footer>
+  Bíblia King James — Leitura e estudo das Escrituras
+</footer>
+
+
 <script>
-'use strict';
-const API_URL='https://script.google.com/macros/s/AKfycbyACS3Hi-BjcYFvCA1j8FzjMcEdc26-j2jc557fhdCmvHNz3qdhdRvXhTxVn9yAnxwm1w/exec';
-let livros=[],testamentoAtual='AT',livroAtual=null,capituloAtual=1,ultimoDiario=null,termoPesquisado='',corMarcacaoAtual='';
-const CHAVE_MARCACOES='bkj_marcacoes_cores_v1';
-const CORES_MARCACAO={white:'Branco',blue:'Azul',red:'Vermelho',purple:'Roxo',gold:'Dourado',green:'Verde',black:'Preto'};
-const TOTAL_CAPITULOS_BIBLIA={genesis:50,exodo:40,levitico:27,numeros:36,deuteronomio:34,josue:24,juizes:21,rute:4,'1samuel':31,'2samuel':24,'1reis':22,'2reis':25,'1cronicas':29,'2cronicas':36,esdras:10,neemias:13,ester:10,jo:42,salmos:150,proverbios:31,eclesiastes:12,canticos:8,canticodoscanticos:8,isaias:66,jeremias:52,lamentacoes:5,ezequiel:48,daniel:12,oseias:14,joel:3,amos:9,obadias:1,jonas:4,miqueias:7,naum:3,habacuque:3,sofonias:3,ageu:2,zacarias:14,malaquias:4,mateus:28,marcos:16,lucas:24,joao:21,atos:28,romanos:16,'1corintios':16,'2corintios':13,galatas:6,efesios:6,filipenses:4,colossenses:4,'1tessalonicenses':5,'2tessalonicenses':3,'1timoteo':6,'2timoteo':4,tito:3,filemom:1,hebreus:13,tiago:5,'1pedro':5,'2pedro':3,'1joao':5,'2joao':1,'3joao':1,judas:1,apocalipse:22};
+"use strict";
 
-document.addEventListener('DOMContentLoaded',async()=>{
- document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')pesquisar();});
- document.getElementById('searchButton').addEventListener('click',pesquisar);document.getElementById('clearSearchButton').addEventListener('click',limparPesquisa);
- document.getElementById('tabAT').addEventListener('click',()=>selecionarTestamento('AT'));document.getElementById('tabNT').addEventListener('click',()=>selecionarTestamento('NT'));
- document.getElementById('refreshDailyButton').addEventListener('click',atualizarPalavraHoje);document.getElementById('shareDailyButton').addEventListener('click',compartilharDiario);document.getElementById('openDailyButton').addEventListener('click',abrirDiario);
- document.getElementById('applyColorButton').addEventListener('click',marcarSelecaoAtual);document.getElementById('removeColorButton').addEventListener('click',removerMarcacaoSelecionada);
- document.getElementById('previousChapterButton').addEventListener('click',capituloAnterior);document.getElementById('nextChapterButton').addEventListener('click',proximoCapitulo);
- document.getElementById('chapterSelect').addEventListener('change',e=>selecionarCapitulo(e.target.value));
- document.querySelectorAll('.color-choice').forEach(b=>b.addEventListener('click',()=>selecionarCorMarcacao(b.dataset.color)));
- document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==='m'){e.preventDefault();marcarSelecaoAtual();}});
- await Promise.allSettled([carregarLivros(),carregarDiario()]);
+/* =====================================================
+   1. CONFIGURAÇÃO DA API DO GOOGLE APPS SCRIPT
+===================================================== */
+
+/*
+  Coloque aqui a URL de implantação do seu Apps Script.
+  Ela normalmente termina em /exec.
+*/
+const API_URL = "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT";
+
+/* =====================================================
+   2. LISTA DOS 66 LIVROS DA BÍBLIA
+===================================================== */
+
+const LIVROS = [
+  ["Gênesis","genesis",50],
+  ["Êxodo","exodo",40],
+  ["Levítico","levitico",27],
+  ["Números","numeros",36],
+  ["Deuteronômio","deuteronomio",34],
+  ["Josué","josue",24],
+  ["Juízes","juizes",21],
+  ["Rute","rute",4],
+  ["1 Samuel","1samuel",31],
+  ["2 Samuel","2samuel",24],
+  ["1 Reis","1reis",22],
+  ["2 Reis","2reis",25],
+  ["1 Crônicas","1cronicas",29],
+  ["2 Crônicas","2cronicas",36],
+  ["Esdras","esdras",10],
+  ["Neemias","neemias",13],
+  ["Ester","ester",10],
+  ["Jó","jo",42],
+  ["Salmos","salmos",150],
+  ["Provérbios","proverbios",31],
+  ["Eclesiastes","eclesiastes",12],
+  ["Cânticos","canticos",8],
+  ["Isaías","isaias",66],
+  ["Jeremias","jeremias",52],
+  ["Lamentações","lamentacoes",5],
+  ["Ezequiel","ezequiel",48],
+  ["Daniel","daniel",12],
+  ["Oseias","oseias",14],
+  ["Joel","joel",3],
+  ["Amós","amos",9],
+  ["Obadias","obadias",1],
+  ["Jonas","jonas",4],
+  ["Miqueias","miqueias",7],
+  ["Naum","naum",3],
+  ["Habacuque","habacuque",3],
+  ["Sofonias","sofonias",3],
+  ["Ageu","ageu",2],
+  ["Zacarias","zacarias",14],
+  ["Malaquias","malaquias",4],
+  ["Mateus","mateus",28],
+  ["Marcos","marcos",16],
+  ["Lucas","lucas",24],
+  ["João","joao",21],
+  ["Atos","atos",28],
+  ["Romanos","romanos",16],
+  ["1 Coríntios","1corintios",16],
+  ["2 Coríntios","2corintios",13],
+  ["Gálatas","galatas",6],
+  ["Efésios","efesios",6],
+  ["Filipenses","filipenses",4],
+  ["Colossenses","colossenses",4],
+  ["1 Tessalonicenses","1tessalonicenses",5],
+  ["2 Tessalonicenses","2tessalonicenses",3],
+  ["1 Timóteo","1timoteo",6],
+  ["2 Timóteo","2timoteo",4],
+  ["Tito","tito",3],
+  ["Filemom","filemom",1],
+  ["Hebreus","hebreus",13],
+  ["Tiago","tiago",5],
+  ["1 Pedro","1pedro",5],
+  ["2 Pedro","2pedro",3],
+  ["1 João","1joao",5],
+  ["2 João","2joao",1],
+  ["3 João","3joao",1],
+  ["Judas","judas",1],
+  ["Apocalipse","apocalipse",22]
+];
+
+/* =====================================================
+   3. REFERÊNCIAS BÍBLICAS CRUZADAS
+===================================================== */
+
+/*
+  Formato:
+  "livro_capitulo_versiculo": ["Referência 1", "Referência 2"]
+
+  Exemplo:
+  João 1:1 apresenta Gênesis 1:1 como referência.
+*/
+
+const REFERENCIAS_CRUZADAS = {
+
+  /* GÊNESIS */
+  "genesis_1_1": ["Jo 1:1", "Hb 11:3"],
+  "genesis_1_3": ["2Co 4:6"],
+  "genesis_1_26": ["Gn 5:1", "Tg 3:9"],
+  "genesis_2_7": ["1Co 15:45"],
+  "genesis_12_3": ["Gl 3:8"],
+  "genesis_22_18": ["Gl 3:16"],
+  "genesis_49_10": ["Ap 5:5"],
+
+  /* ÊXODO */
+  "exodo_3_14": ["Jo 8:58"],
+  "exodo_12_13": ["1Co 5:7"],
+  "exodo_20_3": ["Dt 5:7"],
+  "exodo_20_12": ["Ef 6:2"],
+  "exodo_34_6": ["Nm 14:18", "Sl 103:8"],
+
+  /* SALMOS */
+  "salmos_2_7": ["At 13:33", "Hb 1:5"],
+  "salmos_16_10": ["At 2:27"],
+  "salmos_22_1": ["Mt 27:46"],
+  "salmos_22_18": ["Jo 19:24"],
+  "salmos_23_1": ["Jo 10:11", "1Pe 2:25"],
+  "salmos_33_6": ["Jo 1:3", "Hb 11:3"],
+  "salmos_34_8": ["1Pe 2:3"],
+  "salmos_51_10": ["Ez 36:26"],
+  "salmos_110_1": ["Mt 22:44", "Hb 1:13"],
+  "salmos_118_22": ["Mt 21:42", "At 4:11"],
+
+  /* ISAÍAS */
+  "isaias_7_14": ["Mt 1:22-23"],
+  "isaias_9_6": ["Lc 2:11", "Jo 1:14"],
+  "isaias_40_3": ["Mt 3:3", "Jo 1:23"],
+  "isaias_53_5": ["1Pe 2:24"],
+  "isaias_53_7": ["At 8:32-35"],
+  "isaias_61_1": ["Lc 4:18"],
+
+  /* MATEUS */
+  "mateus_1_23": ["Is 7:14"],
+  "mateus_3_17": ["Mt 17:5"],
+  "mateus_5_3": ["Lc 6:20"],
+  "mateus_5_14": ["Jo 8:12"],
+  "mateus_11_28": ["Jo 6:37"],
+  "mateus_22_37": ["Dt 6:5"],
+  "mateus_28_19": ["Mc 16:15"],
+
+  /* MARCOS */
+  "marcos_10_45": ["Mt 20:28"],
+  "marcos_12_30": ["Dt 6:5"],
+  "marcos_16_15": ["Mt 28:19"],
+
+  /* LUCAS */
+  "lucas_2_11": ["Is 9:6"],
+  "lucas_4_18": ["Is 61:1"],
+  "lucas_19_10": ["Mt 18:11"],
+
+  /* JOÃO */
+  "joao_1_1": ["Gn 1:1", "Cl 1:17"],
+  "joao_1_2": ["Pv 8:22"],
+  "joao_1_3": ["Gn 1:3", "Cl 1:16", "Hb 1:2"],
+  "joao_1_4": ["Jo 5:26"],
+  "joao_1_5": ["Gn 1:4"],
+  "joao_1_10": ["Cl 1:16"],
+  "joao_1_12": ["Rm 8:15"],
+  "joao_1_14": ["Fp 2:7", "Hb 2:14"],
+  "joao_1_29": ["Is 53:7", "1Pe 1:19"],
+  "joao_3_3": ["1Pe 1:23"],
+  "joao_3_16": ["Rm 5:8", "1Jo 4:9"],
+  "joao_8_12": ["Is 9:2", "Jo 1:4"],
+  "joao_10_11": ["Sl 23:1", "Ez 34:11"],
+  "joao_11_25": ["Jo 5:21"],
+  "joao_14_6": ["Hb 10:20"],
+  "joao_15_5": ["Gl 5:22"],
+  "joao_19_30": ["Mt 27:50"],
+
+  /* ATOS */
+  "atos_1_8": ["Lc 24:49"],
+  "atos_2_21": ["Jl 2:32"],
+  "atos_4_12": ["Jo 14:6"],
+  "atos_16_31": ["Rm 10:9"],
+
+  /* ROMANOS */
+  "romanos_3_23": ["Ec 7:20"],
+  "romanos_5_8": ["Jo 3:16"],
+  "romanos_6_23": ["Gn 2:17", "Jo 3:16"],
+  "romanos_8_28": ["Gn 50:20"],
+  "romanos_10_9": ["At 16:31"],
+  "romanos_12_2": ["Ef 4:23"],
+
+  /* 1 CORÍNTIOS */
+  "1corintios_10_13": ["2Pe 2:9"],
+  "1corintios_13_4": ["1Jo 4:7"],
+  "1corintios_15_22": ["Rm 5:12"],
+
+  /* GÁLATAS */
+  "galatas_2_20": ["Rm 6:6"],
+  "galatas_5_22": ["Jo 15:5"],
+
+  /* EFÉSIOS */
+  "efesios_2_8": ["Rm 3:24", "Tt 3:5"],
+  "efesios_2_9": ["Rm 3:28"],
+  "efesios_6_10": ["Fp 4:13"],
+
+  /* FILIPENSES */
+  "filipenses_4_6": ["Mt 6:25"],
+  "filipenses_4_13": ["2Co 12:9"],
+
+  /* HEBREUS */
+  "hebreus_4_12": ["Ef 6:17"],
+  "hebreus_11_1": ["Rm 8:24"],
+  "hebreus_11_3": ["Gn 1:1", "Sl 33:6"],
+  "hebreus_13_8": ["Ml 3:6"],
+
+  /* TIAGO */
+  "tiago_1_5": ["Pv 2:6"],
+  "tiago_2_17": ["Gl 5:6"],
+
+  /* 1 PEDRO */
+  "1pedro_2_24": ["Is 53:5"],
+  "1pedro_5_7": ["Sl 55:22"],
+
+  /* 1 JOÃO */
+  "1joao_1_9": ["Sl 32:5"],
+  "1joao_4_8": ["Jo 3:16"],
+  "1joao_4_9": ["Jo 3:16"],
+
+  /* APOCALIPSE */
+  "apocalipse_1_8": ["Is 44:6", "Ap 22:13"],
+  "apocalipse_3_20": ["Ct 5:2"],
+  "apocalipse_21_4": ["Is 25:8"],
+  "apocalipse_22_13": ["Ap 1:8"]
+};
+
+/* =====================================================
+   4. FUNÇÕES AUXILIARES
+===================================================== */
+
+const $ = id => document.getElementById(id);
+
+function normalizarTexto(texto) {
+  return String(texto || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .trim();
+}
+
+function normalizarNomeLivro(nome) {
+  return normalizarTexto(nome)
+    .replace(/[^a-z0-9]/g, "");
+}
+
+function escaparHTML(texto) {
+  return String(texto ?? "").replace(/[&<>"']/g, caractere => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  }[caractere]));
+}
+
+/*
+  Retorna as referências cadastradas para um versículo.
+
+  Exemplo:
+  obterReferenciasCruzadas("João", 1, 1)
+
+  Resultado:
+  ["Gn 1:1", "Cl 1:17"]
+*/
+function obterReferenciasCruzadas(
+  nomeLivro,
+  capitulo,
+  versiculo
+) {
+  const livro = normalizarNomeLivro(nomeLivro);
+
+  const chave =
+    `${livro}_${Number(capitulo)}_${Number(versiculo)}`;
+
+  return REFERENCIAS_CRUZADAS[chave] || [];
+}
+
+/* =====================================================
+   5. PREPARAÇÃO DO SELETOR DE LIVROS
+===================================================== */
+
+function carregarLivrosNoSeletor() {
+  const seletor = $("livroSelect");
+
+  seletor.innerHTML = LIVROS.map((livro, indice) => `
+    <option value="${indice}">
+      ${escaparHTML(livro[0])}
+    </option>
+  `).join("");
+
+  carregarCapitulosNoSeletor(1);
+}
+
+function carregarCapitulosNoSeletor(capituloSelecionado) {
+  const indiceLivro = Number($("livroSelect").value || 0);
+  const livro = LIVROS[indiceLivro];
+
+  if (!livro) return;
+
+  const totalCapitulos = livro[2];
+
+  $("capituloSelect").innerHTML =
+    Array.from({length: totalCapitulos}, (_, indice) => {
+      const numero = indice + 1;
+
+      return `
+        <option value="${numero}"
+          ${numero === Number(capituloSelecionado) ? "selected" : ""}>
+          ${numero}
+        </option>
+      `;
+    }).join("");
+}
+
+
+/* =====================================================
+   6. COMUNICAÇÃO COM O GOOGLE APPS SCRIPT
+===================================================== */
+
+function consultarAPI(parametros) {
+  return new Promise((resolve, reject) => {
+    if (!API_URL || API_URL.includes("COLE_AQUI")) {
+      reject(new Error(
+        "Configure a URL de implantação do Google Apps Script."
+      ));
+      return;
+    }
+
+    const nomeCallback =
+      "bibliaCallback_" + Date.now() +
+      "_" + Math.floor(Math.random() * 100000);
+
+    const script = document.createElement("script");
+    const consulta = new URLSearchParams({
+      ...parametros,
+      callback: nomeCallback
+    });
+
+    let finalizado = false;
+
+    const temporizador = setTimeout(() => {
+      concluir(new Error("Tempo limite ao consultar a API."));
+    }, 15000);
+
+    function concluir(erro, resultado) {
+      if (finalizado) return;
+
+      finalizado = true;
+      clearTimeout(temporizador);
+
+      try {
+        delete window[nomeCallback];
+      } catch (e) {
+        window[nomeCallback] = undefined;
+      }
+
+      script.remove();
+
+      if (erro) reject(erro);
+      else resolve(resultado);
+    }
+
+    window[nomeCallback] = resultado => {
+      concluir(null, resultado);
+    };
+
+    script.onerror = () => {
+      concluir(new Error(
+        "Falha de comunicação com o Google Apps Script."
+      ));
+    };
+
+    script.src =
+      API_URL +
+      (API_URL.includes("?") ? "&" : "?") +
+      consulta.toString();
+
+    document.body.appendChild(script);
+  });
+}
+
+/*
+  Tenta diferentes nomes de ação para facilitar a adaptação.
+  O nome correto deve existir no seu Apps Script.
+*/
+async function executarAcao(acao, parametros = {}) {
+  const tentativas = [
+    {acao: acao, ...parametros},
+    {action: acao, ...parametros}
+  ];
+
+  let ultimoErro;
+
+  for (const parametrosAPI of tentativas) {
+    try {
+      const resposta = await consultarAPI(parametrosAPI);
+
+      if (
+        resposta &&
+        (resposta.erro || resposta.error)
+      ) {
+        ultimoErro = new Error(
+          resposta.erro || resposta.error
+        );
+        continue;
+      }
+
+      return resposta;
+
+    } catch (erro) {
+      ultimoErro = erro;
+    }
+  }
+
+  throw ultimoErro ||
+    new Error("Não foi possível consultar a API.");
+}
+
+/* =====================================================
+   7. IDENTIFICAR O LIVRO E O CAPÍTULO ATUAIS
+===================================================== */
+
+let livroAtual = null;
+let capituloAtual = 1;
+let versiculoSelecionado = null;
+let fonteAtual = 18;
+
+function obterLivroSelecionado() {
+  const indice = Number($("livroSelect").value || 0);
+  const livro = LIVROS[indice];
+
+  if (!livro) return null;
+
+  return {
+    nome: livro[0],
+    slug: livro[1],
+    capitulos: livro[2]
+  };
+}
+
+/* =====================================================
+   8. CARREGAR UM CAPÍTULO
+===================================================== */
+
+async function carregarCapitulo(
+  livro = obterLivroSelecionado(),
+  capitulo = 1
+) {
+  if (!livro) return;
+
+  livroAtual = livro;
+  capituloAtual = Number(capitulo);
+
+  $("nomeLivro").textContent = livro.nome;
+  $("tituloCapitulo").textContent =
+    `${livro.nome} ${capituloAtual}`;
+
+  $("versiculos").innerHTML =
+    '<div class="vazio">Carregando versículos...</div>';
+
+  $("status").textContent = "Consultando a Bíblia...";
+
+  $("capituloSelect").value = String(capituloAtual);
+
+  /*
+    Estes parâmetros são exemplos.
+    Ajuste os nomes para os esperados pelo seu Apps Script.
+  */
+  const parametros = {
+    livro: livro.nome,
+    livroId: livro.slug,
+    capitulo: capituloAtual,
+    versao: $("versaoSelect").value
+  };
+
+  const acoes = [
+    "capitulo",
+    "getCapitulo",
+    "obterCapitulo",
+    "lerCapitulo"
+  ];
+
+  let resposta = null;
+  let ultimoErro = null;
+
+  for (const acao of acoes) {
+    try {
+      const resultado = await executarAcao(
+        acao,
+        parametros
+      );
+
+      if (
+        resultado &&
+        (
+          Array.isArray(resultado.versiculos) ||
+          Array.isArray(resultado.verses) ||
+          Array.isArray(resultado.dados) ||
+          Array.isArray(resultado.resultados)
+        )
+      ) {
+        resposta = resultado;
+        break;
+      }
+
+      ultimoErro = new Error(
+        "A resposta da API não contém a lista de versículos esperada."
+      );
+
+    } catch (erro) {
+      ultimoErro = erro;
+    }
+  }
+
+  if (!resposta) {
+    $("versiculos").innerHTML = `
+      <div class="vazio">
+        Não foi possível carregar o capítulo.
+        Confira a URL e o formato de resposta do Apps Script.
+      </div>
+    `;
+
+    $("status").textContent =
+      ultimoErro ? ultimoErro.message : "Erro ao carregar.";
+
+    return;
+  }
+
+  exibirCapitulo(resposta, livro, capituloAtual);
+}
+
+/* =====================================================
+   9. INTERPRETAR A RESPOSTA DA API
+===================================================== */
+
+function obterListaVersiculos(resposta) {
+  if (Array.isArray(resposta.versiculos)) {
+    return resposta.versiculos;
+  }
+
+  if (Array.isArray(resposta.verses)) {
+    return resposta.verses;
+  }
+
+  if (Array.isArray(resposta.dados)) {
+    return resposta.dados;
+  }
+
+  if (Array.isArray(resposta.resultados)) {
+    return resposta.resultados;
+  }
+
+  return [];
+}
+
+function obterNumeroVersiculo(item, indice) {
+  if (typeof item === "string") {
+    return indice + 1;
+  }
+
+  return Number(
+    item.numero ??
+    item.versiculo ??
+    item.num ??
+    indice + 1
+  );
+}
+
+function obterTextoVersiculo(item) {
+  if (typeof item === "string") {
+    return item;
+  }
+
+  return String(
+    item.texto ??
+    item.text ??
+    item.conteudo ??
+    item.versiculoTexto ??
+    ""
+  );
+}
+
+/* =====================================================
+   10. EXIBIR OS VERSÍCULOS E AS REFERÊNCIAS
+===================================================== */
+
+function exibirCapitulo(
+  resposta,
+  livro,
+  capitulo
+) {
+  const versiculos = obterListaVersiculos(resposta);
+
+  if (!versiculos.length) {
+    $("versiculos").innerHTML = `
+      <div class="vazio">
+        Nenhum versículo foi retornado para este capítulo.
+      </div>
+    `;
+
+    $("status").textContent =
+      "Verifique os dados retornados pelo Apps Script.";
+
+    return;
+  }
+
+  $("nomeLivro").textContent = livro.nome;
+
+  $("tituloCapitulo").textContent =
+    `${livro.nome} ${capitulo}`;
+
+  const conteudoHTML = versiculos.map((item, indice) => {
+    const numero = obterNumeroVersiculo(item, indice);
+    const texto = obterTextoVersiculo(item);
+
+    /*
+      Procura as referências cadastradas na Parte 2.
+    */
+    const referencias = obterReferenciasCruzadas(
+      livro.nome,
+      capitulo,
+      numero
+    );
+
+    const chaveMarcacao =
+      `biblia_marcacao_${normalizarNomeLivro(livro.nome)}_` +
+      `${capitulo}_${numero}`;
+
+    let corMarcacao = "";
+
+    try {
+      corMarcacao = localStorage.getItem(chaveMarcacao) || "";
+    } catch (e) {
+      corMarcacao = "";
+    }
+
+    const estilo = corMarcacao
+      ? `background:${escaparHTML(corMarcacao)};`
+      : "";
+
+    /*
+      Se houver referências, elas serão exibidas
+      abaixo do texto do versículo.
+    */
+    const htmlReferencias = referencias.length
+      ? `
+        <small class="referencia-cruzada">
+          Referências: ${referencias
+            .map(ref => escaparHTML(ref))
+            .join(" • ")}
+        </small>
+      `
+      : "";
+
+    return `
+      <article
+        class="versiculo"
+        id="versiculo-${numero}"
+        data-numero="${numero}"
+        data-chave="${escaparHTML(chaveMarcacao)}"
+        style="${estilo}"
+      >
+        <span class="numero-versiculo">${numero}</span>
+
+        <span class="texto-versiculo">${escaparHTML(texto)}</span>
+
+        ${htmlReferencias}
+
+        <button
+          type="button"
+          class="acoes-versiculo"
+          data-compartilhar="${numero}"
+          title="Compartilhar versículo"
+          aria-label="Compartilhar versículo ${numero}"
+        >↗</button>
+      </article>
+    `;
+  }).join("");
+
+  $("versiculos").innerHTML = conteudoHTML;
+
+  document.querySelectorAll(".versiculo").forEach(elemento => {
+    elemento.addEventListener("click", evento => {
+      if (evento.target.closest("button")) return;
+
+      document.querySelectorAll(".versiculo").forEach(v => {
+        v.style.outline = "";
+      });
+
+      elemento.style.outline = "2px solid #efe5d5";
+      versiculoSelecionado = elemento;
+    });
+  });
+
+  document.querySelectorAll("[data-compartilhar]").forEach(botao => {
+    botao.addEventListener("click", () => {
+      const numero = Number(botao.dataset.compartilhar);
+
+      const item = versiculos.find((v, indice) =>
+        obterNumeroVersiculo(v, indice) === numero
+      );
+
+      const texto = obterTextoVersiculo(item);
+
+      compartilharVersiculo(
+        `${livro.nome} ${capitulo}:${numero}`,
+        texto
+      );
+    });
+  });
+
+  $("status").textContent =
+    `${versiculos.length} versículos carregados.`;
+}
+
+
+/* =====================================================
+   11. COMPARTILHAR VERSÍCULOS
+===================================================== */
+
+function compartilharVersiculo(referencia, texto) {
+  const conteudo =
+    `${referencia}\n${texto}\n\nBíblia King James`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: referencia,
+      text: conteudo
+    }).catch(() => {});
+    return;
+  }
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(conteudo)
+      .then(() => alert("Versículo copiado para compartilhar."))
+      .catch(() => prompt("Copie o versículo:", conteudo));
+    return;
+  }
+
+  prompt("Copie o versículo:", conteudo);
+}
+
+/* =====================================================
+   12. PESQUISA BÍBLICA
+===================================================== */
+
+async function pesquisarBiblia() {
+  const termo = $("pesquisaInput").value.trim();
+
+  if (!termo) {
+    $("resumoPesquisa").textContent =
+      "Digite uma palavra ou referência bíblica.";
+    $("resultadosPesquisa").innerHTML = "";
+    return;
+  }
+
+  $("resumoPesquisa").textContent =
+    `Pesquisando por "${termo}"...`;
+
+  $("resultadosPesquisa").innerHTML = "";
+
+  let resposta = null;
+  let ultimoErro = null;
+
+  const acoes = [
+    "pesquisar",
+    "buscar",
+    "search",
+    "buscarVersiculos"
+  ];
+
+  for (const acao of acoes) {
+    try {
+      const resultado = await executarAcao(acao, {
+        termo: termo,
+        q: termo,
+        pesquisa: termo,
+        versao: $("versaoSelect").value
+      });
+
+      if (
+        resultado &&
+        (
+          Array.isArray(resultado.resultados) ||
+          Array.isArray(resultado.versiculos) ||
+          Array.isArray(resultado.dados) ||
+          Array.isArray(resultado.results)
+        )
+      ) {
+        resposta = resultado;
+        break;
+      }
+
+    } catch (erro) {
+      ultimoErro = erro;
+    }
+  }
+
+  if (!resposta) {
+    $("resumoPesquisa").textContent =
+      "Não foi possível realizar a pesquisa. Confira a ação de pesquisa do Apps Script.";
+    return;
+  }
+
+  const resultados =
+    resposta.resultados ||
+    resposta.versiculos ||
+    resposta.dados ||
+    resposta.results ||
+    [];
+
+  $("resumoPesquisa").textContent =
+    `${resultados.length} resultado(s) encontrado(s).`;
+
+  if (!resultados.length) {
+    $("resultadosPesquisa").innerHTML =
+      '<p>Nenhum resultado encontrado.</p>';
+    return;
+  }
+
+  $("resultadosPesquisa").innerHTML =
+    resultados.slice(0, 50).map((item, indice) => {
+      const referencia =
+        item.referencia ||
+        item.ref ||
+        `${item.livro || ""} ${item.capitulo || ""}:${item.versiculo || item.numero || ""}`;
+
+      const texto = obterTextoVersiculo(item);
+
+      return `
+        <button
+          type="button"
+          class="resultado"
+          data-resultado="${indice}"
+        >
+          <strong>${escaparHTML(referencia)}</strong>
+          ${escaparHTML(texto)}
+        </button>
+      `;
+    }).join("");
+
+  document.querySelectorAll("[data-resultado]").forEach(botao => {
+    botao.addEventListener("click", () => {
+      const item = resultados[Number(botao.dataset.resultado)];
+
+      const nome = item.livroNome || item.livro || "";
+      const capitulo = Number(item.capitulo || 1);
+      const numero = Number(
+        item.versiculo || item.numero || item.verse || 1
+      );
+
+      const indiceLivro = LIVROS.findIndex(livro =>
+        normalizarNomeLivro(livro[0]) === normalizarNomeLivro(nome) ||
+        normalizarNomeLivro(livro[1]) === normalizarNomeLivro(nome)
+      );
+
+      if (indiceLivro < 0) {
+        alert("Não consegui identificar o livro deste resultado.");
+        return;
+      }
+
+      $("livroSelect").value = String(indiceLivro);
+      carregarCapitulosNoSeletor(capitulo);
+
+      carregarCapitulo(
+        obterLivroSelecionado(),
+        capitulo
+      ).then(() => {
+        const elemento = document.getElementById(
+          `versiculo-${numero}`
+        );
+
+        if (elemento) {
+          elemento.scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+          });
+
+          versiculoSelecionado = elemento;
+        }
+      });
+    });
+  });
+}
+
+/* =====================================================
+   13. MARCAÇÕES COLORIDAS
+===================================================== */
+
+function aplicarMarcacao(cor) {
+  if (!versiculoSelecionado) {
+    alert("Clique em um versículo primeiro.");
+    return;
+  }
+
+  const chave = versiculoSelecionado.dataset.chave;
+
+  try {
+    localStorage.setItem(chave, cor);
+  } catch (erro) {
+    alert("Não foi possível salvar a marcação neste navegador.");
+    return;
+  }
+
+  versiculoSelecionado.style.background = cor;
+  versiculoSelecionado.style.borderRadius = "4px";
+}
+
+function limparMarcacao() {
+  if (!versiculoSelecionado) {
+    alert("Selecione um versículo primeiro.");
+    return;
+  }
+
+  const chave = versiculoSelecionado.dataset.chave;
+
+  try {
+    localStorage.removeItem(chave);
+  } catch (erro) {
+    // A limpeza visual ainda será aplicada.
+  }
+
+  versiculoSelecionado.style.background = "";
+  versiculoSelecionado.style.borderRadius = "";
+}
+
+/* =====================================================
+   14. PALAVRA DO DIA
+===================================================== */
+
+const PALAVRAS_DO_DIA = [
+  {
+    referencia: "Salmos 23:1",
+    texto: "O SENHOR é o meu pastor; nada me faltará."
+  },
+  {
+    referencia: "João 3:16",
+    texto: "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito."
+  },
+  {
+    referencia: "Filipenses 4:13",
+    texto: "Posso todas as coisas naquele que me fortalece."
+  },
+  {
+    referencia: "Provérbios 3:5",
+    texto: "Confia no SENHOR de todo o teu coração."
+  },
+  {
+    referencia: "Isaías 41:10",
+    texto: "Não temas, porque eu sou contigo."
+  }
+];
+
+function atualizarPalavraDoDia() {
+  const dia = Math.floor(Date.now() / 86400000);
+  const indice = dia % PALAVRAS_DO_DIA.length;
+  const versiculo = PALAVRAS_DO_DIA[indice];
+
+  $("palavraDoDia").textContent = versiculo.texto;
+  $("referenciaDoDia").textContent = versiculo.referencia;
+}
+
+/* =====================================================
+   15. AUMENTAR E DIMINUIR A FONTE
+===================================================== */
+
+function alterarFonte(incremento) {
+  fonteAtual = Math.max(
+    13,
+    Math.min(30, fonteAtual + incremento)
+  );
+
+  document.querySelectorAll(".texto-versiculo").forEach(elemento => {
+    elemento.style.fontSize = `${fonteAtual}px`;
+  });
+}
+
+/* =====================================================
+   16. NAVEGAÇÃO ENTRE LIVROS E CAPÍTULOS
+===================================================== */
+
+function mudarLivro(indice) {
+  if (indice < 0 || indice >= LIVROS.length) return;
+
+  $("livroSelect").value = String(indice);
+  carregarCapitulosNoSeletor(1);
+
+  carregarCapitulo(
+    obterLivroSelecionado(),
+    1
+  );
+}
+
+function irParaCapituloAnterior() {
+  const livro = obterLivroSelecionado();
+  if (!livro) return;
+
+  if (capituloAtual > 1) {
+    carregarCapitulo(livro, capituloAtual - 1);
+    return;
+  }
+
+  const indiceAtual = LIVROS.findIndex(
+    item => item[1] === livro.slug
+  );
+
+  if (indiceAtual > 0) {
+    const livroAnterior = LIVROS[indiceAtual - 1];
+    mudarLivro(indiceAtual - 1);
+
+    carregarCapitulosNoSeletor(livroAnterior[2]);
+    carregarCapitulo(
+      obterLivroSelecionado(),
+      livroAnterior[2]
+    );
+  }
+}
+
+function irParaProximoCapitulo() {
+  const livro = obterLivroSelecionado();
+  if (!livro) return;
+
+  if (capituloAtual < livro.capitulos) {
+    carregarCapitulo(livro, capituloAtual + 1);
+    return;
+  }
+
+  const indiceAtual = LIVROS.findIndex(
+    item => item[1] === livro.slug
+  );
+
+  if (indiceAtual < LIVROS.length - 1) {
+    mudarLivro(indiceAtual + 1);
+  }
+}
+
+/* =====================================================
+   17. COMPARTILHAR O LINK DA PÁGINA
+===================================================== */
+
+async function compartilharPagina() {
+  const url = window.location.href;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Bíblia King James",
+        url: url
+      });
+    } catch (erro) {
+      // O usuário pode cancelar o compartilhamento.
+    }
+
+    return;
+  }
+
+  if (navigator.clipboard) {
+    navigator.clipboard.writeText(url)
+      .then(() => alert("Link copiado."))
+      .catch(() => prompt("Copie o link:", url));
+
+    return;
+  }
+
+  prompt("Copie o link:", url);
+}
+
+/* =====================================================
+   18. CONFIGURAR OS EVENTOS DOS CONTROLES
+===================================================== */
+
+$("livroSelect").addEventListener("change", () => {
+  carregarCapitulosNoSeletor(1);
+  carregarCapitulo(obterLivroSelecionado(), 1);
 });
-function api(parametros){return new Promise((resolve,reject)=>{if(!API_URL){reject(new Error('URL da API do Google Apps Script não configurada.'));return;}const callback='kjsApi_'+Date.now()+'_'+Math.random().toString(36).slice(2);const params=new URLSearchParams(parametros||{});params.set('callback',callback);const script=document.createElement('script');let finalizado=false;const timeout=setTimeout(()=>{finalizar();reject(new Error('Tempo esgotado ao comunicar com o Google Apps Script.'));},15000);function finalizar(){if(finalizado)return;finalizado=true;clearTimeout(timeout);script.remove();try{delete window[callback];}catch(e){window[callback]=undefined;}}window[callback]=dados=>{if(finalizado)return;finalizar();dados=dados||{};if(dados.sucesso===false||dados.ok===false){reject(new Error(dados.erro||'Erro retornado pela API.'));return;}resolve(dados);};script.async=true;script.src=API_URL+'?'+params.toString();script.onerror=()=>{if(finalizado)return;finalizar();reject(new Error('Não foi possível comunicar com o Google Apps Script.'));};document.body.appendChild(script);});}
-async function carregarLivros(){const container=document.getElementById('bookList');container.innerHTML='<div class="loading">Carregando livros...</div>';try{const dados=await api({action:'livros'});livros=Array.isArray(dados.livros)?dados.livros.map(l=>{const codigo=l.livro||l.codigo||'';return {...l,livro:String(codigo),codigo:String(codigo),nome:String(l.nome||l.nomeLivro||codigo),qual:normalizar(l.qual)};}):[];if(!livros.length)throw new Error('Nenhum livro foi encontrado na aba "Livros".');renderizarLivros();const primeiro=livros.find(l=>l.qual==='AT')||livros[0];if(primeiro)await selecionarLivro(primeiro);}catch(erro){container.innerHTML=`<div class="error">${esc(erro.message)}</div>`;mostrarStatus(erro.message);}}
-function selecionarTestamento(qual){testamentoAtual=String(qual||'AT').toUpperCase();document.getElementById('tabAT').classList.toggle('active',testamentoAtual==='AT');document.getElementById('tabNT').classList.toggle('active',testamentoAtual==='NT');renderizarLivros();}
-function renderizarLivros(){const container=document.getElementById('bookList');const lista=livros.filter(l=>l.qual===normalizar(testamentoAtual));if(!lista.length){container.innerHTML='<div class="empty">Nenhum livro encontrado.</div>';return;}container.innerHTML=lista.map(l=>`<button class="book ${livroAtual&&String(l.livro)===String(livroAtual.livro)?'active':''}" data-livro="${esc(l.livro)}" type="button">${esc(l.nome)}</button>`).join('');container.querySelectorAll('.book').forEach(b=>b.addEventListener('click',()=>{const l=livros.find(x=>String(x.livro)===String(b.dataset.livro));if(l)selecionarLivro(l);}));}
-async function selecionarLivro(livro){if(!livro)return;livroAtual=livro;capituloAtual=1;selecionarTestamento(livro.qual||'AT');renderizarLivros();await carregarCapitulo();}
-function normalizarNomeLivroParaCapitulos(nome){return String(nome||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');}
-function descobrirTotalCapitulos(livro){const aliases={job:'jo',salmo:'salmos',filemon:'filemom',revelacao:'apocalipse'};for(const chave of [normalizarNomeLivroParaCapitulos(livro&&livro.nome),normalizarNomeLivroParaCapitulos(livro&&livro.livro)]){const canonica=aliases[chave]||chave;if(TOTAL_CAPITULOS_BIBLIA[canonica])return TOTAL_CAPITULOS_BIBLIA[canonica];}return 0;}
-function preencherSeletorCapitulos(capitulos,atual){const seletor=document.getElementById('chapterSelect');if(!seletor)return;capitulos=[...new Set(capitulos.map(Number).filter(n=>Number.isInteger(n)&&n>0))].sort((a,b)=>a-b);if(!capitulos.length)capitulos=[atual];seletor.innerHTML=capitulos.map(n=>`<option value="${n}">Capítulo ${n}</option>`).join('');if(!capitulos.includes(atual))seletor.insertAdjacentHTML('beforeend',`<option value="${atual}">Capítulo ${atual}</option>`);seletor.value=String(atual);seletor.disabled=false;}
-async function atualizarSeletorCapitulos(capitulo){const seletor=document.getElementById('chapterSelect');if(!seletor||!livroAtual)return;const atual=Number(capitulo)||1;seletor.innerHTML='<option value="">Carregando capítulos...</option>';seletor.disabled=true;try{const dados=await api({action:'capitulos',livro:livroAtual.livro});let capitulos=Array.isArray(dados.capitulos)?dados.capitulos:[];capitulos=capitulos.map(Number).filter(n=>Number.isInteger(n)&&n>0);if(!capitulos.length&&Number(dados.totalCapitulos)>0)capitulos=Array.from({length:Number(dados.totalCapitulos)},(_,i)=>i+1);if(capitulos.length){preencherSeletorCapitulos(capitulos,atual);return;}}catch(e){}const total=descobrirTotalCapitulos(livroAtual);preencherSeletorCapitulos(total?Array.from({length:total},(_,i)=>i+1):[atual],atual);}
-function selecionarCapitulo(valor){const numero=Number(valor);if(!livroAtual||!Number.isInteger(numero)||numero<1)return;capituloAtual=numero;carregarCapitulo();}
-async function carregarCapitulo(){if(!livroAtual)return;const container=document.getElementById('verses');container.innerHTML='<div class="loading">Carregando capítulo...</div>';try{const dados=await api({action:'capitulo',livro:livroAtual.livro,cap:capituloAtual});renderizarCapitulo(dados);}catch(erro){container.innerHTML=`<div class="error">${esc(erro.message)}</div>`;}}
-function renderizarCapitulo(dados){if(!dados||!dados.livro){document.getElementById('verses').innerHTML='<div class="empty">Este capítulo não foi encontrado.</div>';return;}capituloAtual=Number(dados.capitulo)||capituloAtual;document.getElementById('readerBreadcrumb').textContent=`${normalizar(dados.livro.qual)==='NT'?'Novo Testamento':'Antigo Testamento'} • ${dados.livro.nome}`;document.getElementById('readerTitle').textContent=`${dados.livro.nome} ${dados.capitulo}`;atualizarSeletorCapitulos(capituloAtual);const versiculos=Array.isArray(dados.versiculos)?dados.versiculos:[];if(!versiculos.length){document.getElementById('verses').innerHTML='<div class="empty">Este capítulo não foi encontrado.</div>';return;}let falaDeJesusAtiva=false;document.getElementById('verses').innerHTML=versiculos.map(v=>{const ref=`${dados.livro.nome} ${dados.capitulo}:${v.versiculo}`;const chave=chaveVersiculo(dados.livro.livro,dados.capitulo,v.versiculo);const falaAtual=temIndicacaoFalaDeJesus(v.texto);const textoVermelho=refereJesusExplicitamente(v.texto)||falaAtual||falaDeJesusAtiva;falaDeJesusAtiva=atualizarContextoFalaDeJesus(v.texto,falaDeJesusAtiva,falaAtual);return `<article class="verse${textoVermelho?' jesus-verse':''}" id="v-${esc(v.versiculo)}" data-mark-key="${esc(chave)}"><span class="verse-number">${esc(v.versiculo)}</span><span class="verse-text${textoVermelho?' jesus-red':''}">${renderizarTextoComMarcacoes(v.texto,chave,termoPesquisado)}</span><span class="verse-actions"><button class="small-share" type="button" title="Compartilhar versículo" aria-label="Compartilhar ${esc(ref)}" data-ref="${esc(ref)}" data-texto="${esc(v.texto)}">↗</button></span></article>`;}).join('');document.querySelectorAll('.small-share').forEach(b=>b.addEventListener('click',()=>compartilharTexto(b.dataset.ref,b.dataset.texto)));}
-// Identificação automática aproximada: marca referências explícitas a Jesus e falas
-// introduzidas no próprio versículo. Como a API fornece apenas o texto, a identificação
-// não substitui uma edição bíblica com marcação red-letter revisada versículo a versículo.
-function textoSemAcentos(valor){return String(valor||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
-function refereJesusExplicitamente(texto){
- const t=textoSemAcentos(texto);
- const padroes=[/\bjesus\b/,/\bcristo\b/,/\bjesus cristo\b/,/\bmessias\b/,/\bfilho de deus\b/,/\bfilho do homem\b/,/\bsalvador\b/,/\bcordeiro de deus\b/,/\bjesus nazareno\b/,/\bo nazareno\b/,/\bfilho de davi\b/];
- return padroes.some(re=>re.test(t));
-}
-function temIndicacaoFalaDeJesus(texto){
- const t=textoSemAcentos(texto);
- return /\b(?:jesus|cristo)\s+(?:lhes?\s+)?(?:disse|respondeu|perguntou|clamou|falou|ordenou|ensinou|advertiu)\b/.test(t)
-  || /\b(?:disse|respondeu|perguntou|clamou|falou|ordenou|ensinou)\s+(?:lhes?\s+)?jesus\b/.test(t)
-  || /\bdisse-lhe jesus\b/.test(t)
-  || /\bjesus lhes disse\b/.test(t)
-  || /\bjesus respondeu e disse\b/.test(t);
-}
-function atualizarContextoFalaDeJesus(texto,ativa,falaAtual){
- const t=textoSemAcentos(texto);
- // Mantém a fala no versículo seguinte quando a citação claramente continua;
- // encerra ao encontrar uma indicação narrativa comum.
- if(/\b(?:e jesus|entao jesus|depois jesus|os discipulos|os fariseus|os escribas|o povo|a multidao|entao eles|e aconteceu que)\b/.test(t) && !falaAtual) return false;
- if(falaAtual) return /[:“"«]\s*[^“"»]*$/.test(String(texto)) && !/[”»"]\s*$/.test(String(texto));
- return ativa && /^(?:[“"«]|em verdade|na verdade|porque eu|eu sou|eu vos|eu te|meu pai|meu reino|digo-vos|digo a voces|bem-aventurados|bem aventurados)\b/i.test(String(texto).trim());
-}
 
-function chaveVersiculo(codigoLivro,capitulo,versiculo){return `${String(codigoLivro)}_${Number(capitulo)}_${Number(versiculo)}`;}
-function lerMarcacoes(){try{const dados=JSON.parse(localStorage.getItem(CHAVE_MARCACOES)||'{}');return dados&&typeof dados==='object'?dados:{};}catch(e){return {};}}
-function salvarMarcacoes(dados){try{localStorage.setItem(CHAVE_MARCACOES,JSON.stringify(dados));return true;}catch(e){mostrarStatus('Não foi possível salvar as marcações neste navegador.');return false;}}
-function selecionarCorMarcacao(cor){if(!CORES_MARCACAO[cor])return;corMarcacaoAtual=cor;document.querySelectorAll('.color-choice').forEach(b=>b.classList.toggle('active',b.dataset.color===cor));mostrarStatus(`Cor selecionada: ${CORES_MARCACAO[cor]}. Selecione um trecho do versículo.`);}
-function obterVersiculoDaSelecao(selecao){if(!selecao||!selecao.rangeCount)return null;const range=selecao.getRangeAt(0);const inicio=range.startContainer.nodeType===1?range.startContainer:range.startContainer.parentElement;const fim=range.endContainer.nodeType===1?range.endContainer:range.endContainer.parentElement;const a=inicio&&inicio.closest?inicio.closest('.verse'):null;const b=fim&&fim.closest?fim.closest('.verse'):null;if(!a||a!==b||!a.dataset.markKey)return null;return a;}
-function marcarSelecaoAtual(){const selecao=window.getSelection();if(!corMarcacaoAtual){mostrarStatus('Escolha uma cor antes de marcar o texto.');return;}if(!selecao||selecao.isCollapsed||!String(selecao).trim()){mostrarStatus('Selecione um trecho de um versículo primeiro.');return;}const versiculo=obterVersiculoDaSelecao(selecao);if(!versiculo){mostrarStatus('Selecione um trecho dentro de um único versículo.');return;}aplicarMarcacaoSelecionada(versiculo,selecao);}
-function aplicarMarcacaoSelecionada(versiculo,selecao){const trecho=String(selecao).trim();if(!trecho){mostrarStatus('Selecione um trecho de texto.');return;}const chave=versiculo.dataset.markKey;const marcacoes=lerMarcacoes();const lista=Array.isArray(marcacoes[chave])?marcacoes[chave]:[];const existente=lista.findIndex(m=>m.texto===trecho);if(existente>=0)lista[existente]={texto:trecho,cor:corMarcacaoAtual};else lista.push({texto:trecho,cor:corMarcacaoAtual});marcacoes[chave]=lista;if(salvarMarcacoes(marcacoes)){const textoOriginal=versiculo.querySelector('.verse-text')?.textContent||'';versiculo.querySelector('.verse-text').innerHTML=renderizarTextoComMarcacoes(textoOriginal,chave,termoPesquisado);selecao.removeAllRanges();mostrarStatus(`Trecho marcado em ${CORES_MARCACAO[corMarcacaoAtual]}.`);}}
-function renderizarTextoComMarcacoes(texto,chave,consulta=''){const original=String(texto??'');const marcacoes=lerMarcacoes()[chave]||[];let partes=[{texto:original,cor:null}];for(const marcacao of marcacoes){if(!marcacao||!marcacao.texto||!CORES_MARCACAO[marcacao.cor])continue;const novas=[];for(const parte of partes){if(parte.cor){novas.push(parte);continue;}const indice=parte.texto.indexOf(marcacao.texto);if(indice<0){novas.push(parte);continue;}if(indice>0)novas.push({texto:parte.texto.slice(0,indice),cor:null});novas.push({texto:marcacao.texto,cor:marcacao.cor});if(indice+marcacao.texto.length<parte.texto.length)novas.push({texto:parte.texto.slice(indice+marcacao.texto.length),cor:null});}partes=novas;}return partes.map(parte=>{const conteudo=destacarTexto(parte.texto,consulta);return parte.cor?`<span class="verse-mark mark-${parte.cor}" title="Marcação: ${CORES_MARCACAO[parte.cor]}">${conteudo}</span>`:conteudo;}).join('');}
-function removerMarcacaoSelecionada(){const selecao=window.getSelection();const trecho=selecao&&!selecao.isCollapsed?String(selecao).trim():'';const versiculo=obterVersiculoDaSelecao(selecao);if(!versiculo||!trecho){mostrarStatus('Selecione o trecho marcado que deseja remover.');return;}const chave=versiculo.dataset.markKey;const marcacoes=lerMarcacoes();const lista=Array.isArray(marcacoes[chave])?marcacoes[chave]:[];const nova=lista.filter(m=>m.texto!==trecho);if(nova.length===lista.length){mostrarStatus('Não foi encontrada uma marcação para esse trecho. Selecione exatamente o trecho marcado.');return;}if(nova.length)marcacoes[chave]=nova;else delete marcacoes[chave];if(salvarMarcacoes(marcacoes)){const textoOriginal=versiculo.querySelector('.verse-text')?.textContent||'';versiculo.querySelector('.verse-text').innerHTML=renderizarTextoComMarcacoes(textoOriginal,chave,termoPesquisado);selecao.removeAllRanges();mostrarStatus('Marcação removida.');}}
-function capituloAnterior(){if(!livroAtual||capituloAtual<=1){mostrarStatus('Você já está no primeiro capítulo.');return;}capituloAtual--;carregarCapitulo();}
-function proximoCapitulo(){if(!livroAtual)return;const total=descobrirTotalCapitulos(livroAtual);if(total&&capituloAtual>=total){mostrarStatus('Você chegou ao último capítulo deste livro.');return;}capituloAtual++;carregarCapitulo();}
-async function carregarDiario(forcarAtualizacao=false){const referencia=document.getElementById('dailyReference'),texto=document.getElementById('dailyText');try{const parametros={action:'diario'};if(forcarAtualizacao)parametros._=Date.now();const dados=await api(parametros);ultimoDiario=dados;referencia.textContent=ultimoDiario.referencia||'Texto do dia';texto.textContent=ultimoDiario.texto||'Nenhum texto foi retornado pela API.';texto.classList.toggle('jesus-red',refereJesusExplicitamente(ultimoDiario.texto));}catch(erro){referencia.textContent='Texto do dia';texto.textContent=erro.message;if(forcarAtualizacao)mostrarStatus('Não foi possível atualizar a Palavra para hoje.');}}
-async function atualizarPalavraHoje(){const botao=document.getElementById('refreshDailyButton');const textoOriginal=botao.textContent;botao.disabled=true;botao.textContent='Atualizando...';try{await carregarDiario(true);if(ultimoDiario&&ultimoDiario.referencia&&ultimoDiario.texto)mostrarStatus('Palavra para hoje atualizada.');}finally{botao.disabled=false;botao.textContent=textoOriginal;}}
-async function abrirDiario(){if(!ultimoDiario)return;const codigo=ultimoDiario.livro&&ultimoDiario.livro.livro;const livro=livros.find(l=>String(l.livro)===String(codigo));if(!livro){mostrarStatus('Livro do texto diário não encontrado.');return;}selecionarTestamento(livro.qual||'AT');livroAtual=livro;capituloAtual=Number(ultimoDiario.capitulo)||1;renderizarLivros();await carregarCapitulo();setTimeout(()=>{const el=document.getElementById(`v-${ultimoDiario.versiculo}`);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},300);}
-async function compartilharDiario(){if(ultimoDiario)await compartilharTexto(ultimoDiario.referencia,ultimoDiario.texto);}
-async function compartilharTexto(referencia,texto){const mensagem=`${referencia}\n\n"${texto}"\n\nBíblia King James`;if(navigator.share){try{await navigator.share({title:referencia,text:mensagem,url:location.href});return;}catch(e){if(e&&e.name==='AbortError')return;}}try{if(navigator.clipboard&&navigator.clipboard.writeText)await navigator.clipboard.writeText(mensagem);else{const area=document.createElement('textarea');area.value=mensagem;document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();}mostrarStatus('Texto copiado. Agora você pode compartilhar.');}catch(e){mostrarStatus('Não foi possível copiar o texto.');}}
-function regexEscapada(texto){return String(texto).replace(/[.*+?^${}()|[\]\\]/g,'\\$&');}
-function criarRegexDestaque(consulta){const termos=String(consulta||'').trim().split(/\s+/).filter(Boolean);if(!termos.length)return null;termos.sort((a,b)=>b.length-a.length);const alternativas=termos.map(termo=>Array.from(termo.normalize('NFD').replace(/[\u0300-\u036f]/g,'')).map(c=>{const grupos={a:'[aáàâãäÁÀÂÃÄ]',e:'[eéèêëÉÈÊË]',i:'[iíìîïÍÌÎÏ]',o:'[oóòôõöÓÒÔÕÖ]',u:'[uúùûüÚÙÛÜ]',c:'[cçCÇ]',n:'[nñNÑ]'};return grupos[c.toLowerCase()]||regexEscapada(c);}).join(''));try{return new RegExp('('+alternativas.join('|')+')','giu');}catch(e){return null;}}
-function destacarTexto(texto,consulta){const original=String(texto??'');const regex=criarRegexDestaque(consulta);if(!regex)return esc(original);let saida='',pos=0,match;while((match=regex.exec(original))!==null){if(!match[0]){regex.lastIndex++;continue;}saida+=esc(original.slice(pos,match.index));saida+='<mark class="search-highlight">'+esc(match[0])+'</mark>';pos=match.index+match[0].length;}return saida+esc(original.slice(pos));}
-async function pesquisar(){const campo=document.getElementById('searchInput'),filtro=document.getElementById('searchTestament'),caixa=document.getElementById('searchResults');const consulta=campo.value.trim(),qual=filtro.value||'TODOS';if(consulta.length<2){mostrarStatus('Digite pelo menos 2 caracteres.');campo.focus();return;}termoPesquisado=consulta;caixa.style.display='block';caixa.innerHTML='<div class="loading">Pesquisando...</div>';try{const dados=await api({action:'buscar',q:consulta,qual,testamento:qual,limite:200});let resultados=Array.isArray(dados.resultados)?dados.resultados:[];if(qual!=='TODOS'){const codigos=new Set(livros.filter(l=>l.qual===qual).map(l=>String(l.livro)));resultados=resultados.filter(r=>codigos.has(String(r.livro))||normalizar(r.qual)===qual||normalizar(r.testamento)===qual);}if(!resultados.length){const nome={TODOS:'em toda a Bíblia',NT:'no Novo Testamento',AT:'no Antigo Testamento'}[qual];caixa.innerHTML=`<div class="empty">Nenhum versículo encontrado para <strong>${esc(consulta)}</strong> ${nome}.<br><br>Experimente outra palavra ou selecione outro testamento.</div>`;return;}const nome={TODOS:'Toda a Bíblia',NT:'Novo Testamento',AT:'Antigo Testamento'}[qual];caixa.innerHTML=`<div style="margin-bottom:14px;color:var(--muted)"><strong>${resultados.length}</strong> resultado(s) para <strong>${esc(dados.consulta||consulta)}</strong><div style="margin-top:6px">Pesquisa em: <strong>${nome}</strong></div></div>`+resultados.map(r=>`<div class="result" role="button" tabindex="0" data-livro="${esc(r.livro)}" data-capitulo="${esc(r.capitulo)}" data-versiculo="${esc(r.versiculo)}"><div class="result-ref">${esc(r.nome)} ${esc(r.capitulo)}:${esc(r.versiculo)}</div><div class="result-text">${destacarTexto(r.texto,termoPesquisado)}</div></div>`).join('');caixa.querySelectorAll('.result').forEach(el=>{const abrir=()=>abrirResultado({livro:el.dataset.livro,capitulo:Number(el.dataset.capitulo),versiculo:Number(el.dataset.versiculo)});el.addEventListener('click',abrir);el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();abrir();}});});caixa.scrollIntoView({behavior:'smooth',block:'start'});}catch(erro){caixa.innerHTML=`<div class="error">${esc(erro.message)}</div>`;}}
-function limparPesquisa(){document.getElementById('searchInput').value='';document.getElementById('searchResults').innerHTML='';document.getElementById('searchResults').style.display='none';termoPesquisado='';document.getElementById('searchInput').focus();if(livroAtual)carregarCapitulo();}
-async function abrirResultado(resultado){const livro=livros.find(l=>String(l.livro)===String(resultado.livro));if(!livro){mostrarStatus('Livro não encontrado.');return;}selecionarTestamento(livro.qual||'AT');livroAtual=livro;capituloAtual=Number(resultado.capitulo);renderizarLivros();await carregarCapitulo();setTimeout(()=>{const el=document.getElementById(`v-${resultado.versiculo}`);if(el)el.scrollIntoView({behavior:'smooth',block:'center'});},300);}
-function mostrarStatus(mensagem){const el=document.getElementById('status');el.textContent=mensagem;el.classList.add('show');clearTimeout(window.statusTimer);window.statusTimer=setTimeout(()=>el.classList.remove('show'),3500);}
-function normalizar(valor){return String(valor||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toUpperCase().trim();}
-function esc(valor){return String(valor??'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+$("capituloSelect").addEventListener("change", () => {
+  carregarCapitulo(
+    obterLivroSelecionado(),
+    Number($("capituloSelect").value)
+  );
+});
+
+$("versaoSelect").addEventListener("change", () => {
+  carregarCapitulo(
+    obterLivroSelecionado(),
+    capituloAtual
+  );
+});
+
+$("btnPesquisar").addEventListener(
+  "click",
+  pesquisarBiblia
+);
+
+$("pesquisaInput").addEventListener("keydown", evento => {
+  if (evento.key === "Enter") {
+    pesquisarBiblia();
+  }
+});
+
+$("capituloAnterior").addEventListener(
+  "click",
+  irParaCapituloAnterior
+);
+
+$("proximoCapitulo").addEventListener(
+  "click",
+  irParaProximoCapitulo
+);
+
+$("aumentarFonte").addEventListener(
+  "click",
+  () => alterarFonte(1)
+);
+
+$("diminuirFonte").addEventListener(
+  "click",
+  () => alterarFonte(-1)
+);
+
+$("compartilharPagina").addEventListener(
+  "click",
+  compartilharPagina
+);
+
+$("limparMarcacao").addEventListener(
+  "click",
+  limparMarcacao
+);
+
+document.querySelectorAll("[data-cor]").forEach(botao => {
+  botao.addEventListener("click", () => {
+    aplicarMarcacao(botao.dataset.cor);
+  });
+});
+
+$("atualizarPalavra").addEventListener(
+  "click",
+  atualizarPalavraDoDia
+);
+
+/* =====================================================
+   19. INICIALIZAÇÃO
+===================================================== */
+
+carregarLivrosNoSeletor();
+atualizarPalavraDoDia();
+
+carregarCapitulo(
+  obterLivroSelecionado(),
+  1
+).catch(erro => {
+  $("status").textContent =
+    erro.message || "Erro ao inicializar a Bíblia.";
+});
+
+/* =====================================================
+   FINAL DO JAVASCRIPT
+===================================================== */
 </script>
 </body>
 </html>
+
