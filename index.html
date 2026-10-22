@@ -1164,6 +1164,7 @@ function abrirReferencia(referencia) {
 */
 
 
+
 async function carregarCapitulo() {
   const indiceLivro = Number(elementoLivro.value);
   const numeroCapitulo = Number(elementoCapitulo.value);
@@ -1175,20 +1176,14 @@ async function carregarCapitulo() {
     !Number.isInteger(numeroCapitulo) ||
     numeroCapitulo < 1
   ) {
-    mostrarMensagem(
-      "Selecione um livro e um capítulo válido.",
-      "erro"
-    );
+    mostrarMensagem("Selecione um livro e um capítulo válido.", "erro");
     return;
   }
 
   const livro = LIVROS[indiceLivro];
 
   if (numeroCapitulo > livro.capitulos) {
-    mostrarMensagem(
-      "O capítulo selecionado não existe neste livro.",
-      "erro"
-    );
+    mostrarMensagem("O capítulo selecionado não existe neste livro.", "erro");
     return;
   }
 
@@ -1200,54 +1195,74 @@ async function carregarCapitulo() {
       livro.nome + " " + numeroCapitulo;
 
     elementoListaVersiculos.replaceChildren();
-
     mostrarMensagem("Carregando capítulo...", "");
 
-    // Consulta os códigos cadastrados na planilha.
-    if (livrosDaAPI.length === 0) {
+    // Carrega os códigos oficiais dos livros da planilha.
+    if (!livrosDaAPI || livrosDaAPI.length === 0) {
       await carregarCodigosLivros();
     }
 
-    const codigoLivro = obterCodigoLivro(livro.nome);
+    const nomeNormalizado = normalizarTexto(livro.nome);
 
-    if (!codigoLivro) {
+    const registroLivro = livrosDaAPI.find(item => {
+      return [
+        item.nome,
+        item.nomeLivro,
+        item.codigo,
+        item.livro
+      ].some(valor =>
+        valor != null &&
+        normalizarTexto(String(valor)) === nomeNormalizado
+      );
+    });
+
+    if (!registroLivro) {
       throw new Error(
-        'Não foi encontrado o código de "' +
-        livro.nome +
-        '" na lista retornada pela aba Livros.'
+        'O livro "' + livro.nome +
+        '" não foi encontrado na lista da API. Confira a aba Livros.'
       );
     }
 
-    // O Apps Script espera action, livro e cap.
+    const codigoLivro = String(
+      registroLivro.codigo || registroLivro.livro
+    ).trim();
+
+    // IMPORTANTE: os nomes dos parâmetros devem coincidir
+    // com os utilizados no Apps Script.
     const resposta = await consultarAPI({
       action: "capitulo",
       livro: codigoLivro,
       cap: String(numeroCapitulo)
     });
 
-    const versiculos = extrairVersiculos(resposta);
-
-    if (versiculos.length === 0) {
+    if (!Array.isArray(resposta.versiculos)) {
       throw new Error(
-        "A API respondeu, mas não retornou versículos para " +
-        livro.nome + " " + numeroCapitulo + "."
+        resposta.erro ||
+        "A API não retornou a propriedade 'versiculos'."
       );
     }
 
-    versiculosAtuais = versiculos;
+    if (resposta.versiculos.length === 0) {
+      throw new Error(
+        "Nenhum versículo encontrado para " +
+        livro.nome + " " + numeroCapitulo +
+        ". Confira os dados da aba Texto."
+      );
+    }
 
-    renderizarVersiculos(versiculos);
+    versiculosAtuais = resposta.versiculos;
+    renderizarVersiculos(versiculosAtuais);
 
   } catch (erro) {
     console.error("Erro ao carregar capítulo:", erro);
 
     mostrarMensagem(
-      "Não foi possível carregar o capítulo: " +
-      erro.message,
+      "Não foi possível carregar o capítulo: " + erro.message,
       "erro"
     );
   }
 }
+
 
 
 /* =====================================================
