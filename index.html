@@ -2,649 +2,796 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Bíblia King James</title>
+  <title>Bíblia King James</title>
 
-<style>
-:root {
-  --fundo: #f5f3ee;
-  --painel: #fffefa;
-  --texto: #28251f;
-  --secundario: #777166;
-  --borda: #e7e1d7;
-  --destaque: #74552d;
-  --vermelho: #b32121;
-}
+  <meta
+    name="description"
+    content="Leia a Bíblia King James em português, pesquise versículos e consulte referências cruzadas."
+  >
 
-* {
-  box-sizing: border-box;
-}
+  <style>
+    :root {
+      --cor-principal: #173f35;
+      --cor-secundaria: #245c4b;
+      --cor-destaque: #d6b36a;
+      --cor-fundo: #f5f3ed;
+      --cor-cartao: #ffffff;
+      --cor-texto: #292d2b;
+      --cor-texto-suave: #6b716e;
+      --cor-borda: #dedfd8;
+      --cor-versiculo: #f5f1e6;
+      --sombra: 0 4px 16px rgba(0, 0, 0, 0.07);
+    }
 
-body {
-  margin: 0;
-  background: var(--fundo);
-  color: var(--texto);
-  font-family: Georgia, "Times New Roman", serif;
-  line-height: 1.65;
-}
+    * {
+      box-sizing: border-box;
+    }
 
-header {
-  background: #2f291f;
-  color: white;
-  padding: 18px;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-.cabecalho {
-  max-width: 1100px;
-  margin: auto;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+    body {
+      margin: 0;
+      background: var(--cor-fundo);
+      color: var(--cor-texto);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
 
-.logo {
-  font-size: 23px;
-  font-weight: bold;
-}
+    button,
+    input,
+    select {
+      font: inherit;
+    }
 
-.logo small {
-  display: block;
-  font: 12px Arial, sans-serif;
-  color: #d8cbb8;
-}
+    button {
+      cursor: pointer;
+    }
 
-main {
-  max-width: 1100px;
-  margin: 24px auto;
-  padding: 0 16px 40px;
-}
+    .cabecalho {
+      background: var(--cor-principal);
+      color: #ffffff;
+      padding: 24px 16px;
+      text-align: center;
+      border-bottom: 4px solid var(--cor-destaque);
+    }
 
-.painel {
-  background: var(--painel);
-  border: 1px solid var(--borda);
-  border-radius: 12px;
-  padding: 18px;
-  margin-bottom: 18px;
-}
+    .cabecalho h1 {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(26px, 5vw, 38px);
+      letter-spacing: 0.5px;
+    }
 
-.controles {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
-}
+    .cabecalho p {
+      margin: 6px 0 0;
+      color: #e3e9e4;
+      font-size: 14px;
+    }
 
-.campo {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  font: 13px Arial, sans-serif;
-  color: var(--secundario);
-}
+    .conteiner {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
 
-input, select, button {
-  font: inherit;
-  border: 1px solid var(--borda);
-  border-radius: 8px;
-  padding: 10px;
-}
+    .cartao {
+      background: var(--cor-cartao);
+      border: 1px solid var(--cor-borda);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: var(--sombra);
+    }
 
-input, select {
-  width: 100%;
-  background: white;
-  color: var(--texto);
-}
+    .cartao h2 {
+      margin: 0 0 14px;
+      color: var(--cor-principal);
+      font-size: 20px;
+    }
 
-button {
-  cursor: pointer;
-  background: white;
-  color: var(--texto);
-}
+    .grade-controles {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 14px;
+      align-items: end;
+    }
 
-button:hover {
-  filter: brightness(.96);
-}
+    .campo {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-width: 0;
+    }
 
-.botao-principal {
-  background: var(--destaque);
-  border-color: var(--destaque);
-  color: white;
-}
+    .campo label {
+      color: var(--cor-texto);
+      font-size: 14px;
+      font-weight: bold;
+    }
 
-.busca {
-  display: flex;
-  align-items: end;
-  gap: 8px;
-  grid-column: span 3;
-}
+    .campo select,
+    .campo input {
+      width: 100%;
+      min-height: 44px;
+      padding: 10px 12px;
+      background: #ffffff;
+      border: 1px solid #cfd4ce;
+      border-radius: 7px;
+      color: var(--cor-texto);
+      outline: none;
+    }
 
-.busca .campo {
-  flex: 1;
-}
+    .campo select:focus,
+    .campo input:focus {
+      border-color: var(--cor-secundaria);
+      box-shadow: 0 0 0 3px rgba(36, 92, 75, 0.12);
+    }
 
-.leitor {
-  background: var(--painel);
-  border: 1px solid var(--borda);
-  border-radius: 12px;
-  padding: 24px;
-}
+    .botoes-navegacao {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
 
-.titulo-capitulo {
-  border-bottom: 1px solid var(--borda);
-  padding-bottom: 14px;
-  margin-bottom: 16px;
-}
+    .botao {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 7px;
+      min-height: 42px;
+      padding: 10px 16px;
+      border: 0;
+      border-radius: 7px;
+      font-weight: bold;
+      transition: opacity 0.2s ease;
+    }
 
-.titulo-capitulo small {
-  color: var(--secundario);
-  font: 12px Arial, sans-serif;
-  text-transform: uppercase;
-}
+    .botao:hover {
+      opacity: 0.88;
+    }
 
-h1 {
-  margin: 4px 0;
-  font-size: 30px;
-}
+    .botao-principal {
+      background: var(--cor-principal);
+      color: #ffffff;
+    }
 
-.navegacao {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-top: 12px;
-}
+    .botao-secundario {
+      background: #e8eee9;
+      color: var(--cor-principal);
+    }
 
-.versiculo {
-  position: relative;
-  padding: 12px 32px 14px 0;
-  border-bottom: 1px solid #f0ece5;
-  border-radius: 4px;
-}
+    .botao-destaque {
+      background: var(--cor-destaque);
+      color: #302817;
+    }
 
-.numero-versiculo {
-  color: var(--destaque);
-  font: bold 12px Arial, sans-serif;
-  margin-right: 7px;
-}
+    .pesquisa-linha {
+      display: flex;
+      gap: 10px;
+    }
 
-.texto-versiculo {
-  font-size: 18px;
-  line-height: 1.9;
-}
+    .pesquisa-linha input {
+      flex: 1;
+      min-width: 0;
+      min-height: 44px;
+      padding: 10px 12px;
+      border: 1px solid #cfd4ce;
+      border-radius: 7px;
+    }
 
-.fala-jesus {
-  color: var(--vermelho);
-}
+    .versiculo-diario {
+      background: var(--cor-principal);
+      color: #ffffff;
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
 
-/* Referências cruzadas em letra pequena */
-.referencia-cruzada {
-  display: block;
-  margin: 3px 0 0 24px;
-  color: var(--secundario);
-  font: italic 11px/1.45 Arial, sans-serif;
-}
+    .versiculo-diario h2 {
+      margin: 0 0 8px;
+      color: var(--cor-destaque);
+      font-size: 18px;
+    }
 
-.acoes-versiculo {
-  position: absolute;
-  top: 8px;
-  right: 0;
-  border: none;
-  padding: 3px 6px;
-  color: var(--secundario);
-  background: transparent;
-}
+    .versiculo-diario p {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      font-style: italic;
+    }
 
-.status {
-  color: var(--secundario);
-  font: 13px Arial, sans-serif;
-  margin: 10px 0;
-}
+    .versiculo-diario .referencia {
+      display: block;
+      margin-top: 10px;
+      color: #e6d19e;
+      font-weight: bold;
+    }
 
-.resultado {
-  display: block;
-  width: 100%;
-  text-align: left;
-  margin-top: 8px;
-  padding: 10px;
-}
+    .titulo-capitulo {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--cor-borda);
+    }
 
-.resultado strong {
-  display: block;
-  color: var(--destaque);
-}
+    .titulo-capitulo h2 {
+      margin: 0;
+      color: var(--cor-principal);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 26px;
+    }
 
-.marcacoes {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 7px;
-  margin-top: 18px;
-  padding-top: 14px;
-  border-top: 1px solid var(--borda);
-  font: 12px Arial, sans-serif;
-}
+    .acoes-capitulo {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
 
-.cor {
-  width: 23px;
-  height: 23px;
-  padding: 0;
-  border-radius: 50%;
-}
+    .lista-versiculos {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
 
-.vazio {
-  padding: 25px 10px;
-  text-align: center;
-  color: var(--secundario);
-}
+    .versiculo {
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: background 0.2s ease;
+    }
 
-footer {
-  text-align: center;
-  padding: 20px;
-  color: var(--secundario);
-  font: 12px Arial, sans-serif;
-}
+    .versiculo:hover {
+      background: #f8f8f4;
+      border-color: var(--cor-borda);
+    }
 
-@media (max-width: 650px) {
-  .controles {
-    grid-template-columns: 1fr;
-  }
+    .numero-versiculo {
+      color: var(--cor-secundaria);
+      font-weight: bold;
+      margin-right: 5px;
+    }
 
-  .busca {
-    grid-column: span 1;
-  }
+    .texto-versiculo {
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 17px;
+    }
 
-  .leitor {
-    padding: 16px;
-  }
+    .palavras-jesus {
+      color: #bd2929;
+    }
 
-  h1 {
-    font-size: 25px;
-  }
-}
-</style>
+    .versiculo-marcado {
+      background: #fff3c9;
+      border-color: #e5c76f;
+    }
+
+    .referencias {
+      margin-top: 8px;
+      padding-left: 12px;
+      border-left: 3px solid var(--cor-destaque);
+      color: var(--cor-texto-suave);
+      font-size: 13px;
+    }
+
+    .referencias strong {
+      color: var(--cor-principal);
+    }
+
+    .referencias a {
+      color: var(--cor-secundaria);
+      text-decoration: underline;
+      cursor: pointer;
+      margin-right: 6px;
+    }
+
+    .mensagem {
+      padding: 14px;
+      border-radius: 8px;
+      background: #f1f3ef;
+      color: var(--cor-texto-suave);
+      text-align: center;
+    }
+
+    .mensagem.erro {
+      background: #fff0ee;
+      color: #9b2922;
+    }
+
+    .mensagem.sucesso {
+      background: #eaf6ed;
+      color: #216b35;
+    }
+
+    .resultado-pesquisa {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .resultado-item {
+      padding: 12px;
+      border: 1px solid var(--cor-borda);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .resultado-item strong {
+      color: var(--cor-principal);
+    }
+
+    .resultado-item p {
+      margin: 5px 0 0;
+    }
+
+    .rodape {
+      padding: 20px 16px;
+      text-align: center;
+      color: var(--cor-texto-suave);
+      font-size: 13px;
+    }
+
+    .oculto {
+      display: none !important;
+    }
+
+    @media (max-width: 600px) {
+      .conteiner {
+        padding: 14px 10px 30px;
+      }
+
+      .cartao {
+        padding: 15px;
+      }
+
+      .grade-controles {
+        grid-template-columns: 1fr;
+      }
+
+      .pesquisa-linha {
+        flex-direction: column;
+      }
+
+      .pesquisa-linha .botao {
+        width: 100%;
+      }
+
+      .titulo-capitulo h2 {
+        font-size: 22px;
+      }
+
+      .acoes-capitulo {
+        width: 100%;
+      }
+
+      .acoes-capitulo .botao {
+        flex: 1;
+      }
+
+      .texto-versiculo {
+        font-size: 16px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<header>
-  <div class="cabecalho">
-    <div class="logo">
-      Bíblia King James
-      <small>Leia • Pesquise • Estude</small>
-    </div>
+  <header class="cabecalho">
+    <h1>📖 Bíblia King James</h1>
+    <p>Leia, pesquise e estude a Palavra de Deus</p>
+  </header>
 
-    <div>
-      <button type="button" id="aumentarFonte">A+</button>
-      <button type="button" id="diminuirFonte">A−</button>
-      <button type="button" id="compartilharPagina">
-        Compartilhar
-      </button>
-    </div>
-  </div>
-</header>
+  <main class="conteiner">
 
-<main>
+    <!-- VERSÍCULO DO DIA -->
+    <section class="versiculo-diario">
+      <h2>✨ Versículo do dia</h2>
+      <p id="textoDiario">
+        Lâmpada para os meus pés é tua palavra e luz, para o meu caminho.
+      </p>
+      <span class="referencia" id="referenciaDiaria">
+        Salmos 119:105
+      </span>
+    </section>
 
-  <section class="painel">
-    <div class="controles">
+    <!-- SELEÇÃO DE LIVRO E CAPÍTULO -->
+    <section class="cartao">
+      <h2>📚 Escolher passagem</h2>
 
-      <label class="campo">
-        Livro
-        <select id="livroSelect">
-          <option value="">Carregando livros...</option>
-        </select>
-      </label>
+      <div class="grade-controles">
 
-      <label class="campo">
-        Capítulo
-        <select id="capituloSelect">
-          <option value="1">1</option>
-        </select>
-      </label>
+        <div class="campo">
+          <label for="livro">Livro bíblico</label>
+          <select id="livro">
+            <option value="">Carregando livros...</option>
+          </select>
+        </div>
 
-      <label class="campo">
-        Versão bíblica
-        <select id="versaoSelect">
-          <option value="KJA">King James Atualizada</option>
-          <option value="KJF">King James Fiel</option>
-        </select>
-      </label>
+        <div class="campo">
+          <label for="capitulo">Capítulo</label>
+          <select id="capitulo" disabled>
+            <option value="">Selecione um livro</option>
+          </select>
+        </div>
 
-      <div class="busca">
-        <label class="campo">
-          Pesquisar na Bíblia
-          <input
-            type="search"
-            id="pesquisaInput"
-            placeholder="Digite uma palavra ou referência"
-          >
-        </label>
+      </div>
 
-        <button class="botao-principal"
-                type="button"
-                id="btnPesquisar">
+      <div class="botoes-navegacao">
+        <button
+          class="botao botao-principal"
+          id="btnLer"
+          type="button"
+        >
+          📖 Ler capítulo
+        </button>
+
+        <button
+          class="botao botao-secundario"
+          id="btnAnterior"
+          type="button"
+        >
+          ◀ Anterior
+        </button>
+
+        <button
+          class="botao botao-secundario"
+          id="btnProximo"
+          type="button"
+        >
+          Próximo ▶
+        </button>
+      </div>
+    </section>
+
+    <!-- PESQUISA BÍBLICA -->
+    <section class="cartao">
+      <h2>🔎 Pesquisar na Bíblia</h2>
+
+      <div class="pesquisa-linha">
+        <input
+          type="search"
+          id="termoPesquisa"
+          placeholder="Digite uma palavra ou expressão..."
+          aria-label="Palavra ou expressão para pesquisar"
+        >
+
+        <button
+          class="botao botao-principal"
+          id="btnPesquisar"
+          type="button"
+        >
           Pesquisar
         </button>
       </div>
 
-    </div>
-  </section>
+      <div
+        id="resultadosPesquisa"
+        class="resultado-pesquisa"
+        aria-live="polite"
+      ></div>
+    </section>
 
-  <div class="leitor">
+    <!-- ÁREA DE LEITURA -->
+    <section class="cartao">
+      <div class="titulo-capitulo">
+        <h2 id="tituloCapitulo">Selecione um livro e capítulo</h2>
 
-    <div class="titulo-capitulo">
-      <small id="nomeLivro">Bíblia Sagrada</small>
-      <h1 id="tituloCapitulo">Carregando capítulo...</h1>
+        <div class="acoes-capitulo">
+          <button
+            class="botao botao-secundario"
+            id="btnCompartilhar"
+            type="button"
+          >
+            Compartilhar
+          </button>
 
-      <div class="navegacao">
-        <button type="button" id="capituloAnterior">
-          ← Anterior
-        </button>
-
-        <button type="button" id="proximoCapitulo">
-          Próximo →
-        </button>
+          <button
+            class="botao botao-destaque"
+            id="btnMarcar"
+            type="button"
+          >
+            ⭐ Meus versículos
+          </button>
+        </div>
       </div>
-    </div>
 
-    <div id="status" class="status">
-      Carregando...
-    </div>
+      <div
+        id="mensagemLeitura"
+        class="mensagem"
+        aria-live="polite"
+      >
+        Escolha um livro e um capítulo para começar a leitura.
+      </div>
 
-    <div id="versiculos">
-      <div class="vazio">Aguarde o carregamento dos versículos.</div>
-    </div>
+      <div
+        id="listaVersiculos"
+        class="lista-versiculos"
+      ></div>
+    </section>
 
-    <div class="marcacoes">
-      <span>Marcar versículo selecionado:</span>
+    <!-- VERSÍCULOS MARCADOS -->
+    <section class="cartao" id="areaMarcados">
+      <h2>⭐ Meus versículos marcados</h2>
 
-      <button type="button" class="cor"
-        data-cor="#fff0a8" style="background:#fff0a8"
-        title="Amarelo"></button>
+      <div id="listaMarcados">
+        <p class="mensagem">
+          Seus versículos favoritos aparecerão aqui.
+        </p>
+      </div>
+    </section>
 
-      <button type="button" class="cor"
-        data-cor="#ccebd3" style="background:#ccebd3"
-        title="Verde"></button>
+  </main>
 
-      <button type="button" class="cor"
-        data-cor="#cfe5ff" style="background:#cfe5ff"
-        title="Azul"></button>
+  <footer class="rodape">
+    Bíblia King James — leitura e estudo bíblico
+  </footer>
 
-      <button type="button" class="cor"
-        data-cor="#f7d2dc" style="background:#f7d2dc"
-        title="Rosa"></button>
-
-      <button type="button" id="limparMarcacao">
-        Limpar marcação
-      </button>
-    </div>
-
-  </div>
-
-  <section class="painel">
-    <h2>Palavra do dia</h2>
-    <p id="palavraDoDia">Carregando versículo...</p>
-    <strong id="referenciaDoDia"></strong>
-    <br><br>
-    <button type="button" id="atualizarPalavra">
-      Novo versículo
-    </button>
-  </section>
-
-  <section class="painel">
-    <h2>Resultados da pesquisa</h2>
-    <p id="resumoPesquisa">
-      Digite uma palavra para pesquisar.
-    </p>
-    <div id="resultadosPesquisa"></div>
-  </section>
-
-</main>
-
-<footer>
-  Bíblia King James — Leitura e estudo das Escrituras
-</footer>
-
-
+  
 <script>
-"use strict";
-
 /* =====================================================
-   1. CONFIGURAÇÃO DA API DO GOOGLE APPS SCRIPT
+   BÍBLIA KING JAMES — PARTE 2
+   Livros, capítulos e configuração da API
 ===================================================== */
 
 /*
-  Coloque aqui a URL de implantação do seu Apps Script.
-  Ela normalmente termina em /exec.
+  IMPORTANTE:
+  Substitua o endereço abaixo pela URL /exec
+  do seu projeto Google Apps Script que fornece
+  os dados da Bíblia.
+
+  Não use a URL de outro aplicativo.
 */
-const API_URL = "https://script.google.com/macros/s/AKfycbyACS3Hi-BjcYFvCA1j8FzjMcEdc26-j2jc557fhdCmvHNz3qdhdRvXhTxVn9yAnxwm1w/exec";
+const API_URL = "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT";
 
 /* =====================================================
-   2. LISTA DOS 66 LIVROS DA BÍBLIA
+   LISTA DOS 66 LIVROS DA BÍBLIA
 ===================================================== */
 
 const LIVROS = [
-  ["Gênesis","genesis",50],
-  ["Êxodo","exodo",40],
-  ["Levítico","levitico",27],
-  ["Números","numeros",36],
-  ["Deuteronômio","deuteronomio",34],
-  ["Josué","josue",24],
-  ["Juízes","juizes",21],
-  ["Rute","rute",4],
-  ["1 Samuel","1samuel",31],
-  ["2 Samuel","2samuel",24],
-  ["1 Reis","1reis",22],
-  ["2 Reis","2reis",25],
-  ["1 Crônicas","1cronicas",29],
-  ["2 Crônicas","2cronicas",36],
-  ["Esdras","esdras",10],
-  ["Neemias","neemias",13],
-  ["Ester","ester",10],
-  ["Jó","jo",42],
-  ["Salmos","salmos",150],
-  ["Provérbios","proverbios",31],
-  ["Eclesiastes","eclesiastes",12],
-  ["Cânticos","canticos",8],
-  ["Isaías","isaias",66],
-  ["Jeremias","jeremias",52],
-  ["Lamentações","lamentacoes",5],
-  ["Ezequiel","ezequiel",48],
-  ["Daniel","daniel",12],
-  ["Oseias","oseias",14],
-  ["Joel","joel",3],
-  ["Amós","amos",9],
-  ["Obadias","obadias",1],
-  ["Jonas","jonas",4],
-  ["Miqueias","miqueias",7],
-  ["Naum","naum",3],
-  ["Habacuque","habacuque",3],
-  ["Sofonias","sofonias",3],
-  ["Ageu","ageu",2],
-  ["Zacarias","zacarias",14],
-  ["Malaquias","malaquias",4],
-  ["Mateus","mateus",28],
-  ["Marcos","marcos",16],
-  ["Lucas","lucas",24],
-  ["João","joao",21],
-  ["Atos","atos",28],
-  ["Romanos","romanos",16],
-  ["1 Coríntios","1corintios",16],
-  ["2 Coríntios","2corintios",13],
-  ["Gálatas","galatas",6],
-  ["Efésios","efesios",6],
-  ["Filipenses","filipenses",4],
-  ["Colossenses","colossenses",4],
-  ["1 Tessalonicenses","1tessalonicenses",5],
-  ["2 Tessalonicenses","2tessalonicenses",3],
-  ["1 Timóteo","1timoteo",6],
-  ["2 Timóteo","2timoteo",4],
-  ["Tito","tito",3],
-  ["Filemom","filemom",1],
-  ["Hebreus","hebreus",13],
-  ["Tiago","tiago",5],
-  ["1 Pedro","1pedro",5],
-  ["2 Pedro","2pedro",3],
-  ["1 João","1joao",5],
-  ["2 João","2joao",1],
-  ["3 João","3joao",1],
-  ["Judas","judas",1],
-  ["Apocalipse","apocalipse",22]
+  { nome: "Gênesis", capitulos: 50, abreviacao: "Gn" },
+  { nome: "Êxodo", capitulos: 40, abreviacao: "Êx" },
+  { nome: "Levítico", capitulos: 27, abreviacao: "Lv" },
+  { nome: "Números", capitulos: 36, abreviacao: "Nm" },
+  { nome: "Deuteronômio", capitulos: 34, abreviacao: "Dt" },
+  { nome: "Josué", capitulos: 24, abreviacao: "Js" },
+  { nome: "Juízes", capitulos: 21, abreviacao: "Jz" },
+  { nome: "Rute", capitulos: 4, abreviacao: "Rt" },
+  { nome: "1 Samuel", capitulos: 31, abreviacao: "1Sm" },
+  { nome: "2 Samuel", capitulos: 24, abreviacao: "2Sm" },
+  { nome: "1 Reis", capitulos: 22, abreviacao: "1Rs" },
+  { nome: "2 Reis", capitulos: 25, abreviacao: "2Rs" },
+  { nome: "1 Crônicas", capitulos: 29, abreviacao: "1Cr" },
+  { nome: "2 Crônicas", capitulos: 36, abreviacao: "2Cr" },
+  { nome: "Esdras", capitulos: 10, abreviacao: "Ed" },
+  { nome: "Neemias", capitulos: 13, abreviacao: "Ne" },
+  { nome: "Ester", capitulos: 10, abreviacao: "Et" },
+  { nome: "Jó", capitulos: 42, abreviacao: "Jó" },
+  { nome: "Salmos", capitulos: 150, abreviacao: "Sl" },
+  { nome: "Provérbios", capitulos: 31, abreviacao: "Pv" },
+  { nome: "Eclesiastes", capitulos: 12, abreviacao: "Ec" },
+  { nome: "Cantares", capitulos: 8, abreviacao: "Ct" },
+  { nome: "Isaías", capitulos: 66, abreviacao: "Is" },
+  { nome: "Jeremias", capitulos: 52, abreviacao: "Jr" },
+  { nome: "Lamentações", capitulos: 5, abreviacao: "Lm" },
+  { nome: "Ezequiel", capitulos: 48, abreviacao: "Ez" },
+  { nome: "Daniel", capitulos: 12, abreviacao: "Dn" },
+  { nome: "Oseias", capitulos: 14, abreviacao: "Os" },
+  { nome: "Joel", capitulos: 3, abreviacao: "Jl" },
+  { nome: "Amós", capitulos: 9, abreviacao: "Am" },
+  { nome: "Obadias", capitulos: 1, abreviacao: "Ob" },
+  { nome: "Jonas", capitulos: 4, abreviacao: "Jn" },
+  { nome: "Miqueias", capitulos: 7, abreviacao: "Mq" },
+  { nome: "Naum", capitulos: 3, abreviacao: "Na" },
+  { nome: "Habacuque", capitulos: 3, abreviacao: "Hc" },
+  { nome: "Sofonias", capitulos: 3, abreviacao: "Sf" },
+  { nome: "Ageu", capitulos: 2, abreviacao: "Ag" },
+  { nome: "Zacarias", capitulos: 14, abreviacao: "Zc" },
+  { nome: "Malaquias", capitulos: 4, abreviacao: "Ml" },
+
+  { nome: "Mateus", capitulos: 28, abreviacao: "Mt" },
+  { nome: "Marcos", capitulos: 16, abreviacao: "Mc" },
+  { nome: "Lucas", capitulos: 24, abreviacao: "Lc" },
+  { nome: "João", capitulos: 21, abreviacao: "Jo" },
+  { nome: "Atos", capitulos: 28, abreviacao: "At" },
+  { nome: "Romanos", capitulos: 16, abreviacao: "Rm" },
+  { nome: "1 Coríntios", capitulos: 16, abreviacao: "1Co" },
+  { nome: "2 Coríntios", capitulos: 13, abreviacao: "2Co" },
+  { nome: "Gálatas", capitulos: 6, abreviacao: "Gl" },
+  { nome: "Efésios", capitulos: 6, abreviacao: "Ef" },
+  { nome: "Filipenses", capitulos: 4, abreviacao: "Fp" },
+  { nome: "Colossenses", capitulos: 4, abreviacao: "Cl" },
+  { nome: "1 Tessalonicenses", capitulos: 5, abreviacao: "1Ts" },
+  { nome: "2 Tessalonicenses", capitulos: 3, abreviacao: "2Ts" },
+  { nome: "1 Timóteo", capitulos: 6, abreviacao: "1Tm" },
+  { nome: "2 Timóteo", capitulos: 4, abreviacao: "2Tm" },
+  { nome: "Tito", capitulos: 3, abreviacao: "Tt" },
+  { nome: "Filemom", capitulos: 1, abreviacao: "Fm" },
+  { nome: "Hebreus", capitulos: 13, abreviacao: "Hb" },
+  { nome: "Tiago", capitulos: 5, abreviacao: "Tg" },
+  { nome: "1 Pedro", capitulos: 5, abreviacao: "1Pe" },
+  { nome: "2 Pedro", capitulos: 3, abreviacao: "2Pe" },
+  { nome: "1 João", capitulos: 5, abreviacao: "1Jo" },
+  { nome: "2 João", capitulos: 1, abreviacao: "2Jo" },
+  { nome: "3 João", capitulos: 1, abreviacao: "3Jo" },
+  { nome: "Judas", capitulos: 1, abreviacao: "Jd" },
+  { nome: "Apocalipse", capitulos: 22, abreviacao: "Ap" }
 ];
 
 /* =====================================================
-   3. REFERÊNCIAS BÍBLICAS CRUZADAS
+   REFERÊNCIAS CRUZADAS INICIAIS
 ===================================================== */
 
-/*
-  Formato:
-  "livro_capitulo_versiculo": ["Referência 1", "Referência 2"]
-
-  Exemplo:
-  João 1:1 apresenta Gênesis 1:1 como referência.
-*/
-
 const REFERENCIAS_CRUZADAS = {
+  "joao_1_1": [
+    "Gênesis 1:1",
+    "Colossenses 1:17",
+    "Hebreus 1:2"
+  ],
 
-  /* GÊNESIS */
-  "genesis_1_1": ["Jo 1:1", "Hb 11:3"],
-  "genesis_1_3": ["2Co 4:6"],
-  "genesis_1_26": ["Gn 5:1", "Tg 3:9"],
-  "genesis_2_7": ["1Co 15:45"],
-  "genesis_12_3": ["Gl 3:8"],
-  "genesis_22_18": ["Gl 3:16"],
-  "genesis_49_10": ["Ap 5:5"],
+  "joao_1_3": [
+    "Gênesis 1:1",
+    "Colossenses 1:16"
+  ],
 
-  /* ÊXODO */
-  "exodo_3_14": ["Jo 8:58"],
-  "exodo_12_13": ["1Co 5:7"],
-  "exodo_20_3": ["Dt 5:7"],
-  "exodo_20_12": ["Ef 6:2"],
-  "exodo_34_6": ["Nm 14:18", "Sl 103:8"],
+  "joao_3_16": [
+    "Romanos 5:8",
+    "1 João 4:9-10"
+  ],
 
-  /* SALMOS */
-  "salmos_2_7": ["At 13:33", "Hb 1:5"],
-  "salmos_16_10": ["At 2:27"],
-  "salmos_22_1": ["Mt 27:46"],
-  "salmos_22_18": ["Jo 19:24"],
-  "salmos_23_1": ["Jo 10:11", "1Pe 2:25"],
-  "salmos_33_6": ["Jo 1:3", "Hb 11:3"],
-  "salmos_34_8": ["1Pe 2:3"],
-  "salmos_51_10": ["Ez 36:26"],
-  "salmos_110_1": ["Mt 22:44", "Hb 1:13"],
-  "salmos_118_22": ["Mt 21:42", "At 4:11"],
+  "salmos_23_1": [
+    "João 10:11",
+    "Ezequiel 34:11"
+  ],
 
-  /* ISAÍAS */
-  "isaias_7_14": ["Mt 1:22-23"],
-  "isaias_9_6": ["Lc 2:11", "Jo 1:14"],
-  "isaias_40_3": ["Mt 3:3", "Jo 1:23"],
-  "isaias_53_5": ["1Pe 2:24"],
-  "isaias_53_7": ["At 8:32-35"],
-  "isaias_61_1": ["Lc 4:18"],
+  "isaias_53_5": [
+    "1 Pedro 2:24",
+    "Mateus 8:17"
+  ],
 
-  /* MATEUS */
-  "mateus_1_23": ["Is 7:14"],
-  "mateus_3_17": ["Mt 17:5"],
-  "mateus_5_3": ["Lc 6:20"],
-  "mateus_5_14": ["Jo 8:12"],
-  "mateus_11_28": ["Jo 6:37"],
-  "mateus_22_37": ["Dt 6:5"],
-  "mateus_28_19": ["Mc 16:15"],
+  "genesis_1_1": [
+    "João 1:1",
+    "Hebreus 11:3"
+  ],
 
-  /* MARCOS */
-  "marcos_10_45": ["Mt 20:28"],
-  "marcos_12_30": ["Dt 6:5"],
-  "marcos_16_15": ["Mt 28:19"],
-
-  /* LUCAS */
-  "lucas_2_11": ["Is 9:6"],
-  "lucas_4_18": ["Is 61:1"],
-  "lucas_19_10": ["Mt 18:11"],
-
-  /* JOÃO */
-  "joao_1_1": ["Gn 1:1", "Cl 1:17"],
-  "joao_1_2": ["Pv 8:22"],
-  "joao_1_3": ["Gn 1:3", "Cl 1:16", "Hb 1:2"],
-  "joao_1_4": ["Jo 5:26"],
-  "joao_1_5": ["Gn 1:4"],
-  "joao_1_10": ["Cl 1:16"],
-  "joao_1_12": ["Rm 8:15"],
-  "joao_1_14": ["Fp 2:7", "Hb 2:14"],
-  "joao_1_29": ["Is 53:7", "1Pe 1:19"],
-  "joao_3_3": ["1Pe 1:23"],
-  "joao_3_16": ["Rm 5:8", "1Jo 4:9"],
-  "joao_8_12": ["Is 9:2", "Jo 1:4"],
-  "joao_10_11": ["Sl 23:1", "Ez 34:11"],
-  "joao_11_25": ["Jo 5:21"],
-  "joao_14_6": ["Hb 10:20"],
-  "joao_15_5": ["Gl 5:22"],
-  "joao_19_30": ["Mt 27:50"],
-
-  /* ATOS */
-  "atos_1_8": ["Lc 24:49"],
-  "atos_2_21": ["Jl 2:32"],
-  "atos_4_12": ["Jo 14:6"],
-  "atos_16_31": ["Rm 10:9"],
-
-  /* ROMANOS */
-  "romanos_3_23": ["Ec 7:20"],
-  "romanos_5_8": ["Jo 3:16"],
-  "romanos_6_23": ["Gn 2:17", "Jo 3:16"],
-  "romanos_8_28": ["Gn 50:20"],
-  "romanos_10_9": ["At 16:31"],
-  "romanos_12_2": ["Ef 4:23"],
-
-  /* 1 CORÍNTIOS */
-  "1corintios_10_13": ["2Pe 2:9"],
-  "1corintios_13_4": ["1Jo 4:7"],
-  "1corintios_15_22": ["Rm 5:12"],
-
-  /* GÁLATAS */
-  "galatas_2_20": ["Rm 6:6"],
-  "galatas_5_22": ["Jo 15:5"],
-
-  /* EFÉSIOS */
-  "efesios_2_8": ["Rm 3:24", "Tt 3:5"],
-  "efesios_2_9": ["Rm 3:28"],
-  "efesios_6_10": ["Fp 4:13"],
-
-  /* FILIPENSES */
-  "filipenses_4_6": ["Mt 6:25"],
-  "filipenses_4_13": ["2Co 12:9"],
-
-  /* HEBREUS */
-  "hebreus_4_12": ["Ef 6:17"],
-  "hebreus_11_1": ["Rm 8:24"],
-  "hebreus_11_3": ["Gn 1:1", "Sl 33:6"],
-  "hebreus_13_8": ["Ml 3:6"],
-
-  /* TIAGO */
-  "tiago_1_5": ["Pv 2:6"],
-  "tiago_2_17": ["Gl 5:6"],
-
-  /* 1 PEDRO */
-  "1pedro_2_24": ["Is 53:5"],
-  "1pedro_5_7": ["Sl 55:22"],
-
-  /* 1 JOÃO */
-  "1joao_1_9": ["Sl 32:5"],
-  "1joao_4_8": ["Jo 3:16"],
-  "1joao_4_9": ["Jo 3:16"],
-
-  /* APOCALIPSE */
-  "apocalipse_1_8": ["Is 44:6", "Ap 22:13"],
-  "apocalipse_3_20": ["Ct 5:2"],
-  "apocalipse_21_4": ["Is 25:8"],
-  "apocalipse_22_13": ["Ap 1:8"]
+  "romanos_8_28": [
+    "Efésios 1:11",
+    "Gênesis 50:20"
+  ]
 };
 
 /* =====================================================
-   4. FUNÇÕES AUXILIARES
+   ELEMENTOS DA PÁGINA
 ===================================================== */
 
-const $ = id => document.getElementById(id);
+const elementoLivro = document.getElementById("livro");
+const elementoCapitulo = document.getElementById("capitulo");
+const elementoTituloCapitulo =
+  document.getElementById("tituloCapitulo");
+
+const elementoListaVersiculos =
+  document.getElementById("listaVersiculos");
+
+const elementoMensagemLeitura =
+  document.getElementById("mensagemLeitura");
+
+const elementoPesquisa =
+  document.getElementById("termoPesquisa");
+
+const elementoResultadosPesquisa =
+  document.getElementById("resultadosPesquisa");
+
+/* =====================================================
+   ESTADO DA LEITURA
+===================================================== */
+
+let livroAtual = null;
+let capituloAtual = null;
+let versiculosAtuais = [];
+let versiculoSelecionado = null;
+
+/* =====================================================
+   POPULAR A LISTA DE LIVROS
+===================================================== */
+
+function preencherLivros() {
+  if (!elementoLivro) {
+    console.error("Elemento #livro não encontrado.");
+    return;
+  }
+
+  elementoLivro.innerHTML =
+    '<option value="">Selecione um livro</option>';
+
+  const grupoAntigo = document.createElement("optgroup");
+  grupoAntigo.label = "Antigo Testamento";
+
+  const grupoNovo = document.createElement("optgroup");
+  grupoNovo.label = "Novo Testamento";
+
+  LIVROS.forEach(function(livro, indice) {
+    const opcao = document.createElement("option");
+
+    opcao.value = String(indice);
+    opcao.textContent = livro.nome;
+
+    if (indice < 39) {
+      grupoAntigo.appendChild(opcao);
+    } else {
+      grupoNovo.appendChild(opcao);
+    }
+  });
+
+  elementoLivro.appendChild(grupoAntigo);
+  elementoLivro.appendChild(grupoNovo);
+}
+
+/* =====================================================
+   POPULAR A LISTA DE CAPÍTULOS
+===================================================== */
+
+function preencherCapitulos(indiceLivro) {
+  if (!elementoCapitulo) return;
+
+  elementoCapitulo.innerHTML =
+    '<option value="">Selecione um capítulo</option>';
+
+  const indice = Number(indiceLivro);
+
+  if (
+    !Number.isInteger(indice) ||
+    indice < 0 ||
+    indice >= LIVROS.length
+  ) {
+    elementoCapitulo.disabled = true;
+    return;
+  }
+
+  const livro = LIVROS[indice];
+
+  for (let numero = 1; numero <= livro.capitulos; numero++) {
+    const opcao = document.createElement("option");
+
+    opcao.value = String(numero);
+    opcao.textContent = "Capítulo " + numero;
+
+    elementoCapitulo.appendChild(opcao);
+  }
+
+  elementoCapitulo.disabled = false;
+}
+
+/* =====================================================
+   MENSAGENS DA INTERFACE
+===================================================== */
+
+function mostrarMensagem(texto, tipo) {
+  if (!elementoMensagemLeitura) return;
+
+  elementoMensagemLeitura.textContent = texto;
+  elementoMensagemLeitura.className = "mensagem";
+
+  if (tipo === "erro") {
+    elementoMensagemLeitura.classList.add("erro");
+  }
+
+  if (tipo === "sucesso") {
+    elementoMensagemLeitura.classList.add("sucesso");
+  }
+}
+
+/* =====================================================
+   NORMALIZAR TEXTO PARA COMPARAÇÕES
+===================================================== */
 
 function normalizarTexto(texto) {
   return String(texto || "")
@@ -654,115 +801,76 @@ function normalizarTexto(texto) {
     .trim();
 }
 
-function normalizarNomeLivro(nome) {
-  return normalizarTexto(nome)
-    .replace(/[^a-z0-9]/g, "");
+/* =====================================================
+   IDENTIFICAR LIVRO PELO NOME
+===================================================== */
+
+function localizarLivro(nome) {
+  const procurado = normalizarTexto(nome);
+
+  return LIVROS.find(function(livro) {
+    return (
+      normalizarTexto(livro.nome) === procurado ||
+      normalizarTexto(livro.abreviacao) === procurado
+    );
+  }) || null;
 }
 
-function escaparHTML(texto) {
-  return String(texto ?? "").replace(/[&<>"']/g, caractere => ({
-    "&": "&amp;",
-    "<": "&lt;",
-    ">": "&gt;",
-    '"': "&quot;",
-    "'": "&#39;"
-  }[caractere]));
-}
+/* =====================================================
+   PREPARAR A INTERFACE
+===================================================== */
+
+preencherLivros();
+
+console.log("Livros bíblicos carregados:", LIVROS.length);
+console.log("Configuração da Bíblia King James concluída.");
+</script>
+</body>
+</html>
+
+
+<script>
+/* =====================================================
+   BÍBLIA KING JAMES — PARTE 3
+   API, leitura de capítulos e referências cruzadas
+===================================================== */
 
 /*
-  Retorna as referências cadastradas para um versículo.
-
-  Exemplo:
-  obterReferenciasCruzadas("João", 1, 1)
-
-  Resultado:
-  ["Gn 1:1", "Cl 1:17"]
+  A Parte 2 já deve ter declarado:
+  API_URL, LIVROS, REFERENCIAS_CRUZADAS,
+  livroAtual, capituloAtual e versiculosAtuais.
 */
-function obterReferenciasCruzadas(
-  nomeLivro,
-  capitulo,
-  versiculo
-) {
-  const livro = normalizarNomeLivro(nomeLivro);
-
-  const chave =
-    `${livro}_${Number(capitulo)}_${Number(versiculo)}`;
-
-  return REFERENCIAS_CRUZADAS[chave] || [];
-}
 
 /* =====================================================
-   5. PREPARAÇÃO DO SELETOR DE LIVROS
+   REQUISIÇÃO JSONP
+   Utilizada quando o Apps Script retorna JSONP.
 ===================================================== */
 
-function carregarLivrosNoSeletor() {
-  const seletor = $("livroSelect");
-
-  seletor.innerHTML = LIVROS.map((livro, indice) => `
-    <option value="${indice}">
-      ${escaparHTML(livro[0])}
-    </option>
-  `).join("");
-
-  carregarCapitulosNoSeletor(1);
-}
-
-function carregarCapitulosNoSeletor(capituloSelecionado) {
-  const indiceLivro = Number($("livroSelect").value || 0);
-  const livro = LIVROS[indiceLivro];
-
-  if (!livro) return;
-
-  const totalCapitulos = livro[2];
-
-  $("capituloSelect").innerHTML =
-    Array.from({length: totalCapitulos}, (_, indice) => {
-      const numero = indice + 1;
-
-      return `
-        <option value="${numero}"
-          ${numero === Number(capituloSelecionado) ? "selected" : ""}>
-          ${numero}
-        </option>
-      `;
-    }).join("");
-}
-
-
-/* =====================================================
-   6. COMUNICAÇÃO COM O GOOGLE APPS SCRIPT
-===================================================== */
-
-function consultarAPI(parametros) {
-  return new Promise((resolve, reject) => {
-    if (!API_URL || API_URL.includes("COLE_AQUI")) {
-      reject(new Error(
-        "Configure a URL de implantação do Google Apps Script."
-      ));
-      return;
-    }
-
+function consultarJSONP(url, timeoutMs = 15000) {
+  return new Promise(function(resolve, reject) {
     const nomeCallback =
-      "bibliaCallback_" + Date.now() +
-      "_" + Math.floor(Math.random() * 100000);
+      "bibliaCallback_" +
+      Date.now() +
+      "_" +
+      Math.floor(Math.random() * 100000);
 
     const script = document.createElement("script");
-    const consulta = new URLSearchParams({
-      ...parametros,
-      callback: nomeCallback
-    });
+    const separador = url.includes("?") ? "&" : "?";
 
     let finalizado = false;
 
-    const temporizador = setTimeout(() => {
-      concluir(new Error("Tempo limite ao consultar a API."));
-    }, 15000);
+    const temporizador = setTimeout(function() {
+      concluir(
+        new Error("Tempo esgotado ao consultar a API da Bíblia.")
+      );
+    }, timeoutMs);
 
-    function concluir(erro, resultado) {
+    function concluir(erro, dados) {
       if (finalizado) return;
-
       finalizado = true;
+
       clearTimeout(temporizador);
+      script.remove();
 
       try {
         delete window[nomeCallback];
@@ -770,124 +878,323 @@ function consultarAPI(parametros) {
         window[nomeCallback] = undefined;
       }
 
-      script.remove();
-
-      if (erro) reject(erro);
-      else resolve(resultado);
+      if (erro) {
+        reject(erro);
+      } else {
+        resolve(dados);
+      }
     }
 
-    window[nomeCallback] = resultado => {
-      concluir(null, resultado);
+    window[nomeCallback] = function(dados) {
+      concluir(null, dados);
     };
 
-    script.onerror = () => {
-      concluir(new Error(
-        "Falha de comunicação com o Google Apps Script."
-      ));
+    script.onerror = function() {
+      concluir(
+        new Error("Não foi possível acessar a API da Bíblia.")
+      );
     };
 
     script.src =
-      API_URL +
-      (API_URL.includes("?") ? "&" : "?") +
-      consulta.toString();
+      url +
+      separador +
+      "callback=" +
+      encodeURIComponent(nomeCallback);
 
     document.body.appendChild(script);
   });
 }
 
-/*
-  Tenta diferentes nomes de ação para facilitar a adaptação.
-  O nome correto deve existir no seu Apps Script.
-*/
-async function executarAcao(acao, parametros = {}) {
-  const tentativas = [
-    {acao: acao, ...parametros},
-    {action: acao, ...parametros}
-  ];
+/* =====================================================
+   CONSULTAR A API
+===================================================== */
 
-  let ultimoErro;
+async function consultarAPI(parametros) {
+  if (
+    !API_URL ||
+    API_URL === "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT"
+  ) {
+    throw new Error(
+      "Configure a URL /exec do Google Apps Script na Parte 2."
+    );
+  }
 
-  for (const parametrosAPI of tentativas) {
+  const query = new URLSearchParams(parametros).toString();
+  const url = API_URL + (API_URL.includes("?") ? "&" : "?") + query;
+
+  /*
+    Primeira tentativa: JSONP.
+    Funciona apenas se o Apps Script implementar
+    o parâmetro callback e retornar JavaScript válido.
+  */
+  try {
+    return await consultarJSONP(url);
+  } catch (erroJSONP) {
+    /*
+      Segunda tentativa: JSON via fetch.
+      Pode falhar se a API não permitir CORS.
+    */
     try {
-      const resposta = await consultarAPI(parametrosAPI);
+      const resposta = await fetch(url, {
+        method: "GET",
+        redirect: "follow"
+      });
 
-      if (
-        resposta &&
-        (resposta.erro || resposta.error)
-      ) {
-        ultimoErro = new Error(
-          resposta.erro || resposta.error
-        );
-        continue;
+      if (!resposta.ok) {
+        throw new Error("HTTP " + resposta.status);
       }
 
-      return resposta;
+      const texto = await resposta.text();
 
-    } catch (erro) {
-      ultimoErro = erro;
+      try {
+        return JSON.parse(texto);
+      } catch (erroJSON) {
+        throw new Error(
+          "A API não retornou JSON válido. " +
+          "Verifique o formato de resposta do Apps Script."
+        );
+      }
+    } catch (erroFetch) {
+      throw new Error(
+        "Falha na comunicação com a API. " +
+        "Confirme a URL, as permissões de acesso e " +
+        "o formato de resposta do Apps Script."
+      );
+    }
+  }
+}
+
+/* =====================================================
+   INTERPRETAR RESPOSTAS DA API
+===================================================== */
+
+function extrairVersiculos(resposta) {
+  if (Array.isArray(resposta)) {
+    return resposta;
+  }
+
+  if (!resposta || typeof resposta !== "object") {
+    return [];
+  }
+
+  const possiveisListas = [
+    resposta.versiculos,
+    resposta.verses,
+    resposta.capitulo,
+    resposta.capítulo,
+    resposta.dados,
+    resposta.data,
+    resposta.resultado,
+    resposta.results
+  ];
+
+  for (const item of possiveisListas) {
+    if (Array.isArray(item)) {
+      return item;
+    }
+
+    if (item && typeof item === "object") {
+      if (Array.isArray(item.versiculos)) {
+        return item.versiculos;
+      }
+
+      if (Array.isArray(item.verses)) {
+        return item.verses;
+      }
     }
   }
 
-  throw ultimoErro ||
-    new Error("Não foi possível consultar a API.");
+  return [];
 }
 
 /* =====================================================
-   7. IDENTIFICAR O LIVRO E O CAPÍTULO ATUAIS
+   OBTER NÚMERO DO VERSÍCULO E TEXTO
 ===================================================== */
 
-let livroAtual = null;
-let capituloAtual = 1;
-let versiculoSelecionado = null;
-let fonteAtual = 18;
+function obterNumeroVersiculo(versiculo, indice) {
+  if (typeof versiculo === "string") {
+    return indice + 1;
+  }
 
-function obterLivroSelecionado() {
-  const indice = Number($("livroSelect").value || 0);
-  const livro = LIVROS[indice];
+  return Number(
+    versiculo.versiculo ??
+    versiculo.versículo ??
+    versiculo.numero ??
+    versiculo.num ??
+    versiculo.verse ??
+    versiculo.id ??
+    indice + 1
+  );
+}
 
-  if (!livro) return null;
+function obterTextoVersiculo(versiculo) {
+  if (typeof versiculo === "string") {
+    return versiculo;
+  }
 
-  return {
-    nome: livro[0],
-    slug: livro[1],
-    capitulos: livro[2]
-  };
+  if (!versiculo || typeof versiculo !== "object") {
+    return "";
+  }
+
+  return String(
+    versiculo.texto ??
+    versiculo.text ??
+    versiculo.conteudo ??
+    versiculo.conteúdo ??
+    versiculo.versiculoTexto ??
+    versiculo.verseText ??
+    ""
+  );
 }
 
 /* =====================================================
-   8. CARREGAR UM CAPÍTULO
+   REFERÊNCIAS CRUZADAS
 ===================================================== */
 
-async function carregarCapitulo(
-  livro = obterLivroSelecionado(),
-  capitulo = 1
-) {
-  if (!livro) return;
+function chaveReferencia(livro, capitulo, versiculo) {
+  const nomeNormalizado = normalizarTexto(livro)
+    .replace(/\s+/g, "_");
+
+  return (
+    nomeNormalizado +
+    "_" +
+    Number(capitulo) +
+    "_" +
+    Number(versiculo)
+  );
+}
+
+function obterReferencias(livro, capitulo, numeroVersiculo) {
+  const chave = chaveReferencia(
+    livro,
+    capitulo,
+    numeroVersiculo
+  );
+
+  return REFERENCIAS_CRUZADAS[chave] || [];
+}
+
+function criarReferenciasHTML(referencias) {
+  if (!referencias || referencias.length === 0) {
+    return null;
+  }
+
+  const container = document.createElement("div");
+  container.className = "referencias";
+
+  const titulo = document.createElement("strong");
+  titulo.textContent = "Referências: ";
+  container.appendChild(titulo);
+
+  referencias.forEach(function(referencia, indice) {
+    if (indice > 0) {
+      container.appendChild(
+        document.createTextNode(" · ")
+      );
+    }
+
+    const link = document.createElement("a");
+    link.href = "#";
+    link.textContent = referencia;
+
+    link.addEventListener("click", function(evento) {
+      evento.preventDefault();
+      abrirReferencia(referencia);
+    });
+
+    container.appendChild(link);
+  });
+
+  return container;
+}
+
+/* =====================================================
+   ABRIR UMA REFERÊNCIA, EX.: JOÃO 1:1
+===================================================== */
+
+function abrirReferencia(referencia) {
+  const resultado = String(referencia).match(
+    /^(.+?)\s+(\d+):(\d+)(?:-(\d+))?$/
+  );
+
+  if (!resultado) {
+    mostrarMensagem(
+      "Formato de referência inválido: " + referencia,
+      "erro"
+    );
+    return;
+  }
+
+  const nomeLivro = resultado[1].trim();
+  const numeroCapitulo = Number(resultado[2]);
+  const numeroVersiculo = Number(resultado[3]);
+
+  const livro = localizarLivro(nomeLivro);
+
+  if (!livro) {
+    mostrarMensagem(
+      "Livro não identificado: " + nomeLivro,
+      "erro"
+    );
+    return;
+  }
+
+  const indice = LIVROS.indexOf(livro);
+
+  elementoLivro.value = String(indice);
+  preencherCapitulos(indice);
+  elementoCapitulo.value = String(numeroCapitulo);
+
+  carregarCapitulo();
+}
+
+/* =====================================================
+   CARREGAR CAPÍTULO
+===================================================== */
+
+/*
+  ATENÇÃO:
+  Os nomes das ações abaixo são tentativas de compatibilidade.
+  A ação correta precisa ser confirmada no Apps Script.
+*/
+
+async function carregarCapitulo() {
+  const indiceLivro = Number(elementoLivro.value);
+  const numeroCapitulo = Number(elementoCapitulo.value);
+
+  if (
+    !Number.isInteger(indiceLivro) ||
+    indiceLivro < 0 ||
+    indiceLivro >= LIVROS.length ||
+    !Number.isInteger(numeroCapitulo) ||
+    numeroCapitulo < 1
+  ) {
+    mostrarMensagem(
+      "Selecione um livro e um capítulo válido.",
+      "erro"
+    );
+    return;
+  }
+
+  const livro = LIVROS[indiceLivro];
+
+  if (numeroCapitulo > livro.capitulos) {
+    mostrarMensagem(
+      "O capítulo selecionado não existe neste livro.",
+      "erro"
+    );
+    return;
+  }
 
   livroAtual = livro;
-  capituloAtual = Number(capitulo);
+  capituloAtual = numeroCapitulo;
 
-  $("nomeLivro").textContent = livro.nome;
-  $("tituloCapitulo").textContent =
-    `${livro.nome} ${capituloAtual}`;
+  elementoTituloCapitulo.textContent =
+    livro.nome + " " + numeroCapitulo;
 
-  $("versiculos").innerHTML =
-    '<div class="vazio">Carregando versículos...</div>';
+  elementoListaVersiculos.replaceChildren();
 
-  $("status").textContent = "Consultando a Bíblia...";
-
-  $("capituloSelect").value = String(capituloAtual);
-
-  /*
-    Estes parâmetros são exemplos.
-    Ajuste os nomes para os esperados pelo seu Apps Script.
-  */
-  const parametros = {
-    livro: livro.nome,
-    livroId: livro.slug,
-    capitulo: capituloAtual,
-    versao: $("versaoSelect").value
-  };
+  mostrarMensagem("Carregando capítulo...", "");
 
   const acoes = [
     "capitulo",
@@ -896,287 +1203,271 @@ async function carregarCapitulo(
     "lerCapitulo"
   ];
 
+  const parametrosBase = {
+    livro: livro.nome,
+    capitulo: String(numeroCapitulo),
+    cap: String(numeroCapitulo)
+  };
+
   let resposta = null;
-  let ultimoErro = null;
+  let erros = [];
 
   for (const acao of acoes) {
     try {
-      const resultado = await executarAcao(
-        acao,
-        parametros
-      );
+      resposta = await consultarAPI({
+        ...parametrosBase,
+        acao: acao
+      });
 
+      /*
+        Algumas APIs devolvem um objeto de erro
+        em vez de rejeitar a requisição.
+      */
       if (
-        resultado &&
+        resposta &&
         (
-          Array.isArray(resultado.versiculos) ||
-          Array.isArray(resultado.verses) ||
-          Array.isArray(resultado.dados) ||
-          Array.isArray(resultado.resultados)
+          resposta.erro ||
+          resposta.error ||
+          resposta.sucesso === false ||
+          resposta.success === false
         )
       ) {
-        resposta = resultado;
-        break;
+        erros.push(
+          acao + ": " +
+          (
+            resposta.erro ||
+            resposta.error ||
+            resposta.mensagem ||
+            resposta.message ||
+            "Ação não concluída"
+          )
+        );
+        resposta = null;
+        continue;
       }
 
-      ultimoErro = new Error(
-        "A resposta da API não contém a lista de versículos esperada."
+      const lista = extrairVersiculos(resposta);
+
+      if (lista.length > 0) {
+        versiculosAtuais = lista;
+        renderizarVersiculos(lista);
+        return;
+      }
+
+      erros.push(
+        acao + ": a resposta não contém uma lista de versículos."
       );
 
     } catch (erro) {
-      ultimoErro = erro;
+      erros.push(acao + ": " + erro.message);
     }
   }
 
-  if (!resposta) {
-    $("versiculos").innerHTML = `
-      <div class="vazio">
-        Não foi possível carregar o capítulo.
-        Confira a URL e o formato de resposta do Apps Script.
-      </div>
-    `;
+  console.error("Falha ao carregar capítulo:", erros);
 
-    $("status").textContent =
-      ultimoErro ? ultimoErro.message : "Erro ao carregar.";
-
-    return;
-  }
-
-  exibirCapitulo(resposta, livro, capituloAtual);
-}
-
-/* =====================================================
-   9. INTERPRETAR A RESPOSTA DA API
-===================================================== */
-
-function obterListaVersiculos(resposta) {
-  if (Array.isArray(resposta.versiculos)) {
-    return resposta.versiculos;
-  }
-
-  if (Array.isArray(resposta.verses)) {
-    return resposta.verses;
-  }
-
-  if (Array.isArray(resposta.dados)) {
-    return resposta.dados;
-  }
-
-  if (Array.isArray(resposta.resultados)) {
-    return resposta.resultados;
-  }
-
-  return [];
-}
-
-function obterNumeroVersiculo(item, indice) {
-  if (typeof item === "string") {
-    return indice + 1;
-  }
-
-  return Number(
-    item.numero ??
-    item.versiculo ??
-    item.num ??
-    indice + 1
-  );
-}
-
-function obterTextoVersiculo(item) {
-  if (typeof item === "string") {
-    return item;
-  }
-
-  return String(
-    item.texto ??
-    item.text ??
-    item.conteudo ??
-    item.versiculoTexto ??
-    ""
+  mostrarMensagem(
+    "Não foi possível carregar o capítulo. " +
+    "Confira a URL e o formato de resposta do Apps Script. " +
+    "Se aparecer 'Ação não reconhecida', precisamos ajustar " +
+    "a ação chamada pelo index ao código do Apps Script.",
+    "erro"
   );
 }
 
 /* =====================================================
-   10. EXIBIR OS VERSÍCULOS E AS REFERÊNCIAS
+   RENDERIZAR VERSÍCULOS
 ===================================================== */
 
-function exibirCapitulo(
-  resposta,
-  livro,
-  capitulo
-) {
-  const versiculos = obterListaVersiculos(resposta);
+function renderizarVersiculos(lista) {
+  elementoListaVersiculos.replaceChildren();
 
-  if (!versiculos.length) {
-    $("versiculos").innerHTML = `
-      <div class="vazio">
-        Nenhum versículo foi retornado para este capítulo.
-      </div>
-    `;
-
-    $("status").textContent =
-      "Verifique os dados retornados pelo Apps Script.";
-
+  if (!Array.isArray(lista) || lista.length === 0) {
+    mostrarMensagem(
+      "Nenhum versículo foi encontrado neste capítulo.",
+      "erro"
+    );
     return;
   }
 
-  $("nomeLivro").textContent = livro.nome;
+  const fragmento = document.createDocumentFragment();
 
-  $("tituloCapitulo").textContent =
-    `${livro.nome} ${capitulo}`;
+  lista.forEach(function(versiculo, indice) {
+    const numero = obterNumeroVersiculo(versiculo, indice);
+    const texto = obterTextoVersiculo(versiculo);
 
-  const conteudoHTML = versiculos.map((item, indice) => {
-    const numero = obterNumeroVersiculo(item, indice);
-    const texto = obterTextoVersiculo(item);
+    if (!texto) return;
 
-    /*
-      Procura as referências cadastradas na Parte 2.
-    */
-    const referencias = obterReferenciasCruzadas(
-      livro.nome,
-      capitulo,
+    const artigo = document.createElement("article");
+    artigo.className = "versiculo";
+    artigo.dataset.versiculo = String(numero);
+
+    const numeroElemento = document.createElement("span");
+    numeroElemento.className = "numero-versiculo";
+    numeroElemento.textContent = numero + ".";
+
+    const textoElemento = document.createElement("span");
+    textoElemento.className = "texto-versiculo";
+    textoElemento.textContent = texto;
+
+    artigo.appendChild(numeroElemento);
+    artigo.appendChild(document.createTextNode(" "));
+    artigo.appendChild(textoElemento);
+
+    const referencias = obterReferencias(
+      livroAtual.nome,
+      capituloAtual,
       numero
     );
 
-    const chaveMarcacao =
-      `biblia_marcacao_${normalizarNomeLivro(livro.nome)}_` +
-      `${capitulo}_${numero}`;
+    const elementoReferencias =
+      criarReferenciasHTML(referencias);
 
-    let corMarcacao = "";
-
-    try {
-      corMarcacao = localStorage.getItem(chaveMarcacao) || "";
-    } catch (e) {
-      corMarcacao = "";
+    if (elementoReferencias) {
+      artigo.appendChild(elementoReferencias);
     }
 
-    const estilo = corMarcacao
-      ? `background:${escaparHTML(corMarcacao)};`
-      : "";
+    artigo.addEventListener("click", function(evento) {
+      if (evento.target.closest("a")) return;
 
-    /*
-      Se houver referências, elas serão exibidas
-      abaixo do texto do versículo.
-    */
-    const htmlReferencias = referencias.length
-      ? `
-        <small class="referencia-cruzada">
-          Referências: ${referencias
-            .map(ref => escaparHTML(ref))
-            .join(" • ")}
-        </small>
-      `
-      : "";
+      document
+        .querySelectorAll(".versiculo-selecionado")
+        .forEach(function(item) {
+          item.classList.remove("versiculo-selecionado");
+        });
 
-    return `
-      <article
-        class="versiculo"
-        id="versiculo-${numero}"
-        data-numero="${numero}"
-        data-chave="${escaparHTML(chaveMarcacao)}"
-        style="${estilo}"
-      >
-        <span class="numero-versiculo">${numero}</span>
+      artigo.classList.add("versiculo-selecionado");
 
-        <span class="texto-versiculo">${escaparHTML(texto)}</span>
-
-        ${htmlReferencias}
-
-        <button
-          type="button"
-          class="acoes-versiculo"
-          data-compartilhar="${numero}"
-          title="Compartilhar versículo"
-          aria-label="Compartilhar versículo ${numero}"
-        >↗</button>
-      </article>
-    `;
-  }).join("");
-
-  $("versiculos").innerHTML = conteudoHTML;
-
-  document.querySelectorAll(".versiculo").forEach(elemento => {
-    elemento.addEventListener("click", evento => {
-      if (evento.target.closest("button")) return;
-
-      document.querySelectorAll(".versiculo").forEach(v => {
-        v.style.outline = "";
-      });
-
-      elemento.style.outline = "2px solid #efe5d5";
-      versiculoSelecionado = elemento;
+      versiculoSelecionado = {
+        livro: livroAtual.nome,
+        capitulo: capituloAtual,
+        numero: numero,
+        texto: texto
+      };
     });
+
+    fragmento.appendChild(artigo);
   });
 
-  document.querySelectorAll("[data-compartilhar]").forEach(botao => {
-    botao.addEventListener("click", () => {
-      const numero = Number(botao.dataset.compartilhar);
+  elementoListaVersiculos.appendChild(fragmento);
 
-      const item = versiculos.find((v, indice) =>
-        obterNumeroVersiculo(v, indice) === numero
-      );
-
-      const texto = obterTextoVersiculo(item);
-
-      compartilharVersiculo(
-        `${livro.nome} ${capitulo}:${numero}`,
-        texto
-      );
-    });
-  });
-
-  $("status").textContent =
-    `${versiculos.length} versículos carregados.`;
+  mostrarMensagem(
+    lista.length + " versículo(s) carregado(s).",
+    "sucesso"
+  );
 }
 
-
 /* =====================================================
-   11. COMPARTILHAR VERSÍCULOS
+   EVENTOS DE SELEÇÃO
 ===================================================== */
 
-function compartilharVersiculo(referencia, texto) {
-  const conteudo =
-    `${referencia}\n${texto}\n\nBíblia King James`;
+elementoLivro.addEventListener("change", function() {
+  preencherCapitulos(elementoLivro.value);
 
-  if (navigator.share) {
-    navigator.share({
-      title: referencia,
-      text: conteudo
-    }).catch(() => {});
-    return;
+  elementoListaVersiculos.replaceChildren();
+
+  elementoTituloCapitulo.textContent =
+    "Selecione um capítulo";
+
+  mostrarMensagem(
+    "Agora selecione o capítulo desejado.",
+    ""
+  );
+});
+
+elementoCapitulo.addEventListener("change", function() {
+  if (elementoCapitulo.value) {
+    carregarCapitulo();
   }
+});
 
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(conteudo)
-      .then(() => alert("Versículo copiado para compartilhar."))
-      .catch(() => prompt("Copie o versículo:", conteudo));
-    return;
-  }
+document
+  .getElementById("btnLer")
+  .addEventListener("click", carregarCapitulo);
 
-  prompt("Copie o versículo:", conteudo);
-}
+document
+  .getElementById("btnAnterior")
+  .addEventListener("click", function() {
+    if (!livroAtual || !capituloAtual) return;
+
+    if (capituloAtual > 1) {
+      elementoCapitulo.value = String(capituloAtual - 1);
+      carregarCapitulo();
+      return;
+    }
+
+    const indice = LIVROS.indexOf(livroAtual);
+
+    if (indice > 0) {
+      const livroAnterior = LIVROS[indice - 1];
+
+      elementoLivro.value = String(indice - 1);
+      preencherCapitulos(indice - 1);
+
+      elementoCapitulo.value =
+        String(livroAnterior.capitulos);
+
+      carregarCapitulo();
+    }
+  });
+
+document
+  .getElementById("btnProximo")
+  .addEventListener("click", function() {
+    if (!livroAtual || !capituloAtual) return;
+
+    if (capituloAtual < livroAtual.capitulos) {
+      elementoCapitulo.value = String(capituloAtual + 1);
+      carregarCapitulo();
+      return;
+    }
+
+    const indice = LIVROS.indexOf(livroAtual);
+
+    if (indice < LIVROS.length - 1) {
+      elementoLivro.value = String(indice + 1);
+      preencherCapitulos(indice + 1);
+      elementoCapitulo.value = "1";
+      carregarCapitulo();
+    }
+  });
+</script>
+
+<script>
+/* =====================================================
+   BÍBLIA KING JAMES — PARTE 4
+   Pesquisa, favoritos e compartilhamento
+===================================================== */
 
 /* =====================================================
-   12. PESQUISA BÍBLICA
+   PESQUISA BÍBLICA
 ===================================================== */
 
 async function pesquisarBiblia() {
-  const termo = $("pesquisaInput").value.trim();
+  const termo = elementoPesquisa.value.trim();
 
   if (!termo) {
-    $("resumoPesquisa").textContent =
-      "Digite uma palavra ou referência bíblica.";
-    $("resultadosPesquisa").innerHTML = "";
+    elementoResultadosPesquisa.replaceChildren();
+
+    const aviso = document.createElement("p");
+    aviso.className = "mensagem";
+    aviso.textContent = "Digite uma palavra para pesquisar.";
+
+    elementoResultadosPesquisa.appendChild(aviso);
     return;
   }
 
-  $("resumoPesquisa").textContent =
-    `Pesquisando por "${termo}"...`;
+  elementoResultadosPesquisa.replaceChildren();
 
-  $("resultadosPesquisa").innerHTML = "";
+  const carregando = document.createElement("p");
+  carregando.className = "mensagem";
+  carregando.textContent = "Pesquisando na Bíblia...";
 
-  let resposta = null;
-  let ultimoErro = null;
+  elementoResultadosPesquisa.appendChild(carregando);
+
+  /*
+    Os nomes das ações são tentativas de compatibilidade.
+    A ação correta depende do seu Google Apps Script.
+  */
 
   const acoes = [
     "pesquisar",
@@ -1185,396 +1476,384 @@ async function pesquisarBiblia() {
     "buscarVersiculos"
   ];
 
+  let resultados = null;
+  let ultimoErro = "";
+
   for (const acao of acoes) {
     try {
-      const resultado = await executarAcao(acao, {
+      const resposta = await consultarAPI({
+        acao: acao,
         termo: termo,
-        q: termo,
+        busca: termo,
         pesquisa: termo,
-        versao: $("versaoSelect").value
+        palavra: termo,
+        q: termo
       });
 
       if (
-        resultado &&
+        resposta &&
         (
-          Array.isArray(resultado.resultados) ||
-          Array.isArray(resultado.versiculos) ||
-          Array.isArray(resultado.dados) ||
-          Array.isArray(resultado.results)
+          resposta.erro ||
+          resposta.error ||
+          resposta.sucesso === false ||
+          resposta.success === false
         )
       ) {
-        resposta = resultado;
-        break;
+        ultimoErro =
+          resposta.erro ||
+          resposta.error ||
+          resposta.mensagem ||
+          resposta.message ||
+          "A pesquisa não foi concluída.";
+
+        continue;
       }
 
-    } catch (erro) {
-      ultimoErro = erro;
-    }
-  }
+      resultados = extrairResultadosPesquisa(resposta);
 
-  if (!resposta) {
-    $("resumoPesquisa").textContent =
-      "Não foi possível realizar a pesquisa. Confira a ação de pesquisa do Apps Script.";
-    return;
-  }
-
-  const resultados =
-    resposta.resultados ||
-    resposta.versiculos ||
-    resposta.dados ||
-    resposta.results ||
-    [];
-
-  $("resumoPesquisa").textContent =
-    `${resultados.length} resultado(s) encontrado(s).`;
-
-  if (!resultados.length) {
-    $("resultadosPesquisa").innerHTML =
-      '<p>Nenhum resultado encontrado.</p>';
-    return;
-  }
-
-  $("resultadosPesquisa").innerHTML =
-    resultados.slice(0, 50).map((item, indice) => {
-      const referencia =
-        item.referencia ||
-        item.ref ||
-        `${item.livro || ""} ${item.capitulo || ""}:${item.versiculo || item.numero || ""}`;
-
-      const texto = obterTextoVersiculo(item);
-
-      return `
-        <button
-          type="button"
-          class="resultado"
-          data-resultado="${indice}"
-        >
-          <strong>${escaparHTML(referencia)}</strong>
-          ${escaparHTML(texto)}
-        </button>
-      `;
-    }).join("");
-
-  document.querySelectorAll("[data-resultado]").forEach(botao => {
-    botao.addEventListener("click", () => {
-      const item = resultados[Number(botao.dataset.resultado)];
-
-      const nome = item.livroNome || item.livro || "";
-      const capitulo = Number(item.capitulo || 1);
-      const numero = Number(
-        item.versiculo || item.numero || item.verse || 1
-      );
-
-      const indiceLivro = LIVROS.findIndex(livro =>
-        normalizarNomeLivro(livro[0]) === normalizarNomeLivro(nome) ||
-        normalizarNomeLivro(livro[1]) === normalizarNomeLivro(nome)
-      );
-
-      if (indiceLivro < 0) {
-        alert("Não consegui identificar o livro deste resultado.");
+      if (resultados !== null) {
+        exibirResultadosPesquisa(resultados);
         return;
       }
 
-      $("livroSelect").value = String(indiceLivro);
-      carregarCapitulosNoSeletor(capitulo);
+    } catch (erro) {
+      ultimoErro = erro.message;
+    }
+  }
 
-      carregarCapitulo(
-        obterLivroSelecionado(),
-        capitulo
-      ).then(() => {
-        const elemento = document.getElementById(
-          `versiculo-${numero}`
-        );
+  elementoResultadosPesquisa.replaceChildren();
 
-        if (elemento) {
-          elemento.scrollIntoView({
-            behavior: "smooth",
-            block: "center"
-          });
+  const erro = document.createElement("p");
+  erro.className = "mensagem erro";
+  erro.textContent =
+    "Não foi possível concluir a pesquisa. " +
+    "Verifique a ação de pesquisa aceita pelo Apps Script." +
+    (ultimoErro ? " Detalhe: " + ultimoErro : "");
 
-          versiculoSelecionado = elemento;
-        }
+  elementoResultadosPesquisa.appendChild(erro);
+}
+
+function extrairResultadosPesquisa(resposta) {
+  if (Array.isArray(resposta)) {
+    return resposta;
+  }
+
+  if (!resposta || typeof resposta !== "object") {
+    return null;
+  }
+
+  const listas = [
+    resposta.resultados,
+    resposta.resultadosPesquisa,
+    resposta.versiculos,
+    resposta.verses,
+    resposta.dados,
+    resposta.results,
+    resposta.data
+  ];
+
+  for (const lista of listas) {
+    if (Array.isArray(lista)) {
+      return lista;
+    }
+  }
+
+  return null;
+}
+
+function exibirResultadosPesquisa(resultados) {
+  elementoResultadosPesquisa.replaceChildren();
+
+  if (!resultados || resultados.length === 0) {
+    const aviso = document.createElement("p");
+    aviso.className = "mensagem";
+    aviso.textContent = "Nenhum resultado encontrado.";
+
+    elementoResultadosPesquisa.appendChild(aviso);
+    return;
+  }
+
+  resultados.forEach(function(item) {
+    const caixa = document.createElement("div");
+    caixa.className = "resultado-item";
+
+    const referencia = obterReferenciaResultado(item);
+    const texto = obterTextoVersiculo(item);
+
+    const titulo = document.createElement("strong");
+    titulo.textContent = referencia || "Referência bíblica";
+
+    caixa.appendChild(titulo);
+
+    const conteudo = document.createElement("p");
+    conteudo.textContent = texto || String(item);
+
+    caixa.appendChild(conteudo);
+
+    if (referencia) {
+      const botao = document.createElement("button");
+      botao.type = "button";
+      botao.className = "botao botao-secundario";
+      botao.style.marginTop = "10px";
+      botao.textContent = "Abrir passagem";
+
+      botao.addEventListener("click", function() {
+        abrirReferencia(referencia);
       });
-    });
+
+      caixa.appendChild(botao);
+    }
+
+    elementoResultadosPesquisa.appendChild(caixa);
   });
 }
 
-/* =====================================================
-   13. MARCAÇÕES COLORIDAS
-===================================================== */
-
-function aplicarMarcacao(cor) {
-  if (!versiculoSelecionado) {
-    alert("Clique em um versículo primeiro.");
-    return;
+function obterReferenciaResultado(item) {
+  if (!item || typeof item !== "object") {
+    return "";
   }
 
-  const chave = versiculoSelecionado.dataset.chave;
+  if (item.referencia || item.ref) {
+    return String(item.referencia || item.ref);
+  }
 
+  const livro =
+    item.livro ||
+    item.nomeLivro ||
+    item.book ||
+    "";
+
+  const capitulo =
+    item.capitulo ??
+    item.capítulo ??
+    item.chapter;
+
+  const versiculo =
+    item.versiculo ??
+    item.versículo ??
+    item.verse;
+
+  if (livro && capitulo != null && versiculo != null) {
+    return livro + " " + capitulo + ":" + versiculo;
+  }
+
+  return "";
+}
+
+document
+  .getElementById("btnPesquisar")
+  .addEventListener("click", pesquisarBiblia);
+
+elementoPesquisa.addEventListener("keydown", function(evento) {
+  if (evento.key === "Enter") {
+    pesquisarBiblia();
+  }
+});
+
+/* =====================================================
+   FAVORITOS — ARMAZENAMENTO LOCAL
+===================================================== */
+
+const CHAVE_FAVORITOS = "bibliaKingJamesFavoritos";
+
+function lerFavoritos() {
   try {
-    localStorage.setItem(chave, cor);
-  } catch (erro) {
-    alert("Não foi possível salvar a marcação neste navegador.");
-    return;
-  }
+    const dados = localStorage.getItem(CHAVE_FAVORITOS);
+    const favoritos = dados ? JSON.parse(dados) : [];
 
-  versiculoSelecionado.style.background = cor;
-  versiculoSelecionado.style.borderRadius = "4px";
+    return Array.isArray(favoritos) ? favoritos : [];
+  } catch (erro) {
+    console.error("Não foi possível ler os favoritos:", erro);
+    return [];
+  }
 }
 
-function limparMarcacao() {
-  if (!versiculoSelecionado) {
-    alert("Selecione um versículo primeiro.");
-    return;
-  }
-
-  const chave = versiculoSelecionado.dataset.chave;
-
+function salvarFavoritos(favoritos) {
   try {
-    localStorage.removeItem(chave);
-  } catch (erro) {
-    // A limpeza visual ainda será aplicada.
-  }
-
-  versiculoSelecionado.style.background = "";
-  versiculoSelecionado.style.borderRadius = "";
-}
-
-/* =====================================================
-   14. PALAVRA DO DIA
-===================================================== */
-
-const PALAVRAS_DO_DIA = [
-  {
-    referencia: "Salmos 23:1",
-    texto: "O SENHOR é o meu pastor; nada me faltará."
-  },
-  {
-    referencia: "João 3:16",
-    texto: "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito."
-  },
-  {
-    referencia: "Filipenses 4:13",
-    texto: "Posso todas as coisas naquele que me fortalece."
-  },
-  {
-    referencia: "Provérbios 3:5",
-    texto: "Confia no SENHOR de todo o teu coração."
-  },
-  {
-    referencia: "Isaías 41:10",
-    texto: "Não temas, porque eu sou contigo."
-  }
-];
-
-function atualizarPalavraDoDia() {
-  const dia = Math.floor(Date.now() / 86400000);
-  const indice = dia % PALAVRAS_DO_DIA.length;
-  const versiculo = PALAVRAS_DO_DIA[indice];
-
-  $("palavraDoDia").textContent = versiculo.texto;
-  $("referenciaDoDia").textContent = versiculo.referencia;
-}
-
-/* =====================================================
-   15. AUMENTAR E DIMINUIR A FONTE
-===================================================== */
-
-function alterarFonte(incremento) {
-  fonteAtual = Math.max(
-    13,
-    Math.min(30, fonteAtual + incremento)
-  );
-
-  document.querySelectorAll(".texto-versiculo").forEach(elemento => {
-    elemento.style.fontSize = `${fonteAtual}px`;
-  });
-}
-
-/* =====================================================
-   16. NAVEGAÇÃO ENTRE LIVROS E CAPÍTULOS
-===================================================== */
-
-function mudarLivro(indice) {
-  if (indice < 0 || indice >= LIVROS.length) return;
-
-  $("livroSelect").value = String(indice);
-  carregarCapitulosNoSeletor(1);
-
-  carregarCapitulo(
-    obterLivroSelecionado(),
-    1
-  );
-}
-
-function irParaCapituloAnterior() {
-  const livro = obterLivroSelecionado();
-  if (!livro) return;
-
-  if (capituloAtual > 1) {
-    carregarCapitulo(livro, capituloAtual - 1);
-    return;
-  }
-
-  const indiceAtual = LIVROS.findIndex(
-    item => item[1] === livro.slug
-  );
-
-  if (indiceAtual > 0) {
-    const livroAnterior = LIVROS[indiceAtual - 1];
-    mudarLivro(indiceAtual - 1);
-
-    carregarCapitulosNoSeletor(livroAnterior[2]);
-    carregarCapitulo(
-      obterLivroSelecionado(),
-      livroAnterior[2]
+    localStorage.setItem(
+      CHAVE_FAVORITOS,
+      JSON.stringify(favoritos)
     );
+    return true;
+  } catch (erro) {
+    console.error("Não foi possível salvar os favoritos:", erro);
+    alert("Não foi possível salvar os favoritos neste navegador.");
+    return false;
   }
 }
 
-function irParaProximoCapitulo() {
-  const livro = obterLivroSelecionado();
-  if (!livro) return;
+function chaveDoFavorito(versiculo) {
+  return [
+    versiculo.livro,
+    versiculo.capitulo,
+    versiculo.numero
+  ].join("|");
+}
 
-  if (capituloAtual < livro.capitulos) {
-    carregarCapitulo(livro, capituloAtual + 1);
+function alternarFavorito(versiculo) {
+  const favoritos = lerFavoritos();
+  const chave = chaveDoFavorito(versiculo);
+
+  const indice = favoritos.findIndex(function(item) {
+    return chaveDoFavorito(item) === chave;
+  });
+
+  if (indice >= 0) {
+    favoritos.splice(indice, 1);
+  } else {
+    favoritos.push(versiculo);
+  }
+
+  if (salvarFavoritos(favoritos)) {
+    renderizarFavoritos();
+  }
+}
+
+function renderizarFavoritos() {
+  const area = document.getElementById("listaMarcados");
+  const favoritos = lerFavoritos();
+
+  area.replaceChildren();
+
+  if (favoritos.length === 0) {
+    const aviso = document.createElement("p");
+    aviso.className = "mensagem";
+    aviso.textContent =
+      "Você ainda não marcou nenhum versículo.";
+
+    area.appendChild(aviso);
     return;
   }
 
-  const indiceAtual = LIVROS.findIndex(
-    item => item[1] === livro.slug
-  );
+  favoritos.forEach(function(item) {
+    const caixa = document.createElement("div");
+    caixa.className = "resultado-item";
 
-  if (indiceAtual < LIVROS.length - 1) {
-    mudarLivro(indiceAtual + 1);
-  }
+    const titulo = document.createElement("strong");
+    titulo.textContent =
+      item.livro + " " + item.capitulo + ":" + item.numero;
+
+    caixa.appendChild(titulo);
+
+    const texto = document.createElement("p");
+    texto.textContent = item.texto;
+
+    caixa.appendChild(texto);
+
+    const botoes = document.createElement("div");
+    botoes.className = "botoes-navegacao";
+
+    const abrir = document.createElement("button");
+    abrir.type = "button";
+    abrir.className = "botao botao-secundario";
+    abrir.textContent = "Abrir";
+
+    abrir.addEventListener("click", function() {
+      abrirReferencia(
+        item.livro + " " + item.capitulo + ":" + item.numero
+      );
+    });
+
+    const remover = document.createElement("button");
+    remover.type = "button";
+    remover.className = "botao botao-secundario";
+    remover.textContent = "Remover";
+
+    remover.addEventListener("click", function() {
+      const atualizados = lerFavoritos().filter(function(fav) {
+        return chaveDoFavorito(fav) !== chaveDoFavorito(item);
+      });
+
+      if (salvarFavoritos(atualizados)) {
+        renderizarFavoritos();
+      }
+    });
+
+    botoes.appendChild(abrir);
+    botoes.appendChild(remover);
+    caixa.appendChild(botoes);
+
+    area.appendChild(caixa);
+  });
 }
 
+document
+  .getElementById("btnMarcar")
+  .addEventListener("click", function() {
+    if (!versiculoSelecionado) {
+      alert(
+        "Clique primeiro no versículo que deseja marcar."
+      );
+      return;
+    }
+
+    alternarFavorito(versiculoSelecionado);
+  });
+
 /* =====================================================
-   17. COMPARTILHAR O LINK DA PÁGINA
+   COMPARTILHAMENTO
 ===================================================== */
 
-async function compartilharPagina() {
+async function compartilharVersiculo() {
+  let texto = "";
+
+  if (versiculoSelecionado) {
+    texto =
+      versiculoSelecionado.livro + " " +
+      versiculoSelecionado.capitulo + ":" +
+      versiculoSelecionado.numero + "\n\n" +
+      versiculoSelecionado.texto;
+  } else if (livroAtual && capituloAtual) {
+    texto =
+      "Estou lendo " +
+      livroAtual.nome + " " + capituloAtual +
+      " na Bíblia King James.";
+  } else {
+    texto =
+      "Leia e estude a Palavra de Deus na Bíblia King James.";
+  }
+
   const url = window.location.href;
 
   if (navigator.share) {
     try {
       await navigator.share({
         title: "Bíblia King James",
+        text: texto,
         url: url
       });
+      return;
     } catch (erro) {
-      // O usuário pode cancelar o compartilhamento.
+      if (erro.name === "AbortError") {
+        return;
+      }
     }
-
-    return;
   }
 
-  if (navigator.clipboard) {
-    navigator.clipboard.writeText(url)
-      .then(() => alert("Link copiado."))
-      .catch(() => prompt("Copie o link:", url));
-
-    return;
+  try {
+    await navigator.clipboard.writeText(texto + "\n\n" + url);
+    alert("Texto copiado! Agora você pode compartilhá-lo.");
+  } catch (erro) {
+    window.prompt(
+      "Copie o texto abaixo para compartilhar:",
+      texto + "\n\n" + url
+    );
   }
-
-  prompt("Copie o link:", url);
 }
 
-/* =====================================================
-   18. CONFIGURAR OS EVENTOS DOS CONTROLES
-===================================================== */
-
-$("livroSelect").addEventListener("change", () => {
-  carregarCapitulosNoSeletor(1);
-  carregarCapitulo(obterLivroSelecionado(), 1);
-});
-
-$("capituloSelect").addEventListener("change", () => {
-  carregarCapitulo(
-    obterLivroSelecionado(),
-    Number($("capituloSelect").value)
-  );
-});
-
-$("versaoSelect").addEventListener("change", () => {
-  carregarCapitulo(
-    obterLivroSelecionado(),
-    capituloAtual
-  );
-});
-
-$("btnPesquisar").addEventListener(
-  "click",
-  pesquisarBiblia
-);
-
-$("pesquisaInput").addEventListener("keydown", evento => {
-  if (evento.key === "Enter") {
-    pesquisarBiblia();
-  }
-});
-
-$("capituloAnterior").addEventListener(
-  "click",
-  irParaCapituloAnterior
-);
-
-$("proximoCapitulo").addEventListener(
-  "click",
-  irParaProximoCapitulo
-);
-
-$("aumentarFonte").addEventListener(
-  "click",
-  () => alterarFonte(1)
-);
-
-$("diminuirFonte").addEventListener(
-  "click",
-  () => alterarFonte(-1)
-);
-
-$("compartilharPagina").addEventListener(
-  "click",
-  compartilharPagina
-);
-
-$("limparMarcacao").addEventListener(
-  "click",
-  limparMarcacao
-);
-
-document.querySelectorAll("[data-cor]").forEach(botao => {
-  botao.addEventListener("click", () => {
-    aplicarMarcacao(botao.dataset.cor);
-  });
-});
-
-$("atualizarPalavra").addEventListener(
-  "click",
-  atualizarPalavraDoDia
-);
+document
+  .getElementById("btnCompartilhar")
+  .addEventListener("click", compartilharVersiculo);
 
 /* =====================================================
-   19. INICIALIZAÇÃO
+   INICIALIZAÇÃO
 ===================================================== */
 
-carregarLivrosNoSeletor();
-atualizarPalavraDoDia();
+renderizarFavoritos();
 
-carregarCapitulo(
-  obterLivroSelecionado(),
-  1
-).catch(erro => {
-  $("status").textContent =
-    erro.message || "Erro ao inicializar a Bíblia.";
-});
-
-/* =====================================================
-   FINAL DO JAVASCRIPT
-===================================================== */
+console.log("Recursos da Bíblia King James inicializados.");
 </script>
+
+
 </body>
 </html>
-
