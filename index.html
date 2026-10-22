@@ -265,6 +265,44 @@
       font-size: 17px;
     }
 
+
+    .estudo-palavra {
+      margin-top: 12px;
+      padding: 14px;
+      border: 1px solid var(--cor-borda);
+      border-left: 4px solid var(--cor-destaque);
+      border-radius: 8px;
+      background: #fffdf7;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .estudo-palavra h3 {
+      margin: 0 0 8px;
+      color: var(--cor-principal);
+      font-size: 16px;
+    }
+
+    .estudo-palavra p {
+      margin: 6px 0;
+    }
+
+    .estudo-palavra .referencias-palavra {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .estudo-palavra .referencias-palavra button {
+      min-height: 32px;
+      padding: 5px 9px;
+      border: 1px solid var(--cor-borda);
+      border-radius: 6px;
+      background: #e8eee9;
+      color: var(--cor-principal);
+      cursor: pointer;
+    }
+
     .palavras-jesus {
       color: #bd2929;
     }
@@ -1261,6 +1299,221 @@ async function carregarCapitulo() {
 
 
 
+
+/* =====================================================
+   ESTUDO DE PALAVRAS: SINÔNIMOS E REFERÊNCIAS BÍBLICAS
+===================================================== */
+
+// Sinônimos em português para termos bíblicos frequentes.
+// Para palavras que não estiverem nesta lista, a interface informa
+// que não há sinônimo cadastrado e ainda tenta localizar referências.
+const SINONIMOS_BIBLICOS = {
+  "amor": ["caridade", "afeição", "bondade", "amor fraternal"],
+  "amar": ["querer bem", "ter amor", "demonstrar afeição"],
+  "deus": ["Senhor", "Criador", "Altíssimo", "Todo-Poderoso"],
+  "senhor": ["Deus", "Soberano", "Mestre"],
+  "jesus": ["Cristo", "Messias", "Salvador", "Filho de Deus"],
+  "cristo": ["Messias", "Ungido", "Salvador"],
+  "fé": ["confiança", "crença", "fidelidade"],
+  "fe": ["confiança", "crença", "fidelidade"],
+  "esperança": ["expectativa", "confiança", "aguardo"],
+  "esperanca": ["expectativa", "confiança", "aguardo"],
+  "paz": ["tranquilidade", "harmonia", "descanso"],
+  "alegria": ["júbilo", "contentamento", "regozijo"],
+  "feliz": ["bem-aventurado", "abençoado", "ditoso"],
+  "bem-aventurado": ["feliz", "abençoado", "ditoso"],
+  "misericórdia": ["compaixão", "clemência", "bondade"],
+  "misericordia": ["compaixão", "clemência", "bondade"],
+  "perdão": ["remissão", "absolvição", "reconciliação"],
+  "perdao": ["remissão", "absolvição", "reconciliação"],
+  "pecado": ["transgressão", "iniquidade", "desobediência"],
+  "salvação": ["livramento", "redenção", "libertação"],
+  "salvacao": ["livramento", "redenção", "libertação"],
+  "salvador": ["libertador", "redentor", "aquele que salva"],
+  "palavra": ["ensinamento", "mensagem", "Escritura"],
+  "caminho": ["vereda", "trajeto", "direção"],
+  "luz": ["claridade", "brilho", "iluminação"],
+  "trevas": ["escuridão", "sombras"],
+  "sabedoria": ["discernimento", "prudência", "entendimento"],
+  "força": ["vigor", "poder", "fortaleza"],
+  "forca": ["vigor", "poder", "fortaleza"],
+  "oração": ["prece", "súplica", "intercessão"],
+  "oracao": ["prece", "súplica", "intercessão"],
+  "orar": ["rogar", "suplicar", "interceder"],
+  "justiça": ["retidão", "equidade", "justeza"],
+  "justica": ["retidão", "equidade", "justeza"],
+  "justo": ["íntegro", "reto", "correto"],
+  "graça": ["favor", "benevolência", "bondade"],
+  "graca": ["favor", "benevolência", "bondade"],
+  "vida": ["existência", "viver", "vida eterna"],
+  "morte": ["falecimento", "fim da vida"],
+  "rei": ["soberano", "monarca", "governante"],
+  "reino": ["domínio", "reinado", "governo"],
+  "servo": ["servidor", "criado", "ministro"],
+  "irmão": ["próximo", "companheiro", "irmão na fé"],
+  "irmao": ["próximo", "companheiro", "irmão na fé"],
+  "temor": ["reverência", "respeito", "veneração"],
+  "glória": ["esplendor", "majestade", "honra"],
+  "gloria": ["esplendor", "majestade", "honra"],
+  "verdade": ["veracidade", "realidade", "fidelidade"],
+  "verdadeiro": ["genuíno", "autêntico", "fiel"],
+  "bondade": ["benignidade", "generosidade", "benevolência"],
+  "abençoar": ["bendizer", "favorecer", "conceder bênçãos"],
+  "abencoar": ["bendizer", "favorecer", "conceder bênçãos"],
+  "confiar": ["crer", "depositar confiança", "esperar"],
+  "salmo": ["cântico", "louvor", "hino"],
+  "pastor": ["guia", "condutor", "cuidador"]
+};
+
+function obterSinonimosPalavra(palavra) {
+  const chave = normalizarTexto(palavra);
+  return SINONIMOS_BIBLICOS[palavra.toLocaleLowerCase("pt-BR")] ||
+    SINONIMOS_BIBLICOS[chave] ||
+    [];
+}
+
+function obterReferenciaDeItemPesquisa(item) {
+  if (typeof item === "string") return "";
+  return obterReferenciaResultado(item);
+}
+
+function adicionarBotaoReferencia(container, referencia) {
+  const botao = document.createElement("button");
+  botao.type = "button";
+  botao.textContent = referencia;
+  botao.addEventListener("click", function(evento) {
+    evento.stopPropagation();
+    abrirReferencia(referencia);
+  });
+  container.appendChild(botao);
+}
+
+async function mostrarEstudoDaPalavra(palavra, artigo) {
+  if (!palavra || !artigo) return;
+
+  // Substitui o painel anterior, sem alterar o texto bíblico.
+  document.querySelectorAll(".estudo-palavra").forEach(function(painel) {
+    painel.remove();
+  });
+
+  const painel = document.createElement("section");
+  painel.className = "estudo-palavra";
+  painel.setAttribute("aria-live", "polite");
+
+  const titulo = document.createElement("h3");
+  titulo.textContent = "Estudo da palavra: “" + palavra + "”";
+  painel.appendChild(titulo);
+
+  const sinonimos = obterSinonimosPalavra(palavra);
+  const linhaSinonimos = document.createElement("p");
+  const rotuloSinonimos = document.createElement("strong");
+  rotuloSinonimos.textContent = "Sinônimos em português: ";
+  linhaSinonimos.appendChild(rotuloSinonimos);
+  linhaSinonimos.appendChild(document.createTextNode(
+    sinonimos.length ? sinonimos.join(", ") :
+      "não há sinônimo cadastrado para esta palavra."
+  ));
+  painel.appendChild(linhaSinonimos);
+
+  const subtituloRefs = document.createElement("p");
+  const rotuloRefs = document.createElement("strong");
+  rotuloRefs.textContent = "Referências bíblicas que contêm a palavra:";
+  subtituloRefs.appendChild(rotuloRefs);
+  painel.appendChild(subtituloRefs);
+
+  const listaRefs = document.createElement("div");
+  listaRefs.className = "referencias-palavra";
+  painel.appendChild(listaRefs);
+
+  const carregando = document.createElement("p");
+  carregando.textContent = "Procurando referências...";
+  painel.appendChild(carregando);
+
+  artigo.appendChild(painel);
+
+  const referenciasEncontradas = new Set();
+
+  // Primeiro, procura no capítulo que já está carregado.
+  if (Array.isArray(versiculosAtuais) && livroAtual && capituloAtual) {
+    versiculosAtuais.forEach(function(item, indice) {
+      const texto = obterTextoVersiculo(item);
+      const numero = obterNumeroVersiculo(item, indice);
+      const regexPalavra = new RegExp(
+        "(^|[^\\p{L}\\p{N}_])" +
+        palavra.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") +
+        "([^\\p{L}\\p{N}_]|$)", "iu"
+      );
+      if (regexPalavra.test(texto)) {
+        referenciasEncontradas.add(
+          livroAtual.nome + " " + capituloAtual + ":" + numero
+        );
+      }
+    });
+  }
+
+  // Tenta consultar a pesquisa da API para localizar ocorrências em toda a Bíblia.
+  // Se a API não oferecer essa ação, mantém as referências do capítulo atual.
+  try {
+    const resposta = await consultarAPI({ action: "buscar", q: palavra });
+    const resultados = extrairResultadosPesquisa(resposta) || [];
+    resultados.forEach(function(item) {
+      const referencia = obterReferenciaDeItemPesquisa(item);
+      const texto = obterTextoVersiculo(item);
+      if (referencia && normalizarTexto(texto).includes(normalizarTexto(palavra))) {
+        referenciasEncontradas.add(referencia);
+      }
+    });
+  } catch (erro) {
+    console.info("Pesquisa geral de palavras indisponível; exibindo referências do capítulo atual.", erro);
+  }
+
+  carregando.remove();
+
+  if (referenciasEncontradas.size === 0) {
+    const semResultados = document.createElement("p");
+    semResultados.textContent =
+      "Não foram encontradas referências para esta palavra. Verifique se a API de pesquisa está configurada.";
+    painel.appendChild(semResultados);
+    return;
+  }
+
+  Array.from(referenciasEncontradas).slice(0, 40).forEach(function(referencia) {
+    adicionarBotaoReferencia(listaRefs, referencia);
+  });
+
+  if (referenciasEncontradas.size > 40) {
+    const limite = document.createElement("p");
+    limite.textContent = "Mostrando as primeiras 40 referências encontradas.";
+    painel.appendChild(limite);
+  }
+}
+
+function configurarSelecaoDePalavra(textoElemento, artigo) {
+  function processarSelecao() {
+    const selecao = window.getSelection();
+    if (!selecao || !selecao.rangeCount) return;
+
+    const textoSelecionado = selecao.toString().trim();
+    const noInicial = selecao.anchorNode;
+    if (!textoSelecionado || !noInicial || !textoElemento.contains(noInicial)) return;
+
+    // Se a seleção incluir uma frase, usa a primeira palavra selecionada.
+    const correspondencia = textoSelecionado.match(/[\p{L}\p{N}À-ÿ'-]+/u);
+    if (!correspondencia) return;
+
+    mostrarEstudoDaPalavra(correspondencia[0], artigo);
+  }
+
+  textoElemento.addEventListener("mouseup", function() {
+    setTimeout(processarSelecao, 0);
+  });
+  textoElemento.addEventListener("keyup", function(evento) {
+    if (evento.key === "Shift" || evento.key.startsWith("Arrow")) {
+      setTimeout(processarSelecao, 0);
+    }
+  });
+}
+
 /* =====================================================
    RENDERIZAR VERSÍCULOS
 ===================================================== */
@@ -1295,6 +1548,8 @@ function renderizarVersiculos(lista) {
     const textoElemento = document.createElement("span");
     textoElemento.className = "texto-versiculo";
     textoElemento.textContent = texto;
+    textoElemento.title = "Selecione uma palavra para ver sinônimos e referências bíblicas";
+    configurarSelecaoDePalavra(textoElemento, artigo);
 
     artigo.appendChild(numeroElemento);
     artigo.appendChild(document.createTextNode(" "));
