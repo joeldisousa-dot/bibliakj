@@ -909,60 +909,65 @@ function consultarJSONP(url, timeoutMs = 15000) {
    CONSULTAR A API
 ===================================================== */
 
+
 async function consultarAPI(parametros) {
-  if (
-    !API_URL ||
-    API_URL === "COLE_AQUI_A_URL_DO_SEU_APPS_SCRIPT"
-  ) {
-    throw new Error(
-      "Configure a URL /exec do Google Apps Script na Parte 2."
-    );
+  if (!API_URL || !API_URL.includes("/exec")) {
+    throw new Error("URL do Apps Script inválida.");
   }
 
   const query = new URLSearchParams(parametros).toString();
-  const url = API_URL + (API_URL.includes("?") ? "&" : "?") + query;
 
-  /*
-    Primeira tentativa: JSONP.
-    Funciona apenas se o Apps Script implementar
-    o parâmetro callback e retornar JavaScript válido.
-  */
-  try {
-    return await consultarJSONP(url);
-  } catch (erroJSONP) {
-    /*
-      Segunda tentativa: JSON via fetch.
-      Pode falhar se a API não permitir CORS.
-    */
-    try {
-      const resposta = await fetch(url, {
-        method: "GET",
-        redirect: "follow"
-      });
+  const url =
+    API_URL +
+    (API_URL.includes("?") ? "&" : "?") +
+    query;
 
-      if (!resposta.ok) {
-        throw new Error("HTTP " + resposta.status);
-      }
+  const resposta = await consultarJSONP(url);
 
-      const texto = await resposta.text();
-
-      try {
-        return JSON.parse(texto);
-      } catch (erroJSON) {
-        throw new Error(
-          "A API não retornou JSON válido. " +
-          "Verifique o formato de resposta do Apps Script."
-        );
-      }
-    } catch (erroFetch) {
-      throw new Error(
-        "Falha na comunicação com a API. " +
-        "Confirme a URL, as permissões de acesso e " +
-        "o formato de resposta do Apps Script."
-      );
-    }
+  if (!resposta || typeof resposta !== "object") {
+    throw new Error("Resposta inválida da API.");
   }
+
+  if (resposta.sucesso === false || resposta.ok === false) {
+    throw new Error(
+      resposta.erro ||
+      resposta.mensagem ||
+      "O Apps Script retornou um erro."
+    );
+  }
+
+  return resposta;
 }
+
+let livrosDaAPI = [];
+
+async function carregarCodigosLivros() {
+  const resposta = await consultarAPI({
+    action: "livros"
+  });
+
+  if (!Array.isArray(resposta.livros)) {
+    throw new Error("A API não retornou a lista de livros.");
+  }
+
+  livrosDaAPI = resposta.livros;
+}
+
+function obterCodigoLivro(nomeLivro) {
+  const nome = normalizarTexto(nomeLivro);
+
+  const registro = livrosDaAPI.find(function(item) {
+    return (
+      normalizarTexto(item.nome || item.nomeLivro) === nome ||
+      normalizarTexto(item.codigo || item.livro) === nome
+    );
+  });
+
+  return registro
+    ? String(registro.codigo || registro.livro).trim()
+    : "";
+}
+
 
 /* =====================================================
    INTERPRETAR RESPOSTAS DA API
@@ -1158,6 +1163,7 @@ function abrirReferencia(referencia) {
   A ação correta precisa ser confirmada no Apps Script.
 */
 
+
 async function carregarCapitulo() {
   const indiceLivro = Number(elementoLivro.value);
   const numeroCapitulo = Number(elementoCapitulo.value);
@@ -1186,93 +1192,63 @@ async function carregarCapitulo() {
     return;
   }
 
-  livroAtual = livro;
-  capituloAtual = numeroCapitulo;
+  try {
+    livroAtual = livro;
+    capituloAtual = numeroCapitulo;
 
-  elementoTituloCapitulo.textContent =
-    livro.nome + " " + numeroCapitulo;
+    elementoTituloCapitulo.textContent =
+      livro.nome + " " + numeroCapitulo;
 
-  elementoListaVersiculos.replaceChildren();
+    elementoListaVersiculos.replaceChildren();
 
-  mostrarMensagem("Carregando capítulo...", "");
+    mostrarMensagem("Carregando capítulo...", "");
 
-  const acoes = [
-    "capitulo",
-    "getCapitulo",
-    "obterCapitulo",
-    "lerCapitulo"
-  ];
-
-  const parametrosBase = {
-    livro: livro.nome,
-    capitulo: String(numeroCapitulo),
-    cap: String(numeroCapitulo)
-  };
-
-  let resposta = null;
-  let erros = [];
-
-  for (const acao of acoes) {
-    try {
-      resposta = await consultarAPI({
-        ...parametrosBase,
-        acao: acao
-      });
-
-      /*
-        Algumas APIs devolvem um objeto de erro
-        em vez de rejeitar a requisição.
-      */
-      if (
-        resposta &&
-        (
-          resposta.erro ||
-          resposta.error ||
-          resposta.sucesso === false ||
-          resposta.success === false
-        )
-      ) {
-        erros.push(
-          acao + ": " +
-          (
-            resposta.erro ||
-            resposta.error ||
-            resposta.mensagem ||
-            resposta.message ||
-            "Ação não concluída"
-          )
-        );
-        resposta = null;
-        continue;
-      }
-
-      const lista = extrairVersiculos(resposta);
-
-      if (lista.length > 0) {
-        versiculosAtuais = lista;
-        renderizarVersiculos(lista);
-        return;
-      }
-
-      erros.push(
-        acao + ": a resposta não contém uma lista de versículos."
-      );
-
-    } catch (erro) {
-      erros.push(acao + ": " + erro.message);
+    // Consulta os códigos cadastrados na planilha.
+    if (livrosDaAPI.length === 0) {
+      await carregarCodigosLivros();
     }
+
+    const codigoLivro = obterCodigoLivro(livro.nome);
+
+    if (!codigoLivro) {
+      throw new Error(
+        'Não foi encontrado o código de "' +
+        livro.nome +
+        '" na lista retornada pela aba Livros.'
+      );
+    }
+
+    // O Apps Script espera action, livro e cap.
+    const resposta = await consultarAPI({
+      action: "capitulo",
+      livro: codigoLivro,
+      cap: String(numeroCapitulo)
+    });
+
+    const versiculos = extrairVersiculos(resposta);
+
+    if (versiculos.length === 0) {
+      throw new Error(
+        "A API respondeu, mas não retornou versículos para " +
+        livro.nome + " " + numeroCapitulo + "."
+      );
+    }
+
+    versiculosAtuais = versiculos;
+
+    renderizarVersiculos(versiculos);
+
+  } catch (erro) {
+    console.error("Erro ao carregar capítulo:", erro);
+
+    mostrarMensagem(
+      "Não foi possível carregar o capítulo: " +
+      erro.message,
+      "erro"
+    );
   }
-
-  console.error("Falha ao carregar capítulo:", erros);
-
-  mostrarMensagem(
-    "Não foi possível carregar o capítulo. " +
-    "Confira a URL e o formato de resposta do Apps Script. " +
-    "Se aparecer 'Ação não reconhecida', precisamos ajustar " +
-    "a ação chamada pelo index ao código do Apps Script.",
-    "erro"
-  );
 }
+
 
 /* =====================================================
    RENDERIZAR VERSÍCULOS
@@ -1442,95 +1418,31 @@ document
    PESQUISA BÍBLICA
 ===================================================== */
 
-async function pesquisarBiblia() {
-  const termo = elementoPesquisa.value.trim();
 
-  if (!termo) {
-    elementoResultadosPesquisa.replaceChildren();
+try {
+  const resposta = await consultarAPI({
+    action: "buscar",
+    q: termo,
+    limite: 50
+  });
 
-    const aviso = document.createElement("p");
-    aviso.className = "mensagem";
-    aviso.textContent = "Digite uma palavra para pesquisar.";
+  exibirResultadosPesquisa(
+    Array.isArray(resposta.resultados)
+      ? resposta.resultados
+      : []
+  );
 
-    elementoResultadosPesquisa.appendChild(aviso);
-    return;
-  }
-
-  elementoResultadosPesquisa.replaceChildren();
-
-  const carregando = document.createElement("p");
-  carregando.className = "mensagem";
-  carregando.textContent = "Pesquisando na Bíblia...";
-
-  elementoResultadosPesquisa.appendChild(carregando);
-
-  /*
-    Os nomes das ações são tentativas de compatibilidade.
-    A ação correta depende do seu Google Apps Script.
-  */
-
-  const acoes = [
-    "pesquisar",
-    "buscar",
-    "search",
-    "buscarVersiculos"
-  ];
-
-  let resultados = null;
-  let ultimoErro = "";
-
-  for (const acao of acoes) {
-    try {
-      const resposta = await consultarAPI({
-        acao: acao,
-        termo: termo,
-        busca: termo,
-        pesquisa: termo,
-        palavra: termo,
-        q: termo
-      });
-
-      if (
-        resposta &&
-        (
-          resposta.erro ||
-          resposta.error ||
-          resposta.sucesso === false ||
-          resposta.success === false
-        )
-      ) {
-        ultimoErro =
-          resposta.erro ||
-          resposta.error ||
-          resposta.mensagem ||
-          resposta.message ||
-          "A pesquisa não foi concluída.";
-
-        continue;
-      }
-
-      resultados = extrairResultadosPesquisa(resposta);
-
-      if (resultados !== null) {
-        exibirResultadosPesquisa(resultados);
-        return;
-      }
-
-    } catch (erro) {
-      ultimoErro = erro.message;
-    }
-  }
+} catch (erro) {
+  console.error("Erro na pesquisa bíblica:", erro);
 
   elementoResultadosPesquisa.replaceChildren();
 
-  const erro = document.createElement("p");
-  erro.className = "mensagem erro";
-  erro.textContent =
-    "Não foi possível concluir a pesquisa. " +
-    "Verifique a ação de pesquisa aceita pelo Apps Script." +
-    (ultimoErro ? " Detalhe: " + ultimoErro : "");
+  const aviso = document.createElement("p");
+  aviso.className = "mensagem erro";
+  aviso.textContent =
+    "Não foi possível pesquisar: " + erro.message;
 
-  elementoResultadosPesquisa.appendChild(erro);
+  elementoResultadosPesquisa.appendChild(aviso);
 }
 
 function extrairResultadosPesquisa(resposta) {
