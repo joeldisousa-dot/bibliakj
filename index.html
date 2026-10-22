@@ -1956,21 +1956,33 @@ function chaveDoFavorito(versiculo) {
 }
 
 function alternarFavorito(versiculo) {
+  if (!versiculo || !versiculo.livro || !versiculo.capitulo || !versiculo.numero) {
+    alert("Não consegui identificar o versículo. Clique no texto do versículo e tente novamente.");
+    return;
+  }
+
   const favoritos = lerFavoritos();
   const chave = chaveDoFavorito(versiculo);
-
-  const indice = favoritos.findIndex(function(item) {
+  const jaExiste = favoritos.some(function(item) {
     return chaveDoFavorito(item) === chave;
   });
 
-  if (indice >= 0) {
-    favoritos.splice(indice, 1);
-  } else {
-    favoritos.push(versiculo);
+  // O botão principal serve para marcar. Para desmarcar, use Remover na lista.
+  if (jaExiste) {
+    alert("Este versículo já está em Meus versículos marcados.");
+    return;
   }
+
+  favoritos.push({
+    livro: String(versiculo.livro),
+    capitulo: Number(versiculo.capitulo),
+    numero: Number(versiculo.numero),
+    texto: String(versiculo.texto || "")
+  });
 
   if (salvarFavoritos(favoritos)) {
     renderizarFavoritos();
+    alert("Versículo salvo em Meus versículos marcados!");
   }
 }
 
@@ -2045,10 +2057,14 @@ function renderizarFavoritos() {
 document
   .getElementById("btnMarcar")
   .addEventListener("click", function() {
+    // Revalida a seleção no momento do clique para evitar salvar um item vazio.
     if (!versiculoSelecionado) {
-      alert(
-        "Clique primeiro no versículo que deseja marcar."
-      );
+      const selecionado = document.querySelector("#listaVersiculos .versiculo-selecionado");
+      if (selecionado) {
+        alert("Versículo selecionado visualmente, mas os dados não foram identificados. Clique novamente no texto do versículo e tente marcar.");
+      } else {
+        alert("Clique primeiro no texto do versículo que deseja marcar. Depois clique em ⭐ Meus versículos.");
+      }
       return;
     }
 
