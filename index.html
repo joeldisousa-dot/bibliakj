@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -825,9 +824,6 @@ preencherLivros();
 console.log("Livros bíblicos carregados:", LIVROS.length);
 console.log("Configuração da Bíblia King James concluída.");
 </script>
-</body>
-</html>
-
 
 <script>
 /* =====================================================
@@ -1304,6 +1300,30 @@ function renderizarVersiculos(lista) {
     artigo.appendChild(document.createTextNode(" "));
     artigo.appendChild(textoElemento);
 
+    const botaoCompartilhar = document.createElement("button");
+    botaoCompartilhar.type = "button";
+    botaoCompartilhar.className = "botao botao-secundario";
+    botaoCompartilhar.textContent = "↗ Compartilhar";
+    botaoCompartilhar.setAttribute(
+      "aria-label",
+      "Compartilhar " + livroAtual.nome + " " + capituloAtual + ":" + numero
+    );
+    botaoCompartilhar.style.marginTop = "8px";
+    botaoCompartilhar.style.minHeight = "34px";
+    botaoCompartilhar.style.padding = "5px 10px";
+    botaoCompartilhar.style.fontSize = "13px";
+    botaoCompartilhar.addEventListener("click", function(evento) {
+      evento.stopPropagation();
+      compartilharTextoVersiculo({
+        livro: livroAtual.nome,
+        capitulo: capituloAtual,
+        numero: numero,
+        texto: texto
+      });
+    });
+    artigo.appendChild(document.createElement("br"));
+    artigo.appendChild(botaoCompartilhar);
+
     const referencias = obterReferencias(
       livroAtual.nome,
       capituloAtual,
@@ -1434,31 +1454,7 @@ document
 ===================================================== */
 
 
-try {
-  const resposta = await consultarAPI({
-    action: "buscar",
-    q: termo,
-    limite: 50
-  });
 
-  exibirResultadosPesquisa(
-    Array.isArray(resposta.resultados)
-      ? resposta.resultados
-      : []
-  );
-
-} catch (erro) {
-  console.error("Erro na pesquisa bíblica:", erro);
-
-  elementoResultadosPesquisa.replaceChildren();
-
-  const aviso = document.createElement("p");
-  aviso.className = "mensagem erro";
-  aviso.textContent =
-    "Não foi possível pesquisar: " + erro.message;
-
-  elementoResultadosPesquisa.appendChild(aviso);
-}
 
 function extrairResultadosPesquisa(resposta) {
   if (Array.isArray(resposta)) {
@@ -1721,6 +1717,35 @@ document
    COMPARTILHAMENTO
 ===================================================== */
 
+async function compartilharTextoVersiculo(versiculo) {
+  const texto = versiculo.livro + " " +
+    versiculo.capitulo + ":" + versiculo.numero +
+    "\\n\\n" + versiculo.texto;
+  const titulo = versiculo.livro + " " +
+    versiculo.capitulo + ":" + versiculo.numero;
+  const url = window.location.href;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: titulo + " — Bíblia King James",
+        text: texto,
+        url: url
+      });
+      return;
+    } catch (erro) {
+      if (erro.name === "AbortError") return;
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(texto + "\\n\\n" + url);
+    alert("Versículo copiado! Agora você pode compartilhá-lo.");
+  } catch (erro) {
+    window.prompt("Copie o versículo para compartilhar:", texto + "\\n\\n" + url);
+  }
+}
+
 async function compartilharVersiculo() {
   let texto = "";
 
@@ -1780,7 +1805,6 @@ renderizarFavoritos();
 
 console.log("Recursos da Bíblia King James inicializados.");
 </script>
-
 
 </body>
 </html>
