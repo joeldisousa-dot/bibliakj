@@ -325,6 +325,17 @@
       color: #bd2929;
     }
 
+    /* Versículos identificados como palavras de Jesus ou sobre Jesus */
+    .versiculo-jesus .texto-versiculo,
+    .texto-jesus,
+    .versiculo-jesus .numero-versiculo {
+      color: #bd2929;
+    }
+
+    .versiculo-jesus .texto-versiculo {
+      font-weight: 600;
+    }
+
     .versiculo-marcado {
       background: #fff3c9;
       border-color: #e5c76f;
@@ -1640,6 +1651,76 @@ function configurarSelecaoDePalavra(textoElemento, artigo) {
    RENDERIZAR VERSÍCULOS
 ===================================================== */
 
+/*
+ * Identificação de versículos relacionados a Jesus.
+ *
+ * Para classificação precisa, a API pode devolver um campo booleano
+ * em cada versículo: falaJesus, sobreJesus, relacionadoAJesus ou jesus.
+ * Quando algum desses campos existe, ele prevalece sobre a heurística.
+ *
+ * Sem metadados, são usados termos e títulos cristológicos conhecidos.
+ * Isso é uma aproximação: referências indiretas como profecias e símbolos
+ * exigem classificação bíblica editorial para garantir cobertura completa.
+ */
+function valorBooleanoBiblico(valor) {
+  if (typeof valor === "boolean") return valor;
+  if (typeof valor === "number") return valor === 1;
+  if (typeof valor === "string") {
+    return ["true", "sim", "yes", "1", "jesus", "sobre jesus", "fala de jesus"]
+      .includes(normalizarTexto(valor));
+  }
+  return false;
+}
+
+function versiculoRelacionadoAJesus(versiculo, texto, referencia) {
+  if (versiculo && typeof versiculo === "object") {
+    const campos = [
+      "falaJesus", "fala_jesus", "palavrasDeJesus", "palavras_de_jesus",
+      "sobreJesus", "sobre_jesus", "relacionadoAJesus",
+      "relacionado_a_jesus", "jesus", "cristologico", "cristologico"
+    ];
+    for (const campo of campos) {
+      if (Object.prototype.hasOwnProperty.call(versiculo, campo)) {
+        return valorBooleanoBiblico(versiculo[campo]);
+      }
+    }
+
+    const classificacao = normalizarTexto(
+      versiculo.classificacao || versiculo.categoria || versiculo.tema || ""
+    );
+    if (classificacao) {
+      if (/(nao relacionado|não relacionado|sem relacao com jesus|sem relação com jesus)/i.test(classificacao)) {
+        return false;
+      }
+      if (/(jesus|cristo|messias|cristologico|cristológico|palavras de jesus|fala de jesus)/i.test(classificacao)) {
+        return true;
+      }
+    }
+  }
+
+  const t = normalizarTexto(texto);
+  const termosCristologicos = [
+    /\bjesus\b/, /\bcristo\b/, /\bmessias\b/, /\bcrist[oã]o\b/,
+    /\bfilho de deus\b/, /\bfilho do homem\b/, /\bfilho unig[eê]nito\b/,
+    /\bcordeiro de deus\b/, /\bcordeiro\b/, /\bsalvador\b/, /\bredentor\b/,
+    /\bverbo (?:era|se fez|feito) carne\b/, /\bo verbo\b/,
+    /\beu sou (?:o|a) (?:caminho|verdade|vida|luz|porta|bom pastor|videira)\b/,
+    /\bbom pastor\b/, /\bp[aã]o da vida\b/, /\bporta das ovelhas\b/,
+    /\bvideira verdadeira\b/, /\bnoivo\b/, /\bestrela da manh[aã]\b/,
+    /\braiz de davi\b/, /\brenovo\b/, /\bpedra angular\b/,
+    /\bservo sofredor\b/, /\bungido do senhor\b/, /\bfilho de davi\b/,
+    /\brei dos judeus\b/, /\brei de israel\b/, /\bpr[ií]ncipe da paz\b/,
+    /\bemmanuel\b/, /\bimanuel\b/, /\bcruz\b.*\bressuscit/,
+    /\bressuscit.*\bterceiro dia\b/
+  ];
+  if (termosCristologicos.some(regex => regex.test(t))) return true;
+
+  // Reconhece atribuições de fala de Jesus caso a API inclua a atribuição no texto.
+  if (/\b(?:disse|respondeu|falou|ensinou|ordenou) jesus\b/.test(t)) return true;
+
+  return false;
+}
+
 function renderizarVersiculos(lista) {
   elementoListaVersiculos.replaceChildren();
 
@@ -1662,6 +1743,13 @@ function renderizarVersiculos(lista) {
     const artigo = document.createElement("article");
     artigo.className = "versiculo";
     artigo.dataset.versiculo = String(numero);
+
+    const referenciaAtual = livroAtual && capituloAtual
+      ? livroAtual.nome + " " + capituloAtual + ":" + numero
+      : "";
+    if (versiculoRelacionadoAJesus(versiculo, texto, referenciaAtual)) {
+      artigo.classList.add("versiculo-jesus");
+    }
 
     const numeroElemento = document.createElement("span");
     numeroElemento.className = "numero-versiculo";
@@ -1887,6 +1975,9 @@ function exibirResultadosPesquisa(resultados) {
 
     const conteudo = document.createElement("p");
     conteudo.textContent = texto || String(item);
+    if (versiculoRelacionadoAJesus(item, texto, referencia)) {
+      conteudo.classList.add("texto-jesus");
+    }
 
     caixa.appendChild(conteudo);
 
