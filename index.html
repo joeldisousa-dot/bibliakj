@@ -1919,6 +1919,62 @@ function obterReferenciaResultado(item) {
   );
 }
 
+// Pesquisa global na Bíblia usando a ação "buscar" do Apps Script.
+// Esta função precisa ficar no escopo global porque os eventos abaixo a chamam.
+async function pesquisarBiblia() {
+  const termo = String(elementoPesquisa.value || "").trim();
+
+  if (!termo) {
+    elementoResultadosPesquisa.replaceChildren();
+    const aviso = document.createElement("p");
+    aviso.className = "mensagem";
+    aviso.textContent = "Digite uma palavra ou expressão para pesquisar.";
+    elementoResultadosPesquisa.appendChild(aviso);
+    elementoPesquisa.focus();
+    return;
+  }
+
+  const botao = document.getElementById("btnPesquisar");
+  const textoOriginal = botao ? botao.textContent : "Pesquisar";
+  if (botao) {
+    botao.disabled = true;
+    botao.textContent = "Pesquisando...";
+  }
+
+  elementoResultadosPesquisa.replaceChildren();
+  const carregando = document.createElement("p");
+  carregando.className = "mensagem";
+  carregando.textContent = "Pesquisando na Bíblia...";
+  elementoResultadosPesquisa.appendChild(carregando);
+
+  try {
+    const resposta = await consultarAPI({ action: "buscar", q: termo, limite: "100" });
+    const resultados = extrairResultadosPesquisa(resposta);
+
+    if (!resultados) {
+      throw new Error("A API não retornou uma lista de resultados válida.");
+    }
+
+    exibirResultadosPesquisa(resultados);
+  } catch (erro) {
+    console.error("Erro na pesquisa bíblica:", erro);
+    elementoResultadosPesquisa.replaceChildren();
+    const aviso = document.createElement("p");
+    aviso.className = "mensagem";
+    aviso.textContent = "Não foi possível realizar a pesquisa. " +
+      (erro && erro.message ? erro.message : "Verifique a conexão com a API.");
+    elementoResultadosPesquisa.appendChild(aviso);
+  } finally {
+    if (botao) {
+      botao.disabled = false;
+      botao.textContent = textoOriginal;
+    }
+  }
+}
+
+// Mantém compatibilidade com chamadas feitas por HTML inline, se houver.
+window.pesquisarBiblia = pesquisarBiblia;
+
 document
   .getElementById("btnPesquisar")
   .addEventListener("click", pesquisarBiblia);
