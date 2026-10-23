@@ -336,11 +336,6 @@
       font-weight: 600;
     }
 
-    .versiculo-marcado {
-      background: #fff3c9;
-      border-color: #e5c76f;
-    }
-
     .referencias {
       margin-top: 8px;
       padding-left: 12px;
@@ -564,13 +559,6 @@
             Compartilhar
           </button>
 
-          <button
-            class="botao botao-destaque"
-            id="btnMarcar"
-            type="button"
-          >
-            ⭐ Meus versículos
-          </button>
         </div>
       </div>
 
@@ -586,17 +574,6 @@
         id="listaVersiculos"
         class="lista-versiculos"
       ></div>
-    </section>
-
-    <!-- VERSÍCULOS MARCADOS -->
-    <section class="cartao" id="areaMarcados">
-      <h2>⭐ Meus versículos marcados</h2>
-
-      <div id="listaMarcados">
-        <p class="mensagem">
-          Seus versículos favoritos aparecerão aqui.
-        </p>
-      </div>
     </section>
 
   </main>
@@ -2077,162 +2054,6 @@ elementoPesquisa.addEventListener("keydown", function(evento) {
 });
 
 /* =====================================================
-   FAVORITOS — ARMAZENAMENTO LOCAL
-===================================================== */
-
-const CHAVE_FAVORITOS = "bibliaKingJamesFavoritos";
-
-function lerFavoritos() {
-  try {
-    const dados = localStorage.getItem(CHAVE_FAVORITOS);
-    const favoritos = dados ? JSON.parse(dados) : [];
-
-    return Array.isArray(favoritos) ? favoritos : [];
-  } catch (erro) {
-    console.error("Não foi possível ler os favoritos:", erro);
-    return [];
-  }
-}
-
-function salvarFavoritos(favoritos) {
-  try {
-    localStorage.setItem(
-      CHAVE_FAVORITOS,
-      JSON.stringify(favoritos)
-    );
-    return true;
-  } catch (erro) {
-    console.error("Não foi possível salvar os favoritos:", erro);
-    alert("Não foi possível salvar os favoritos neste navegador.");
-    return false;
-  }
-}
-
-function chaveDoFavorito(versiculo) {
-  return [
-    versiculo.livro,
-    versiculo.capitulo,
-    versiculo.numero
-  ].join("|");
-}
-
-function alternarFavorito(versiculo) {
-  if (!versiculo || !versiculo.livro || !versiculo.capitulo || !versiculo.numero) {
-    alert("Não consegui identificar o versículo. Clique no texto do versículo e tente novamente.");
-    return;
-  }
-
-  const favoritos = lerFavoritos();
-  const chave = chaveDoFavorito(versiculo);
-  const jaExiste = favoritos.some(function(item) {
-    return chaveDoFavorito(item) === chave;
-  });
-
-  // O botão principal serve para marcar. Para desmarcar, use Remover na lista.
-  if (jaExiste) {
-    alert("Este versículo já está em Meus versículos marcados.");
-    return;
-  }
-
-  favoritos.push({
-    livro: String(versiculo.livro),
-    capitulo: Number(versiculo.capitulo),
-    numero: Number(versiculo.numero),
-    texto: String(versiculo.texto || "")
-  });
-
-  if (salvarFavoritos(favoritos)) {
-    renderizarFavoritos();
-    alert("Versículo salvo em Meus versículos marcados!");
-  }
-}
-
-function renderizarFavoritos() {
-  const area = document.getElementById("listaMarcados");
-  const favoritos = lerFavoritos();
-
-  area.replaceChildren();
-
-  if (favoritos.length === 0) {
-    const aviso = document.createElement("p");
-    aviso.className = "mensagem";
-    aviso.textContent =
-      "Você ainda não marcou nenhum versículo.";
-
-    area.appendChild(aviso);
-    return;
-  }
-
-  favoritos.forEach(function(item) {
-    const caixa = document.createElement("div");
-    caixa.className = "resultado-item";
-
-    const titulo = document.createElement("strong");
-    titulo.textContent =
-      item.livro + " " + item.capitulo + ":" + item.numero;
-
-    caixa.appendChild(titulo);
-
-    const texto = document.createElement("p");
-    texto.textContent = item.texto;
-
-    caixa.appendChild(texto);
-
-    const botoes = document.createElement("div");
-    botoes.className = "botoes-navegacao";
-
-    const abrir = document.createElement("button");
-    abrir.type = "button";
-    abrir.className = "botao botao-secundario";
-    abrir.textContent = "Abrir";
-
-    abrir.addEventListener("click", function() {
-      abrirReferencia(
-        item.livro + " " + item.capitulo + ":" + item.numero
-      );
-    });
-
-    const remover = document.createElement("button");
-    remover.type = "button";
-    remover.className = "botao botao-secundario";
-    remover.textContent = "Remover";
-
-    remover.addEventListener("click", function() {
-      const atualizados = lerFavoritos().filter(function(fav) {
-        return chaveDoFavorito(fav) !== chaveDoFavorito(item);
-      });
-
-      if (salvarFavoritos(atualizados)) {
-        renderizarFavoritos();
-      }
-    });
-
-    botoes.appendChild(abrir);
-    botoes.appendChild(remover);
-    caixa.appendChild(botoes);
-
-    area.appendChild(caixa);
-  });
-}
-
-document
-  .getElementById("btnMarcar")
-  .addEventListener("click", function() {
-    // Revalida a seleção no momento do clique para evitar salvar um item vazio.
-    if (!versiculoSelecionado) {
-      const selecionado = document.querySelector("#listaVersiculos .versiculo-selecionado");
-      if (selecionado) {
-        alert("Versículo selecionado visualmente, mas os dados não foram identificados. Clique novamente no texto do versículo e tente marcar.");
-      } else {
-        alert("Clique primeiro no texto do versículo que deseja marcar. Depois clique em ⭐ Meus versículos.");
-      }
-      return;
-    }
-
-    alternarFavorito(versiculoSelecionado);
-  });
-
-/* =====================================================
    COMPARTILHAMENTO
 ===================================================== */
 
@@ -2443,7 +2264,6 @@ async function atualizarVersiculoDoDia() {
 ===================================================== */
 
 atualizarVersiculoDoDia();
-renderizarFavoritos();
 
 console.log("Recursos da Bíblia King James inicializados.");
 </script>
