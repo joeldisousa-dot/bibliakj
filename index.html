@@ -212,6 +212,17 @@
       font-weight: bold;
     }
 
+    .acoes-versiculo-diario {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .acoes-versiculo-diario .botao {
+      min-height: 40px;
+    }
+
     .titulo-capitulo {
       display: flex;
       flex-wrap: wrap;
@@ -312,12 +323,6 @@
 
     .palavras-jesus {
       color: #bd2929;
-    }
-
-    .versiculo-selecionado {
-      background: #fff3c9;
-      border-color: #e5c76f;
-      box-shadow: 0 0 0 2px rgba(214, 179, 106, 0.2);
     }
 
     .versiculo-marcado {
@@ -448,9 +453,14 @@
       <h2>✨ Versículo do dia</h2>
       <p id="textoDiario">Carregando versículo do dia...</p>
       <span class="referencia" id="referenciaDiaria"></span>
+      <div class="acoes-versiculo-diario">
+        <button class="botao botao-destaque" id="btnCompartilharDiario" type="button">
+          📤 Compartilhar versículo
+        </button>
+      </div>
     </section>
 
-    <!-- O versículo do dia é carregado da aba VersiculoDia pela API do Apps Script. -->
+    <!-- O versículo é carregado da aba VersiculoDia pela API do Apps Script. -->
 
     <!-- SELEÇÃO DE LIVRO E CAPÍTULO -->
     <section class="cartao">
@@ -1205,18 +1215,6 @@ async function abrirReferencia(referencia) {
   }
 
   const indice = LIVROS.indexOf(livro);
-
-  if (
-    !Number.isInteger(numeroCapitulo) ||
-    numeroCapitulo < 1 ||
-    numeroCapitulo > livro.capitulos ||
-    !Number.isInteger(numeroVersiculo) ||
-    numeroVersiculo < 1
-  ) {
-    mostrarMensagem("Capítulo ou versículo inválido na referência: " + referencia, "erro");
-    return;
-  }
-
   elementoLivro.value = String(indice);
   preencherCapitulos(indice);
   elementoCapitulo.value = String(numeroCapitulo);
@@ -1275,7 +1273,6 @@ async function carregarCapitulo() {
   try {
     livroAtual = livro;
     capituloAtual = numeroCapitulo;
-    versiculoSelecionado = null;
 
     elementoTituloCapitulo.textContent =
       livro.nome + " " + numeroCapitulo;
@@ -1755,7 +1752,6 @@ elementoLivro.addEventListener("change", function() {
   preencherCapitulos(elementoLivro.value);
 
   elementoListaVersiculos.replaceChildren();
-  versiculoSelecionado = null;
 
   elementoTituloCapitulo.textContent =
     "Selecione um capítulo";
@@ -1921,46 +1917,6 @@ function obterReferenciaResultado(item) {
   return normalizarReferenciaBiblica(
     item.referencia || item.ref || item.reference || ""
   );
-}
-
-async function pesquisarBiblia() {
-  const termo = String(elementoPesquisa && elementoPesquisa.value || "").trim();
-  elementoResultadosPesquisa.replaceChildren();
-
-  if (!termo) {
-    const aviso = document.createElement("p");
-    aviso.className = "mensagem";
-    aviso.textContent = "Digite uma palavra ou expressão para pesquisar.";
-    elementoResultadosPesquisa.appendChild(aviso);
-    if (elementoPesquisa) elementoPesquisa.focus();
-    return;
-  }
-
-  const carregando = document.createElement("p");
-  carregando.className = "mensagem";
-  carregando.textContent = 'Pesquisando por "' + termo + '"...';
-  elementoResultadosPesquisa.appendChild(carregando);
-
-  try {
-    // Mantém o mesmo contrato de API usado pelo estudo de palavras.
-    const resposta = await consultarAPI({ action: "buscar", q: termo });
-    const resultados = extrairResultadosPesquisa(resposta);
-
-    if (resultados === null) {
-      throw new Error("A API não retornou uma lista de resultados de pesquisa.");
-    }
-
-    exibirResultadosPesquisa(resultados);
-  } catch (erro) {
-    console.error("Erro na pesquisa bíblica:", erro);
-    elementoResultadosPesquisa.replaceChildren();
-
-    const aviso = document.createElement("p");
-    aviso.className = "mensagem erro";
-    aviso.textContent = "Não foi possível pesquisar na Bíblia. Confira se o Apps Script publicado oferece a ação 'buscar' com o parâmetro 'q'. Detalhes: " +
-      (erro && erro.message ? erro.message : "erro desconhecido");
-    elementoResultadosPesquisa.appendChild(aviso);
-  }
 }
 
 document
@@ -2155,10 +2111,10 @@ async function compartilharTextoVersiculo(versiculo) {
   }
 
   try {
-    await navigator.clipboard.writeText(texto + "\n\n" + url);
+    await navigator.clipboard.writeText(texto + "\\n\\n" + url);
     alert("Versículo copiado! Agora você pode compartilhá-lo.");
   } catch (erro) {
-    window.prompt("Copie o versículo para compartilhar:", texto + "\n\n" + url);
+    window.prompt("Copie o versículo para compartilhar:", texto + "\\n\\n" + url);
   }
 }
 
@@ -2214,7 +2170,47 @@ document
   .addEventListener("click", compartilharVersiculo);
 
 /* =====================================================
-   VERSÍCULO DO DIA — LIDO DA ABA VersiculoDia
+   COMPARTILHAR VERSÍCULO DO DIA
+===================================================== */
+async function compartilharVersiculoDoDia() {
+  const texto = (document.getElementById("textoDiario")?.textContent || "").trim();
+  const referencia = (document.getElementById("referenciaDiaria")?.textContent || "").trim();
+
+  if (!texto || !referencia || texto.includes("Carregando") || texto.includes("Não foi possível")) {
+    alert("Aguarde o versículo do dia carregar antes de compartilhar.");
+    return;
+  }
+
+  const conteudo = "✨ Versículo do dia — Bíblia King James\n\n“" + texto + "”\n" + referencia + "\n\n" + window.location.href;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Versículo do dia — Bíblia King James",
+        text: conteudo
+      });
+      return;
+    } catch (erro) {
+      if (erro.name === "AbortError") return;
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(conteudo);
+    alert("Versículo copiado! Agora você pode colá-lo no WhatsApp ou em outro aplicativo.");
+  } catch (erro) {
+    window.prompt("Copie o versículo para compartilhar:", conteudo);
+  }
+}
+
+document
+  .getElementById("btnCompartilharDiario")
+  .addEventListener("click", compartilharVersiculoDoDia);
+
+/* =====================================================
+   VERSÍCULO DO DIA — DADOS DA ABA VersiculoDia
+   A API deve responder à ação action=versiculoDia com:
+   { sucesso: true, texto: "...", referencia: "..." }
 ===================================================== */
 async function atualizarVersiculoDoDia() {
   const textoEl = document.getElementById("textoDiario");
@@ -2223,46 +2219,41 @@ async function atualizarVersiculoDoDia() {
 
   textoEl.textContent = "Carregando versículo do dia...";
   referenciaEl.textContent = "";
-  referenciaEl.removeAttribute("role");
-  referenciaEl.removeAttribute("tabindex");
-  referenciaEl.style.cursor = "default";
 
   try {
-    // O Apps Script escolhe a linha do dia na aba VersiculoDia.
     const resposta = await consultarAPI({ action: "versiculoDia" });
-    const texto = String(resposta.texto || resposta.Texto || "").trim();
-    const referencia = String(
-      resposta.referencia || resposta.Referencia || resposta.referência || ""
-    ).trim();
+    const texto = String(resposta.texto || resposta.versiculo || "").trim();
+    const referencia = String(resposta.referencia || resposta.ref || "").trim();
 
     if (!texto || !referencia) {
-      throw new Error("A API não retornou Texto e Referencia da aba VersiculoDia.");
+      throw new Error("A aba VersiculoDia não retornou texto e referência.");
     }
 
     textoEl.textContent = texto;
     referenciaEl.textContent = referencia;
-    referenciaEl.style.cursor = "pointer";
-    referenciaEl.setAttribute("role", "link");
+    referenciaEl.setAttribute("role", "button");
     referenciaEl.setAttribute("tabindex", "0");
     referenciaEl.setAttribute("title", "Clique para abrir esta referência na Bíblia");
+    referenciaEl.style.cursor = "pointer";
 
-    const abrir = function () {
-      if (typeof abrirReferencia === "function") abrirReferencia(referencia);
+    const abrirReferenciaDiaria = function () {
+      if (typeof abrirReferencia === "function") {
+        abrirReferencia(referencia);
+      } else if (typeof navegarParaReferencia === "function") {
+        navegarParaReferencia(referencia);
+      }
     };
-    referenciaEl.onclick = abrir;
+    referenciaEl.onclick = abrirReferenciaDiaria;
     referenciaEl.onkeydown = function (evento) {
       if (evento.key === "Enter" || evento.key === " ") {
         evento.preventDefault();
-        abrir();
+        abrirReferenciaDiaria();
       }
     };
   } catch (erro) {
-    console.error("Erro ao carregar o versículo do dia da aba VersiculoDia:", erro);
+    console.error("Erro ao carregar o Versículo do Dia:", erro);
     textoEl.textContent = "Não foi possível carregar o versículo do dia.";
-    referenciaEl.textContent = "Verifique a aba VersiculoDia e a implantação do Apps Script.";
-    referenciaEl.style.cursor = "default";
-    referenciaEl.removeAttribute("role");
-    referenciaEl.removeAttribute("tabindex");
+    referenciaEl.textContent = "Confira a aba VersiculoDia e a ação correspondente no Apps Script.";
   }
 }
 
