@@ -2220,41 +2220,74 @@ async function atualizarVersiculoDoDia() {
   textoEl.textContent = "Carregando versículo do dia...";
   referenciaEl.textContent = "";
 
-  try {
-    const resposta = await consultarAPI({ action: "versiculoDia" });
+  function extrairVersiculo(resposta) {
+    if (!resposta || typeof resposta !== "object") return null;
     const texto = String(resposta.texto || resposta.versiculo || "").trim();
-    const referencia = String(resposta.referencia || resposta.ref || "").trim();
-
-    if (!texto || !referencia) {
-      throw new Error("A aba VersiculoDia não retornou texto e referência.");
+    let referencia = String(resposta.referencia || resposta.ref || "").trim();
+    if (!referencia) {
+      const nomeLivro = String(
+        resposta.nomeLivro ||
+        (resposta.livro && (resposta.livro.nomeLivro || resposta.livro.nome || resposta.livro.livro)) ||
+        ""
+      ).trim();
+      const capitulo = Number(resposta.capitulo);
+      const versiculo = Number(resposta.versiculoNumero || resposta.numeroVersiculo || resposta.ver);
+      if (nomeLivro && capitulo > 0 && versiculo > 0) {
+        referencia = nomeLivro + " " + capitulo + ":" + versiculo;
+      }
     }
-
-    textoEl.textContent = texto;
-    referenciaEl.textContent = referencia;
-    referenciaEl.setAttribute("role", "button");
-    referenciaEl.setAttribute("tabindex", "0");
-    referenciaEl.setAttribute("title", "Clique para abrir esta referência na Bíblia");
-    referenciaEl.style.cursor = "pointer";
-
-    const abrirReferenciaDiaria = function () {
-      if (typeof abrirReferencia === "function") {
-        abrirReferencia(referencia);
-      } else if (typeof navegarParaReferencia === "function") {
-        navegarParaReferencia(referencia);
-      }
-    };
-    referenciaEl.onclick = abrirReferenciaDiaria;
-    referenciaEl.onkeydown = function (evento) {
-      if (evento.key === "Enter" || evento.key === " ") {
-        evento.preventDefault();
-        abrirReferenciaDiaria();
-      }
-    };
-  } catch (erro) {
-    console.error("Erro ao carregar o Versículo do Dia:", erro);
-    textoEl.textContent = "Não foi possível carregar o versículo do dia.";
-    referenciaEl.textContent = "Confira a aba VersiculoDia e a ação correspondente no Apps Script.";
+    return texto && referencia ? { texto, referencia } : null;
   }
+
+  let dados = null;
+  let erroPrincipal = null;
+
+  // Primeiro tenta a rota específica da aba VersiculoDia.
+  try {
+    dados = extrairVersiculo(await consultarAPI({ action: "versiculoDia" }));
+  } catch (erro) {
+    erroPrincipal = erro;
+    console.warn("A ação versiculoDia falhou; tentando a rota diario.", erro);
+  }
+
+  // Compatibilidade com implantações anteriores do Apps Script.
+  if (!dados) {
+    try {
+      dados = extrairVersiculo(await consultarAPI({ action: "diario" }));
+    } catch (erroAlternativo) {
+      console.error("A ação diario também falhou:", erroAlternativo);
+      if (!erroPrincipal) erroPrincipal = erroAlternativo;
+    }
+  }
+
+  if (!dados) {
+    console.error("Não foi possível carregar o Versículo do Dia.", erroPrincipal);
+    textoEl.textContent = "Não foi possível carregar o versículo do dia.";
+    referenciaEl.textContent = "Verifique a publicação do Apps Script e as abas Texto e VersiculoDia.";
+    return;
+  }
+
+  textoEl.textContent = dados.texto;
+  referenciaEl.textContent = dados.referencia;
+  referenciaEl.setAttribute("role", "button");
+  referenciaEl.setAttribute("tabindex", "0");
+  referenciaEl.setAttribute("title", "Clique para abrir esta referência na Bíblia");
+  referenciaEl.style.cursor = "pointer";
+
+  const abrirReferenciaDiaria = function () {
+    if (typeof abrirReferencia === "function") {
+      abrirReferencia(dados.referencia);
+    } else if (typeof navegarParaReferencia === "function") {
+      navegarParaReferencia(dados.referencia);
+    }
+  };
+  referenciaEl.onclick = abrirReferenciaDiaria;
+  referenciaEl.onkeydown = function (evento) {
+    if (evento.key === "Enter" || evento.key === " ") {
+      evento.preventDefault();
+      abrirReferenciaDiaria();
+    }
+  };
 }
 
 /* =====================================================
