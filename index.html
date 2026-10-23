@@ -440,12 +440,8 @@
     <!-- VERSÍCULO DO DIA -->
     <section class="versiculo-diario">
       <h2>✨ Versículo do dia</h2>
-      <p id="textoDiario">
-        Lâmpada para os meus pés é tua palavra e luz, para o meu caminho.
-      </p>
-      <span class="referencia" id="referenciaDiaria">
-        Salmos 119:105
-      </span>
+      <p id="textoDiario">Carregando versículo do dia...</p>
+      <span class="referencia" id="referenciaDiaria"></span>
     </section>
 
     <!-- SELEÇÃO DE LIVRO E CAPÍTULO -->
@@ -2156,9 +2152,64 @@ document
   .addEventListener("click", compartilharVersiculo);
 
 /* =====================================================
+   VERSÍCULO DO DIA
+   Escolhe um versículo de acordo com o dia do ano local.
+   O texto permanece igual durante o dia e muda no dia seguinte.
+===================================================== */
+const VERSICULOS_DO_DIA = [
+  { texto: "O Senhor é o meu pastor; nada me faltará.", referencia: "Salmos 23:1" },
+  { texto: "Tudo posso naquele que me fortalece.", referencia: "Filipenses 4:13" },
+  { texto: "O Senhor é a minha luz e a minha salvação; a quem temerei?", referencia: "Salmos 27:1" },
+  { texto: "Confia no Senhor de todo o teu coração e não te estribes no teu próprio entendimento.", referencia: "Provérbios 3:5" },
+  { texto: "Entrega o teu caminho ao Senhor; confia nele, e ele tudo fará.", referencia: "Salmos 37:5" },
+  { texto: "O amor é paciente, o amor é bondoso.", referencia: "1 Coríntios 13:4" },
+  { texto: "Aquietai-vos e sabei que eu sou Deus.", referencia: "Salmos 46:10" },
+  { texto: "Não temas, porque eu sou contigo; não te assombres, porque eu sou teu Deus.", referencia: "Isaías 41:10" },
+  { texto: "Buscai primeiro o Reino de Deus e a sua justiça.", referencia: "Mateus 6:33" },
+  { texto: "A tua palavra é lâmpada para os meus pés e luz para o meu caminho.", referencia: "Salmos 119:105" },
+  { texto: "O Senhor é bom, uma fortaleza no dia da angústia.", referencia: "Naum 1:7" },
+  { texto: "Regozijai-vos sempre.", referencia: "1 Tessalonicenses 5:16" },
+  { texto: "Lança o teu cuidado sobre o Senhor, e ele te susterá.", referencia: "Salmos 55:22" },
+  { texto: "Sede fortes e corajosos; não temais, nem vos espanteis.", referencia: "Deuteronômio 31:6" },
+  { texto: "Porque andamos por fé, e não por vista.", referencia: "2 Coríntios 5:7" },
+  { texto: "A resposta branda desvia o furor.", referencia: "Provérbios 15:1" },
+  { texto: "Alegrai-vos na esperança, sede pacientes na tribulação, perseverai na oração.", referencia: "Romanos 12:12" },
+  { texto: "O Senhor pelejará por vós, e vós vos calareis.", referencia: "Êxodo 14:14" },
+  { texto: "Bem-aventurados os limpos de coração, porque eles verão a Deus.", referencia: "Mateus 5:8" },
+  { texto: "Em tudo dai graças.", referencia: "1 Tessalonicenses 5:18" },
+  { texto: "A minha graça te basta, porque o meu poder se aperfeiçoa na fraqueza.", referencia: "2 Coríntios 12:9" },
+  { texto: "O choro pode durar uma noite, mas a alegria vem pela manhã.", referencia: "Salmos 30:5" },
+  { texto: "Perto está o Senhor dos que têm o coração quebrantado.", referencia: "Salmos 34:18" },
+  { texto: "A fé é o firme fundamento das coisas que se esperam.", referencia: "Hebreus 11:1" },
+  { texto: "O Senhor te abençoe e te guarde.", referencia: "Números 6:24" },
+  { texto: "Deleita-te também no Senhor, e ele te concederá os desejos do teu coração.", referencia: "Salmos 37:4" },
+  { texto: "Aquele que começou boa obra em vós há de completá-la.", referencia: "Filipenses 1:6" },
+  { texto: "Se Deus é por nós, quem será contra nós?", referencia: "Romanos 8:31" },
+  { texto: "O Senhor é a minha força e o meu escudo.", referencia: "Salmos 28:7" },
+  { texto: "Pedi, e dar-se-vos-á; buscai, e encontrareis.", referencia: "Mateus 7:7" },
+  { texto: "Alegrai-vos sempre no Senhor; outra vez digo: alegrai-vos.", referencia: "Filipenses 4:4" }
+];
+
+function atualizarVersiculoDoDia() {
+  const textoEl = document.getElementById("textoDiario");
+  const referenciaEl = document.getElementById("referenciaDiaria");
+  if (!textoEl || !referenciaEl) return;
+
+  const agora = new Date();
+  const inicioAno = new Date(agora.getFullYear(), 0, 0);
+  const diaDoAno = Math.floor((agora - inicioAno) / 86400000);
+  const indice = (diaDoAno - 1) % VERSICULOS_DO_DIA.length;
+  const versiculo = VERSICULOS_DO_DIA[indice];
+
+  textoEl.textContent = versiculo.texto;
+  referenciaEl.textContent = versiculo.referencia;
+}
+
+/* =====================================================
    INICIALIZAÇÃO
 ===================================================== */
 
+atualizarVersiculoDoDia();
 renderizarFavoritos();
 
 console.log("Recursos da Bíblia King James inicializados.");
