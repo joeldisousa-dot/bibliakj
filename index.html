@@ -447,6 +447,16 @@
         font-size: 16px;
       }
     }
+
+    .nota-leitura-voz {
+      margin: 0 0 14px;
+      color: var(--cor-texto-suave);
+      font-size: 13px;
+    }
+    #btnOuvirCapitulo:disabled, #btnPausarVoz:disabled, #btnPararVoz:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
   </style>
 </head>
 
@@ -576,7 +586,15 @@
           >
             Compartilhar
           </button>
-
+          <button class="botao botao-principal" id="btnOuvirCapitulo" type="button" disabled>
+            🔊 Ouvir capítulo
+          </button>
+          <button class="botao botao-secundario" id="btnPausarVoz" type="button" disabled>
+            ⏸ Pausar
+          </button>
+          <button class="botao botao-secundario" id="btnPararVoz" type="button" disabled>
+            ■ Parar
+          </button>
         </div>
       </div>
 
@@ -588,6 +606,9 @@
         Escolha um livro e um capítulo para começar a leitura.
       </div>
 
+      <p id="statusLeituraVoz" class="nota-leitura-voz" aria-live="polite">
+        Selecione um capítulo para ouvir a leitura em voz alta.
+      </p>
       <div
         id="listaVersiculos"
         class="lista-versiculos"
@@ -2356,6 +2377,143 @@ document.querySelectorAll(".botao-cor").forEach(btn=>btn.addEventListener("click
 document.getElementById("removerMarcacao").addEventListener("click",()=>{const sel=window.getSelection();const artigo=sel?.anchorNode?.parentElement?.closest(".versiculo");if(!artigo){document.getElementById("statusMarcacao").textContent="Selecione um trecho marcado para removê-lo.";return;}const chave=chaveVersiculo(artigo),dados=obterMarcacoes(),texto=sel.toString().trim();if(texto&&dados[chave]){dados[chave]=dados[chave].filter(x=>x.texto!==texto);if(!dados[chave].length)delete dados[chave];salvarJSONLocal(chaveMarcacoes,dados);aplicarMarcacoesNoArtigo(artigo);sel.removeAllRanges();document.getElementById("statusMarcacao").textContent="Marcação removida.";}else document.getElementById("statusMarcacao").textContent="Selecione o texto marcado que deseja remover.";});
 document.getElementById("verLegendaCores").addEventListener("click",()=>{const el=document.getElementById("legendaCores");el.classList.toggle("oculto");if(!el.childElementCount){Object.entries(CORES_MARCACAO).forEach(([nome,d])=>{const div=document.createElement("div");div.className="item-legenda";div.style.background=d.cor;div.style.color=d.texto;div.textContent=`${nome}: ${d.descricao}`;el.appendChild(div);});}});
 
+</script>
+
+
+<script>
+/* =====================================================
+   LEITURA EM VOZ ALTA DO CAPÍTULO
+   Usa a voz disponível no navegador (Web Speech API).
+===================================================== */
+(function configurarLeituraEmVozAlta() {
+  const btnOuvir = document.getElementById("btnOuvirCapitulo");
+  const btnPausar = document.getElementById("btnPausarVoz");
+  const btnParar = document.getElementById("btnPararVoz");
+  const status = document.getElementById("statusLeituraVoz");
+  if (!btnOuvir || !btnPausar || !btnParar || !status) return;
+
+  const suportaVoz = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  let fila = [];
+  let indiceAtual = 0;
+  let emExecucao = false;
+  let pausada = false;
+  let identificador = 0;
+
+  if (!suportaVoz) {
+    status.textContent = "Este navegador não oferece suporte à leitura em voz alta.";
+    btnOuvir.disabled = true;
+    return;
+  }
+
+  function atualizarBotoes() {
+    btnOuvir.disabled = !Array.isArray(versiculosAtuais) || versiculosAtuais.length === 0 || emExecucao;
+    btnPausar.disabled = !emExecucao;
+    btnParar.disabled = !emExecucao;
+    btnPausar.textContent = pausada ? "▶ Continuar" : "⏸ Pausar";
+  }
+
+  function pararLeitura(mensagem) {
+    identificador++;
+    window.speechSynthesis.cancel();
+    fila = [];
+    indiceAtual = 0;
+    emExecucao = false;
+    pausada = false;
+    atualizarBotoes();
+    if (mensagem) status.textContent = mensagem;
+  }
+
+  function falarProximo(id) {
+    if (id !== identificador || !emExecucao || pausada) return;
+    if (indiceAtual >= fila.length) {
+      pararLeitura("Leitura do capítulo concluída.");
+      return;
+    }
+
+    const item = fila[indiceAtual];
+    const fala = new SpeechSynthesisUtterance(item.texto);
+    fala.lang = "pt-BR";
+    fala.rate = 1;
+    fala.pitch = 1;
+    fala.volume = 1;
+
+    const vozes = window.speechSynthesis.getVoices();
+    const vozPortugues = vozes.find(v => /^pt-BR$/i.test(v.lang)) ||
+      vozes.find(v => /^pt/i.test(v.lang));
+    if (vozPortugues) fala.voice = vozPortugues;
+
+    status.textContent = "Lendo " + item.referencia + "… (" + (indiceAtual + 1) + "/" + fila.length + ")";
+    fala.onend = function() {
+      if (id !== identificador) return;
+      indiceAtual++;
+      falarProximo(id);
+    };
+    fala.onerror = function(evento) {
+      if (id !== identificador || evento.error === "canceled" || evento.error === "interrupted") return;
+      pararLeitura("A leitura por voz foi interrompida pelo navegador. Toque em Ouvir capítulo para tentar novamente.");
+    };
+    window.speechSynthesis.speak(fala);
+  }
+
+  btnOuvir.addEventListener("click", function() {
+    if (!Array.isArray(versiculosAtuais) || !versiculosAtuais.length || !livroAtual || !capituloAtual) {
+      status.textContent = "Primeiro selecione um capítulo bíblico.";
+      return;
+    }
+    pararLeitura("");
+    fila = versiculosAtuais.map(function(v, i) {
+      const numero = obterNumeroVersiculo(v, i);
+      const texto = obterTextoVersiculo(v);
+      return { referencia: livroAtual.nome + " " + capituloAtual + ":" + numero,
+        texto: texto ? "Versículo " + numero + ". " + texto : "" };
+    }).filter(item => item.texto);
+    if (!fila.length) {
+      status.textContent = "Não há texto disponível para leitura neste capítulo.";
+      atualizarBotoes();
+      return;
+    }
+    identificador++;
+    indiceAtual = 0;
+    emExecucao = true;
+    pausada = false;
+    atualizarBotoes();
+    falarProximo(identificador);
+  });
+
+  btnPausar.addEventListener("click", function() {
+    if (!emExecucao) return;
+    if (pausada) {
+      pausada = false;
+      window.speechSynthesis.resume();
+      atualizarBotoes();
+      status.textContent = "Retomando a leitura…";
+    } else {
+      pausada = true;
+      window.speechSynthesis.pause();
+      atualizarBotoes();
+      status.textContent = "Leitura pausada.";
+    }
+  });
+
+  btnParar.addEventListener("click", function() {
+    pararLeitura("Leitura interrompida.");
+  });
+
+  // Ao trocar de capítulo, interrompe a leitura anterior.
+  const seletorLivro = document.getElementById("livro");
+  const seletorCapitulo = document.getElementById("capitulo");
+  seletorLivro?.addEventListener("change", () => pararLeitura("Selecione um capítulo para ouvir."));
+  seletorCapitulo?.addEventListener("change", () => pararLeitura("Carregando capítulo…"));
+
+  // Atualiza a disponibilidade quando um capítulo terminar de carregar.
+  const lista = document.getElementById("listaVersiculos");
+  if (lista && "MutationObserver" in window) {
+    new MutationObserver(() => {
+      if (!emExecucao) atualizarBotoes();
+    }).observe(lista, { childList: true });
+  }
+  atualizarBotoes();
+})();
 </script>
 
 </body>
