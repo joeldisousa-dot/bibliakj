@@ -398,7 +398,8 @@
       padding: 20px 16px;
       text-align: center;
       color: var(--cor-texto-suave);
-      font-size: 13px;
+
+          font-size: 13px;
     }
 
     .oculto {
@@ -799,7 +800,7 @@
 
         <div class="estudos-campo">
 
-            <label for="estudoConteudo">
+                      <label for="estudoConteudo">
                 Conteúdo do estudo
             </label>
 
@@ -888,12 +889,6 @@
   <footer class="rodape">
     Bíblia King James — leitura e estudo bíblico
   </footer>
-  <script>
-/* ==========================================
-   ESTUDOS COMPLEMENTARES - JAVASCRIPT
-========================================== */
-
-let estudosCadastrados = [];
 
 <script>
 /* ==========================================
@@ -911,52 +906,43 @@ function inicializarSeletorEstudos() {
         return;
     }
 
-    // Limpa as opções anteriores
     seletor.innerHTML = '';
 
-    // Opção inicial
     const opcaoInicial = document.createElement('option');
     opcaoInicial.value = '';
     opcaoInicial.textContent = 'Selecione um livro';
     seletor.appendChild(opcaoInicial);
 
-    // Verifica a lista oficial dos 66 livros
-    if (!Array.isArray(LIVROS) || LIVROS.length !== 66) {
-        console.error('A lista de livros da Bíblia não está disponível.');
+    // Utiliza a lista principal de livros da Bíblia King James.
+    if (!Array.isArray(LIVROS) || LIVROS.length === 0) {
+
+        console.error('A lista LIVROS ainda não está disponível.');
+
+        opcaoInicial.textContent = 'Livros não carregados';
+
         return;
     }
 
-    // Antigo Testamento
-    const grupoAntigo = document.createElement('optgroup');
-    grupoAntigo.label = 'Antigo Testamento';
+    LIVROS.forEach(livro => {
 
-    // Novo Testamento
-    const grupoNovo = document.createElement('optgroup');
-    grupoNovo.label = 'Novo Testamento';
+        const nome = String(livro.nome || '').trim();
 
-    LIVROS.forEach((livro, indice) => {
+        if (!nome) return;
 
         const opcao = document.createElement('option');
 
-        // Usa o nome do livro como valor
-        opcao.value = livro.nome;
-        opcao.textContent = livro.nome;
+        opcao.value = nome;
+        opcao.textContent = nome;
 
-        if (indice < 39) {
-            grupoAntigo.appendChild(opcao);
-        } else {
-            grupoNovo.appendChild(opcao);
-        }
+        seletor.appendChild(opcao);
 
     });
 
-    seletor.appendChild(grupoAntigo);
-    seletor.appendChild(grupoNovo);
-
     console.log(
         'Livros carregados no seletor de estudos:',
-        LIVROS.length
+        seletor.options.length - 1
     );
+
 }
 
 
@@ -1209,7 +1195,8 @@ async function excluirEstudo(id) {
     if (!estudo) return;
 
     if (!confirm('Deseja excluir o estudo "' + estudo.titulo + '"?')) {
-        return;
+
+          return;
     }
 
     try {
@@ -1229,7 +1216,10 @@ async function excluirEstudo(id) {
 
     }
 
-} 
+}
+
+</script>
+
 <script>
 /* =====================================================
    BÍBLIA KING JAMES — PARTE 2
@@ -1508,18 +1498,17 @@ function localizarLivro(nome) {
     );
   }) || null;
 }
+
 /* =====================================================
    PREPARAR A INTERFACE
 ===================================================== */
 
 preencherLivros();
-
-// Preenche o seletor de livros dos Estudos Complementares
 inicializarSeletorEstudos();
 
 console.log("Livros bíblicos carregados:", LIVROS.length);
-console.log("Seletor de estudos inicializado.");
 console.log("Configuração da Bíblia King James concluída.");
+</script>
 
 <script>
 /* =====================================================
@@ -1611,7 +1600,8 @@ async function consultarAPI(parametros) {
 
   const url =
     API_URL +
-    (API_URL.includes("?") ? "&" : "?") +
+
+        (API_URL.includes("?") ? "&" : "?") +
     query;
 
   const resposta = await consultarJSONP(url);
@@ -1659,7 +1649,6 @@ function obterCodigoLivro(nomeLivro) {
     ? String(registro.codigo || registro.livro).trim()
     : "";
 }
-
 
 /* =====================================================
    INTERPRETAR RESPOSTAS DA API
@@ -1883,8 +1872,6 @@ async function abrirReferencia(referencia) {
   A ação correta precisa ser confirmada no Apps Script.
 */
 
-
-
 async function carregarCapitulo() {
   const indiceLivro = Number(elementoLivro.value);
   const numeroCapitulo = Number(elementoCapitulo.value);
@@ -1983,9 +1970,6 @@ async function carregarCapitulo() {
   }
 }
 
-
-
-
 /* =====================================================
    ESTUDO DE PALAVRAS: SINÔNIMOS E REFERÊNCIAS BÍBLICAS
 ===================================================== */
@@ -2011,7 +1995,8 @@ const SINONIMOS_BIBLICOS = {
   "misericórdia": ["compaixão", "clemência", "bondade"],
   "misericordia": ["compaixão", "clemência", "bondade"],
   "perdão": ["remissão", "absolvição", "reconciliação"],
-  "perdao": ["remissão", "absolvição", "reconciliação"],
+
+    "perdao": ["remissão", "absolvição", "reconciliação"],
   "pecado": ["transgressão", "iniquidade", "desobediência"],
   "salvação": ["livramento", "redenção", "libertação"],
   "salvacao": ["livramento", "redenção", "libertação"],
@@ -2361,7 +2346,8 @@ function renderizarVersiculos(lista) {
   const fragmento = document.createDocumentFragment();
 
   lista.forEach(function(versiculo, indice) {
-    const numero = obterNumeroVersiculo(versiculo, indice);
+
+                    const numero = obterNumeroVersiculo(versiculo, indice);
     const texto = obterTextoVersiculo(versiculo);
 
     if (!texto) return;
@@ -2546,9 +2532,6 @@ document
 /* =====================================================
    PESQUISA BÍBLICA
 ===================================================== */
-
-
-
 
 function extrairResultadosPesquisa(resposta) {
   if (Array.isArray(resposta)) {
@@ -2761,7 +2744,8 @@ async function compartilharVersiculo() {
 
   if (navigator.share) {
     try {
-      await navigator.share({
+
+          await navigator.share({
         title: "Bíblia King James",
         text: texto,
         url: url
@@ -2910,7 +2894,6 @@ async function atualizarVersiculoDoDia() {
   };
 }
 
-  
 /* =====================================================
    INICIALIZAÇÃO
 ===================================================== */
@@ -2922,77 +2905,1143 @@ console.log("Recursos da Bíblia King James inicializados.");
 /* =====================================================
    RECURSOS INTEGRADOS DA BÍBLIA PY
 ===================================================== */
-const LEITURAS_PLANO = [["A Palavra Criadora e a Luz", "Gênesis 1:1-5", "João 1:1-5"], ["A Imagem de Deus e Cristo", "Gênesis 1:26-31", "Colossenses 1:15-17"], ["O Descanso de Deus", "Gênesis 2:1-3", "Hebreus 4:9-11"], ["O Casamento no Éden e a Igreja", "Gênesis 2:15-25", "Efésios 5:25-32"], ["A Origem da Tentação e a Queda", "Gênesis 3:1-7", "Tiago 1:13-15"], ["A Primeira Promessa do Redentor", "Gênesis 3:8-15", "Romanos 16:20; Gálatas 4:4-5"], ["As Vestes de Pele e a Justiça", "Gênesis 3:21-24", "2 Coríntios 5:21"], ["A Fé de Abel e o Caminho de Caim", "Gênesis 4:1-10", "Hebreus 11:4; 1 João 3:11-12"], ["Enoque Andou com Deus", "Gênesis 5:21-24", "Hebreus 11:5-6"], ["Os Dias de Noé e a Vinda de Cristo", "Gênesis 6:5-14", "Lucas 17:26-27"], ["A Arca como Símbolo de Salvação", "Gênesis 7:11-24", "1 Pedro 3:20-21"], ["O Sacrifício de Cheiro Suave", "Gênesis 8:20-22", "Efésios 5:2"], ["O Arco da Aliança ao Redor do Trono", "Gênesis 9:8-17", "Apocalipse 4:3"], ["Babel e Pentecostes", "Gênesis 11:1-9", "Atos 2:1-11"], ["A Glória do Homem Cumprida em Jesus", "Salmos 8:1-9", "Hebreus 2:5-9"], ["A Criação Revela a Glória de Deus", "Salmos 19:1-6", "Romanos 1:19-20"], ["O Universo Formado pela Palavra", "Salmos 33:6-9", "Hebreus 11:3"], ["Aquele que Comanda os Mares", "Jó 38:1-11", "Marcos 4:39-41"], ["A Sabedoria Eterna de Deus", "Provérbios 8:22-31", "1 Coríntios 1:24, 30"], ["O Criador que Dá Forças ao Cansado", "Isaías 40:25-31", "Mateus 11:28-30"], ["Todo Joelho se Dobrará", "Isaías 45:18-22", "Filipenses 2:9-11"], ["Novos Céus e Nova Terra Prometidos", "Isaías 65:17-19", "2 Pedro 3:13"], ["O Primeiro Adão e o Último Adão", "Gênesis 2:7", "1 Coríntios 15:45-49"], ["A Entrada do Pecado e da Graça", "Gênesis 3:6, 17-19", "Romanos 5:12-15"], ["A Árvore da Vida Restaurada", "Gênesis 2:9; 3:22", "Apocalipse 22:1-2"], ["Deus Cria a Luz nas Trevas", "Gênesis 1:3", "2 Coríntios 4:6"], ["A Soberania do Oleiro", "Isaías 64:8", "Romanos 9:20-21"], ["O Sustento Diário da Criação", "Salmos 104:24-30", "Mateus 6:26-30"], ["A Bondade Original da Criação", "Gênesis 1:31", "1 Timóteo 4:4-5"], ["A Promessa da Vitória sobre a Morte", "Isaías 25:8", "1 Coríntios 15:54-57"], ["Louvor ao Criador Eterno", "Salmos 148:1-14", "Apocalipse 4:11"], ["O Chamado de Abraão pela Fé", "Gênesis 12:1-4", "Hebreus 11:8-10"], ["Todas as Famílias Abençoadas", "Gênesis 12:3", "Gálatas 3:8-9"], ["A Escolha de Ló e a Visão da Fé", "Gênesis 13:10-17", "2 Coríntios 4:18"], ["Melquisedeque e o Sacerdócio Eterno", "Gênesis 14:18-20", "Hebreus 7:1-3"], ["Justificado pela Fé", "Gênesis 15:1-6", "Romanos 4:1-5"], ["O Deus que Vê (El Roi)", "Gênesis 16:7-13", "João 1:48-50"], ["Pai de Muitas Nações", "Gênesis 17:1-8", "Romanos 4:16-17"], ["Nada é Impossível para Deus", "Gênesis 18:1-14", "Lucas 1:34-37"], ["A Intercessão pelos Justos", "Gênesis 18:22-33", "Tiago 5:16"], ["O Juízo sobre Sodoma e o Alerta", "Gênesis 19:24-29", "Lucas 17:28-32"], ["O Filho da Promessa", "Gênesis 21:1-7", "Gálatas 4:28"], ["O Sacrifício no Monte Moriá", "Gênesis 22:1-14", "Hebreus 11:17-19; João 3:16"], ["A Fé Aprovada pelas Obras", "Gênesis 22:15-18", "Tiago 2:21-23"], ["Peregrinos na Terra", "Gênesis 23:3-4", "Hebreus 11:13-16"], ["A Direção de Deus no Casamento", "Gênesis 24:12-27", "Provérbios 3:5-6"], ["O Valor da Primogenitura", "Gênesis 25:29-34", "Hebreus 12:16-17"], ["A Escada de Jacó e o Filho do Homem", "Gênesis 28:10-17", "João 1:51"], ["A Graça da Eleição Divina", "Gênesis 25:23", "Romanos 9:10-13"], ["Lutando com Deus em Oração", "Gênesis 32:24-30", "Lucas 18:1-8"], ["A Reconciliação entre Irmãos", "Gênesis 33:1-11", "Mateus 5:23-24"], ["A Fidelidade de José na Tentação", "Gênesis 39:7-12", "1 Coríntios 10:13"], ["Deus Transforma o Mal em Bem", "Gênesis 50:19-21", "Romanos 8:28"], ["A Fé de José no Êxodo Futuro", "Gênesis 50:24-25", "Hebreus 11:22"], ["O Deus de Abraão, Isaque e Jacó", "Êxodo 3:6", "Marcos 12:26-27"], ["A Descendência é Cristo", "Gênesis 22:18", "Gálatas 3:16"], ["Hagar e Sara: Lei e Graça", "Gênesis 21:9-12", "Gálatas 4:22-26"], ["A Bênção dos Filhos pela Fé", "Gênesis 48:15-16", "Hebreus 11:21"], ["Fidelidade Eterna da Aliança", "Salmos 105:7-11", "Lucas 1:68-75"], ["O Nascimento de Moisés pela Fé", "Êxodo 2:1-10", "Hebreus 11:23"], ["A Escolha de Sofrer com o Povo de Deus", "Êxodo 2:11-15", "Hebreus 11:24-26"], ["A Sarça Ardente e o EU SOU", "Êxodo 3:1-14", "João 8:56-58"], ["A Suficiência de Deus na Fraqueza", "Êxodo 4:10-12", "2 Coríntios 12:9"], ["O Endurecimento do Coração", "Êxodo 7:1-5", "Romanos 9:17-18"], ["O Cordeiro Pascal sem Defeito", "Êxodo 12:1-13", "1 Pedro 1:18-19; 1 Coríntios 5:7"], ["Nenhum Osso Quebrado", "Êxodo 12:46", "João 19:33-36"], ["A Páscoa e a Ceia do Senhor", "Êxodo 12:14-20", "Lucas 22:14-20"], ["A Coluna de Nuvem e Fogo", "Êxodo 13:21-22", "João 8:12"], ["A Travessia do Mar Vermelho", "Êxodo 14:21-31", "1 Coríntios 10:1-2; Hebreus 11:29"], ["O Cântico de Moisés e do Cordeiro", "Êxodo 15:1-6", "Apocalipse 15:2-4"], ["As Águas Amargas Transformadas", "Êxodo 15:22-26", "1 Pedro 2:24"], ["O Maná do Céu e o Pão da Vida", "Êxodo 16:11-18", "João 6:31-35"], ["A Rocha Ferida que Dá Água", "Êxodo 17:1-7", "1 Coríntios 10:3-4; João 7:37-38"], ["Mãos Levantadas em Intercessão", "Êxodo 17:8-13", "1 Timóteo 2:1, 8"], ["A Delegação de Liderança", "Êxodo 18:17-24", "Atos 6:1-4"], ["Reino de Sacerdotes e Nação Santa", "Êxodo 19:3-6", "1 Pedro 2:9"], ["Os Dez Mandamentos: Amar a Deus", "Êxodo 20:1-11", "Mateus 22:37-38"], ["Os Dez Mandamentos: Amar ao Próximo", "Êxodo 20:12-17", "Romanos 13:8-10"], ["O Medo no Sinai e a Graça em Sião", "Êxodo 20:18-21", "Hebreus 12:18-24"], ["O Sangue da Aliança", "Êxodo 24:6-8", "Mateus 26:27-28"], ["O Tabernáculo e o Verbo Habitando", "Êxodo 25:8-9", "João 1:14"], ["A Arca da Aliança e o Propiciatório", "Êxodo 25:17-22", "Romanos 3:25"], ["O Pão da Presença", "Êxodo 25:23-30", "João 6:48-51"], ["O Candelabro de Ouro", "Êxodo 25:31-40", "Apocalipse 1:12-13, 20"], ["O Véu do Santuário Rasgado", "Êxodo 26:31-33", "Mateus 27:50-51; Hebreus 10:19-20"], ["O Altar de Incenso e as Orações", "Êxodo 30:1-8", "Apocalipse 8:3-4"], ["O Bezerro de Ouro e a Idolatria", "Êxodo 32:1-8", "1 Coríntios 10:6-7"], ["A Glória de Deus Mostrada a Moisés", "Êxodo 33:18-23", "2 Coríntios 3:18"], ["O Rosto Resplandecente de Moisés", "Êxodo 34:29-35", "2 Coríntios 3:7-13"], ["A Glória Enche o Tabernáculo", "Êxodo 40:34-38", "Efésios 2:19-22"], ["O Holocausto Total a Deus", "Levítico 1:3-9", "Romanos 12:1"], ["A Oferta de Paz e Reconciliação", "Levítico 3:1-5", "Efésios 2:14-16"], ["Sem Derramamento de Sangue Não Há Perdão", "Levítico 17:11", "Hebreus 9:22"], ["O Fogo Estranho e a Reverência", "Levítico 10:1-3", "Hebreus 12:28-29"], ["Pureza Interior e Exterior", "Levítico 11:44-45", "1 Pedro 1:15-16"], ["A Purificação da Lepra", "Levítico 14:1-7", "Marcos 1:40-44"], ["O Dia da Expiação (Yom Kippur)", "Levítico 16:15-22", "Hebreus 9:11-14"], ["O Sacrifício Fora do Acampamento", "Levítico 16:27", "Hebreus 13:11-13"], ["Amarás o Teu Próximo como a Ti Mesmo", "Levítico 19:17-18", "Mateus 22:39-40; Tiago 2:8"], ["Justiça nos Pesos e Julgamentos", "Levítico 19:15, 35-36", "Tiago 2:1-4"], ["O Ano do Jubileu e a Liberdade", "Levítico 25:8-13", "Lucas 4:18-19"], ["Andarei no Meio de Vós", "Levítico 26:11-12", "2 Coríntios 6:16"], ["A Bênção Sacerdotal de Arão", "Números 6:22-27", "2 Coríntios 13:13"], ["O Voto de Nazireu e Consagração", "Números 6:1-8", "Atos 18:18; Romanos 6:13"], ["A Trombeta de Prata e o Chamado", "Números 10:1-10", "1 Coríntios 14:8; 1 Tessalonicenses 4:16"], ["A Murmuração no Deserto", "Números 11:4-6, 31-33", "1 Coríntios 10:5-6; Filipenses 2:14"], ["A Mansidão de Moisés", "Números 12:1-8", "Mateus 11:29; Hebreus 3:1-6"], ["Os Doze Espias e a Incredulidade", "Números 13:26-33", "Hebreus 3:16-19"], ["A Fé de Josué e Calebe", "Números 14:6-9", "Hebreus 4:1-3"], ["A Rebelião de Corá", "Números 16:1-3, 31-33", "Judas 1:11"], ["A Vara de Arão que Floresceu", "Números 17:1-8", "Hebreus 9:4"], ["A Novilha Vermelha e a Purificação", "Números 19:1-9", "Hebreus 9:13-14"], ["A Desobediência de Moisés nas Águas", "Números 20:7-12", "Salmos 106:32-33; Tiago 3:1"], ["A Serpente de Bronze Levantada", "Números 21:4-9", "João 3:14-15"], ["A Cobica de Balaão", "Números 22:15-22", "2 Pedro 2:15-16"], ["A Estrela que Procederá de Jacó", "Números 24:17", "Mateus 2:1-2; Apocalipse 22:16"], ["O Zelo de Fineias", "Números 25:10-13", "João 2:17"], ["O Pedido das Filhas de Zelofeade", "Números 27:1-7", "Gálatas 3:28"], ["A Nomeação de Josué como Pastor", "Números 27:15-20", "Mateus 9:36"], ["As Cidades de Refúgio", "Números 35:9-15", "Hebreus 6:18"], ["O Shema: O Senhor é o Único Deus", "Deuteronômio 6:4-9", "Marcos 12:29-30"], ["Não Só de Pão Viverá o Homem", "Deuteronômio 8:1-3", "Mateus 4:1-4"], ["Não Tentarás o Senhor Teu Deus", "Deuteronômio 6:16", "Mateus 4:5-7"], ["Só ao Senhor Adorarás", "Deuteronômio 6:13", "Mateus 4:8-10"], ["Lembra-te do Senhor na Prosperidade", "Deuteronômio 8:11-18", "1 Timóteo 6:17-19"], ["A Circuncisão do Coração", "Deuteronômio 10:16; 30:6", "Romanos 2:28-29"], ["O Profeta Semelhante a Moisés", "Deuteronômio 18:15-19", "Atos 3:22-23"], ["Maldito Todo Aquele Pendurado no Madeiro", "Deuteronômio 21:22-23", "Gálatas 3:13"], ["Não Amordaces o Boi que Debulha", "Deuteronômio 25:4", "1 Coríntios 9:9-10; 1 Timóteo 5:18"], ["As Primícias e a Gratidão", "Deuteronômio 26:1-11", "2 Coríntios 9:6-11"], ["Bênçãos da Obediência e Maldições", "Deuteronômio 28:1-6, 15", "Gálatas 3:10"], ["A Palavra Está Perto de Ti", "Deuteronômio 30:11-14", "Romanos 10:6-9"], ["Escolhe a Vida", "Deuteronômio 30:15-20", "João 14:6"], ["Nunca Te Deixarei Nem Te Abandonarei", "Deuteronômio 31:6-8", "Hebreus 13:5-6"], ["O Cântico de Moisés: Deus é Rocha", "Deuteronômio 32:1-4", "1 Coríntios 10:4"], ["A Morte de Moisés no Monte Nebo", "Deuteronômio 34:1-8", "Judas 1:9"], ["Sê Forte e Corajoso na Palavra", "Josué 1:1-9", "2 Timóteo 2:1, 15"], ["A Fé de Raabe e o Cordão Escarlate", "Josué 2:8-21", "Hebreus 11:31; Tiago 2:25"], ["A Travessia do Jordão", "Josué 3:14-17", "Marcos 1:9-11"], ["As Doze Pedras de Memorial", "Josué 4:1-9", "1 Pedro 2:4-5"], ["O Comandante do Exército do Senhor", "Josué 5:13-15", "Apocalipse 19:11-14"], ["A Queda das Muralhas de Jericó", "Josué 6:15-20", "Hebreus 11:30"], ["O Pecado de Acã e a Santidade", "Josué 7:10-13, 20-21", "Atos 5:1-11"], ["A Aliança no Monte Ebal e Gerizim", "Josué 8:30-35", "João 4:20-24"], ["O Engano dos Gibeonitas: Falta de Oração", "Josué 9:14-16", "Tiago 4:13-15"], ["O Sol se Detém em Gibeão", "Josué 10:12-14", "Tiago 5:17-18"], ["A Herança de Calebe aos 85 Anos", "Josué 14:6-14", "Filipenses 3:13-14"], ["Nenhuma Promessa Falhou", "Josué 21:43-45", "2 Coríntios 1:20"], ["Eu e a Minha Casa Serviremos ao Senhor", "Josué 24:14-15", "Atos 16:31-34"], ["A Fome de Pão na Era dos Juízes", "Rute 1:1-6, 16-17", "João 6:35"], ["Boaz, o Resgatador (Goel)", "Rute 4:9-17", "Mateus 1:5; Efésios 1:7"], ["A Oração de Ana e o Magnificat", "1 Samuel 2:1-10", "Lucas 1:46-55"], ["O Chamado do Jovem Samuel", "1 Samuel 3:1-10", "João 10:27"], ["A Arca Capturada: Glória Apartada", "1 Samuel 4:19-22", "Apocalipse 2:4-5"], ["O Pedido por um Rei como as Nações", "1 Samuel 8:4-9", "João 19:15"], ["Obedecer é Melhor que Sacrificar", "1 Samuel 15:22-23", "Marcos 12:33"], ["Deus Vê o Coração, Não a Aparência", "1 Samuel 16:6-13", "2 Coríntios 5:16; 1 Pedro 3:4"], ["Davi e Golias: A Batalha é do Senhor", "1 Samuel 17:45-50", "Efésios 6:10-13"], ["A Amizade de Davi e Jônatas", "1 Samuel 18:1-4", "João 15:13-15"], ["Davi Poupa a Vida de Saul", "1 Samuel 24:4-12", "Romanos 12:17-21"], ["A Sabedoria de Abigail", "1 Samuel 25:23-35", "Mateus 5:9"], ["Fortalecendo-se no Senhor em Ziclague", "1 Samuel 30:1-6", "Filipenses 4:13"], ["Davi Ungido Rei em Hebrom", "2 Samuel 5:1-5", "Atos 13:22-23"], ["A Reverência ao Transportar a Arca", "2 Samuel 6:6-15", "1 Coríntios 11:27-30"], ["A Aliança Davídica: Um Trono Eterno", "2 Samuel 7:12-16", "Lucas 1:31-33"], ["A Bondade com Mefibosete", "2 Samuel 9:1-8", "Efésios 2:4-7"], ["O Pecado de Davi e Bate-Seba", "2 Samuel 11:1-5, 26-27", "Tiago 1:14-15"], ["A Confrontação de Natã", "2 Samuel 12:1-7, 13", "Gálatas 6:1; 1 João 1:9"], ["O Salmo de Arrependimento", "Salmos 51:1-12", "Atos 3:19"], ["A Rebelião de Absalão e o Amor de Pai", "2 Samuel 18:31-33", "Lucas 15:20-24"], ["A Compra da Eira de Araúna", "2 Samuel 24:18-25", "1 Pedro 1:18-19"], ["O Pedido de Sabedoria de Salomão", "1 Reis 3:5-14", "Tiago 1:5; Mateus 6:33"], ["A Dedicação do Templo", "1 Reis 8:22-30", "1 Coríntios 3:16-17"], ["A Rainha de Sabá Visita Salomão", "1 Reis 10:1-9", "Mateus 12:42"], ["A Queda de Salomão pela Idolatria", "1 Reis 11:1-8", "1 Coríntios 10:12"], ["A Divisão do Reino", "1 Reis 12:12-17", "Marcos 3:24-25"], ["Elias e os Corvos no Ribeiro", "1 Reis 17:1-7", "Mateus 6:31-32"], ["A Viúva de Sarepta", "1 Reis 17:8-16", "Lucas 4:25-26"], ["Elias no Monte Carmelo", "1 Reis 18:21, 36-39", "Tiago 5:17-18"], ["A Voz Mansa e Delicada no Horebe", "1 Reis 19:9-13", "João 14:26-27"], ["O Arrebatamento de Elias", "2 Reis 2:9-12", "Lucas 24:50-51"], ["Os Dois Caminhos: Justos e Ímpios", "Salmos 1:1-6", "Mateus 7:13-14"], ["O Filho Ungido Reinando em Sião", "Salmos 2:1-12", "Atos 4:25-28; Hebreus 1:5"], ["O Bom Pastor", "Salmos 23:1-6", "João 10:11-15"], ["O Rei da Glória Entra", "Salmos 24:1-10", "Apocalipse 19:16"], ["A Alegria do Perdão", "Salmos 32:1-5", "Romanos 4:6-8"], ["Entrega o Teu Caminho ao Senhor", "Salmos 37:3-7", "1 Pedro 5:6-7"], ["Como a Corça Anseia pelas Águas", "Salmos 42:1-5", "João 4:13-14"], ["Deus é Nosso Refúgio e Fortaleza", "Salmos 46:1-11", "Romanos 8:31-39"], ["Cria em Mim um Coração Puro", "Salmos 51:10-17", "2 Coríntios 5:17"], ["A Sede da Alma por Deus", "Salmos 63:1-8", "Mateus 5:6"], ["A Glória do Reino do Messias", "Salmos 72:1-14", "Lucas 1:68-79"], ["A Inveja da Prosperidade dos Ímpios", "Salmos 73:1-3, 16-17, 25-26", "Lucas 12:15-21"], ["Um Dia nos Teus Átrios", "Salmos 84:1-12", "Apocalipse 21:3"], ["A Eternidade de Deus e a Brevidade Humana", "Salmos 90:1-12", "Tiago 4:14"], ["À Sombra do Onipotente", "Salmos 91:1-16", "Lucas 10:19"], ["Cântico Novo ao Senhor", "Salmos 96:1-13", "Apocalipse 5:9-10"], ["Entrai por Suas Portas com Ações de Graças", "Salmos 100:1-5", "Filipenses 4:4-7"], ["Não Te Esqueças de Seus Benefícios", "Salmos 103:1-14", "Efésios 1:3-7"], ["Assenta-te à Minha Direita", "Salmos 110:1-4", "Mateus 22:41-45; Hebreus 5:6"], ["A Pedra que os Construtores Rejeitaram", "Salmos 118:22-24", "Mateus 21:42; Atos 4:11"], ["Lâmpada para os Meus Pés", "Salmos 119:105-112", "2 Timóteo 3:16-17"], ["De Onde Vem o Meu Socorro", "Salmos 121:1-8", "Hebreus 4:16"], ["Se o Senhor Não Edificar a Casa", "Salmos 127:1-5", "1 Coríntios 3:9-11"], ["A União dos Irmãos", "Salmos 133:1-3", "João 17:20-23"], ["Conhecidos por Deus antes de Nascer", "Salmos 139:1-16", "Efésios 1:4"], ["O Temor do Senhor é o Princípio", "Provérbios 1:7; 9:10", "Colossenses 2:2-3"], ["Guarda o Teu Coração", "Provérbios 4:20-27", "Mateus 15:18-20"], ["A Disciplina do Pai Amoroso", "Provérbios 3:11-12", "Hebreus 12:5-7"], ["O Poder da Língua", "Provérbios 15:1; 18:21", "Tiago 3:2-10"], ["Tudo Tem o Seu Tempo", "Eclesiastes 3:1-11", "Gálatas 6:9"], ["Teme a Deus e Guarda os Mandamentos", "Eclesiastes 12:13-14", "2 Coríntios 5:10"], ["A Integridade de Jó na Perda", "Jó 1:20-22", "Tiago 5:11"], ["Receberemos o Bem e Não o Mal?", "Jó 2:9-10", "1 Pedro 4:12-13"], ["Eu Sei que o Meu Redentor Vive", "Jó 19:25-27", "1 Coríntios 15:20-23"], ["A Resposta de Deus na Tempestade", "Jó 42:1-6", "Romanos 11:33-36"], ["A Cura de Naamã pela Fé Simples", "2 Reis 5:9-14", "Lucas 4:27"], ["Os Carros de Fogo Invisíveis", "2 Reis 6:15-17", "2 Coríntios 4:16-18"], ["O Achado do Livro da Lei por Josias", "2 Reis 22:8-13", "Romanos 3:20"], ["A Oração de Ezequias e o Livramento", "2 Reis 19:14-19, 35", "2 Pedro 2:9"], ["A Fidelidade de Daniel na Dieta", "Daniel 1:8-17", "1 Coríntios 6:19-20"], ["A Estátua e a Pedra Não Cortada por Mãos", "Daniel 2:31-35, 44", "1 Pedro 2:6-7"], ["Os Três Jovens na Fornalha Ardente", "Daniel 3:16-25", "Hebreus 11:33-34"], ["O Orgulho de Nabucodonosor Abatido", "Daniel 4:28-37", "Tiago 4:6"], ["A Escrita na Parede (Mene, Mene)", "Daniel 5:22-30", "Lucas 12:20"], ["Daniel na Cova dos Leões", "Daniel 6:10, 16-23", "2 Timóteo 4:17"], ["O Filho do Homem Vindo nas Nuvens", "Daniel 7:13-14", "Mateus 24:30; Apocalipse 1:7"], ["A Oração de Confissão de Daniel", "Daniel 9:3-19", "1 João 1:8-9"], ["As Setenta Semanas Proféticas", "Daniel 9:24-27", "Marcos 1:15; Gálatas 4:4"], ["A Ressurreição para a Vida Eterna", "Daniel 12:1-3", "João 5:28-29"], ["A Fuga de Jonas e a Tempestade", "Jonas 1:1-17", "Mateus 8:23-27"], ["O Sinal de Jonas no Ventre do Peixe", "Jonas 2:1-10", "Mateus 12:39-40"], ["O Arrependimento de Nínive", "Jonas 3:4-10", "Mateus 12:41"], ["A Compaixão de Deus pelos Perdidos", "Jonas 4:1-11", "Lucas 15:1-7"], ["O Justo Viverá pela Fé", "Habacuque 2:1-4", "Romanos 1:17; Hebreus 10:37-38"], ["A Alegria Mesmo sem Colheita", "Habacuque 3:17-19", "Filipenses 4:11-13"], ["Ester: Para um Tempo como Este", "Ester 4:12-16", "Efésios 5:15-17"], ["A Providência Inverte o Decreto", "Ester 7:1-10", "Colossenses 2:14-15"], ["Não Desprezes o Dia dos Pequenos Começos", "Zacarias 4:6-10", "1 Coríntios 1:27-29"], ["As Misericórdias se Renovam a Cada Manhã", "Lamentações 3:21-26", "2 Coríntios 1:3-4"], ["A Fome da Palavra de Deus", "Amós 8:11-12", "João 6:63, 68"], ["O Senhor é Bom e Fortaleza na Angústia", "Naum 1:7", "João 16:33"], ["O Remanescente Fiel Preservado", "Sofonias 3:12-17", "Romanos 11:5"], ["O Chamado de Isaías: Santo, Santo, Santo", "Isaías 6:1-8", "João 12:39-41"], ["O Sinal do Emanuel (Deus Conosco)", "Isaías 7:14", "Mateus 1:20-23"], ["Luz nas Trevas da Galileia", "Isaías 9:1-2", "Mateus 4:13-16"], ["Um Menino Nos Nasceu: Príncipe da Paz", "Isaías 9:6-7", "Lucas 2:10-14"], ["O Renovo do Tronco de Jessé", "Isaías 11:1-5", "Romanos 15:12"], ["A Paz no Reino Messiânico", "Isaías 11:6-10", "Apocalipse 21:4"], ["O Cântico da Salvação", "Isaías 12:1-6", "João 4:10, 14"], ["A Chave de Davi", "Isaías 22:22", "Apocalipse 3:7"], ["A Pedra Angular Escolhida em Sião", "Isaías 28:16", "1 Pedro 2:4-6"], ["O Rei que Reinará com Justiça", "Isaías 32:1-4", "João 18:37"], ["Os Olhos dos Cegos Serão Abertos", "Isaías 35:3-6", "Mateus 11:2-5"], ["A Voz que Clama no Deserto", "Isaías 40:1-5", "Marcos 1:1-4"], ["A Palavra de Deus Permanece para Sempre", "Isaías 40:6-8", "1 Pedro 1:24-25"], ["O Servo que Não Quebra a Cana Ferida", "Isaías 42:1-4", "Mateus 12:17-21"], ["Luz para os Gentios", "Isaías 49:5-6", "Lucas 2:29-32; Atos 13:47"], ["O Servo Obediente no Sofrimento", "Isaías 50:4-7", "Mateus 26:67; 27:26"], ["O Servo Desfigurado e Exaltado", "Isaías 52:13-15", "Filipenses 2:7-9"], ["Desprezado e Rejeitado entre os Homens", "Isaías 53:1-3", "João 1:10-11; 12:37-38"], ["Traspassado pelas Nossas Transgressões", "Isaías 53:4-6", "1 Pedro 2:24-25"], ["Como Cordeiro Levado ao Matadouro", "Isaías 53:7-9", "Atos 8:32-35"], ["A Oferta pela Culpa e a Justificação", "Isaías 53:10-12", "Romanos 4:25; 2 Coríntios 5:21"], ["Vinde às Águas Gratuitamente", "Isaías 55:1-3", "Apocalipse 22:17"], ["Os Pensamentos de Deus Mais Altos", "Isaías 55:6-11", "Romanos 11:33"], ["O Jejum que Agrada a Deus", "Isaías 58:6-9", "Mateus 25:35-40"], ["O Espírito do Senhor Está Sobre Mim", "Isaías 61:1-3", "Lucas 4:16-21"], ["Belém Efrata: O Nascimento do Governante", "Miqueias 5:2-4", "Mateus 2:4-6"], ["O Que o Senhor Pede: Justiça e Misericórdia", "Miqueias 6:6-8", "Mateus 23:23"], ["O Rei Humilde Montado num Jumentinho", "Zacarias 9:9-10", "Mateus 21:4-5"], ["As Trinta Moedas de Prata", "Zacarias 11:12-13", "Mateus 26:14-15; 27:9"], ["Olharão para Aquele a Quem Traspassaram", "Zacarias 12:10", "João 19:34, 37"], ["Chamado antes do Nascimento", "Jeremias 1:4-10", "Gálatas 1:15-16"], ["Fontes de Águas Vivas Abandonadas", "Jeremias 2:13", "João 4:10; 7:37"], ["A Falácia da Religião Externa", "Jeremias 7:1-11", "Marcos 11:15-17"], ["O Engano do Coração Humano", "Jeremias 17:9-10", "Marcos 7:20-23; Apocalipse 2:23"], ["Bendito o Homem que Confia no Senhor", "Jeremias 17:5-8", "Salmos 1:1-3; João 15:5"], ["O Vaso na Casa do Oleiro", "Jeremias 18:1-6", "2 Timóteo 2:20-21"], ["O Senhor Justiça Nossa (Jeová Tsidkenu)", "Jeremias 23:5-6", "1 Coríntios 1:30"], ["Planos de Paz e Não de Mal", "Jeremias 29:11-14", "Romanos 8:28; Mateus 7:7"], ["A Promessa da Nova Aliança no Coração", "Jeremias 31:31-34", "Hebreus 8:8-12; 2 Coríntios 3:3-6"], ["O Choro em Ramá", "Jeremias 31:15", "Mateus 2:16-18"], ["Clama a Mim e Responder-te-ei", "Jeremias 33:2-3", "Efésios 3:20"], ["A Visão da Glória de Deus", "Ezequiel 1:26-28", "Apocalipse 1:13-16"], ["O Atalaia Responsável pela Mensagem", "Ezequiel 3:17-19", "Atos 20:26-27"], ["A Responsabilidade Individual", "Ezequiel 18:20-23", "Romanos 14:12; 2 Pedro 3:9"], ["Um Coração Novo e um Espírito Novo", "Ezequiel 36:25-27", "João 3:5-8; Tito 3:5"], ["O Vale de Ossos Secos", "Ezequiel 37:1-14", "Efésios 2:1-5"], ["Um Só Rebanho e Um Só Pastor", "Ezequiel 34:23-24; 37:24", "João 10:16"], ["O Rio que Flui do Santuário", "Ezequiel 47:1-9", "João 7:38; Apocalipse 22:1-2"], ["O Amor Fiel de Deus por Infieis", "Oseias 2:19-20; 3:1", "Efésios 5:25-27"], ["Misericórdia Quero e Não Sacrifício", "Oseias 6:6", "Mateus 9:13; 12:7"], ["Do Egito Chamei o Meu Filho", "Oseias 11:1", "Mateus 2:14-15"], ["Onde Está, ó Morte, a Tua Vitória?", "Oseias 13:14", "1 Coríntios 15:55"], ["Rasgai o Vosso Coração e Não as Vestes", "Joel 2:12-13", "Lucas 18:13-14"], ["A Restituição dos Anos Consumidos", "Joel 2:25-27", "1 Pedro 5:10"], ["O Pastor Ferido e as Ovelhas Dispersas", "Zacarias 13:7", "Mateus 26:31"], ["A Fonte Aberta para Purificação", "Zacarias 13:1", "1 João 1:7"], ["As Vestes Sujas Trocadas por Limpas", "Zacarias 3:1-5", "Apocalipse 7:13-14"], ["O Roubo a Deus e as Janelas do Céu", "Malaquias 3:8-10", "2 Coríntios 9:6-8"], ["O Livro de Memorial dos que Temem a Deus", "Malaquias 3:16-18", "Apocalipse 20:12"], ["O Mensageiro que Prepara o Caminho", "Malaquias 3:1; 4:5-6", "Mateus 11:10-14; Lucas 1:17"], ["O Sol da Justiça Nascerá", "Malaquias 4:2", "Lucas 1:78-79"], ["O Derramamento do Espírito sobre Todos", "Joel 2:28-32", "Atos 2:16-21"], ["A Ascensão e o Poder para Testemunhar", "Salmos 68:18", "Atos 1:8-11; Efésios 4:8"], ["O Sermão de Pedro no Pentecostes", "Salmos 16:8-11", "Atos 2:25-32"], ["A Comunhão e Generosidade da Igreja", "Deuteronômio 15:4", "Atos 2:42-47; 4:32-35"], ["Nenhum Outro Nome pelo Qual Sejamos Salvos", "Salmos 118:22", "Atos 4:10-12"], ["A Oração que Faz Tremer o Lugar", "Salmos 2:1-2", "Atos 4:24-31"], ["A Alegria de Sofrer pelo Nome de Cristo", "Isaías 66:5", "Atos 5:40-42"], ["O Discurso de Estêvão e a Visão da Glória", "Salmos 110:1", "Atos 7:54-60"], ["Filipe e o Eunuco Etíope", "Isaías 53:7-8", "Atos 8:26-39"], ["A Conversão de Saulo no Caminho", "Isaías 42:6-7", "Atos 9:1-16"], ["O Evangelho Abre-se aos Gentios", "Isaías 49:6", "Atos 10:34-43"], ["Chamados Cristãos em Antioquia", "Isaías 62:2", "Atos 11:25-26"], ["A Igreja Ora e Pedro é Libertado", "Salmos 34:7", "Atos 12:5-11"], ["A Primeira Viagem Missionária", "Isaías 49:6", "Atos 13:1-3, 46-48"], ["A Salvação pela Graça no Concílio", "Amós 9:11-12", "Atos 15:7-18"], ["O Chamado Macedônio e Lídia", "Salmos 67:1-2", "Atos 16:9-15"], ["Louvor na Prisão e Salvação do Carcereiro", "Salmos 149:5-6", "Atos 16:25-34"], ["O Deus Desconhecido Anunciado em Atenas", "Isaías 42:5", "Atos 17:22-31"], ["O Despertamento e Avanço em Éfeso", "Isaías 55:11", "Atos 19:18-20"], ["O Ministério Pastoral com Lágrimas", "Ezequiel 34:11-16", "Atos 20:17-28"], ["A Reconstrução dos Muros com Oração e Trabalho", "Neemias 4:6-9, 17", "1 Coríntios 15:58"], ["A Alegria do Senhor é a Nossa Força", "Neemias 8:8-10", "Filipenses 4:4"], ["O Espírito de Esdras: Estudar e Ensinar", "Esdras 7:10", "2 Timóteo 2:15"], ["A Unidade do Corpo de Cristo", "Salmos 133:1", "Efésios 4:1-6"], ["Dons Diversos para o Bem Comum", "Joel 2:28", "1 Coríntios 12:4-11"], ["O Fruto do Espírito vs. Obras da Carne", "Isaías 32:15-17", "Gálatas 5:16-23"], ["A Armadura de Deus na Batalha Espiritual", "Isaías 59:17", "Efésios 6:10-18"], ["A Grande Comissão a Todas as Nações", "Salmos 96:3", "Mateus 28:18-20"], ["Embaixadores da Reconciliação", "Isaías 52:7", "2 Coríntios 5:18-20; Romanos 10:15"], ["A Igreja como Templo Vivo", "1 Reis 6:7", "1 Pedro 2:4-5; Efésios 2:20-22"], ["O Dia do Senhor Virá como Ladrão", "Joel 2:1-2", "1 Tessalonicenses 5:1-6; 2 Pedro 3:10"], ["A Ressurreição dos Mortos em Cristo", "Isaías 26:19", "1 Tessalonicenses 4:13-18"], ["A Transformação num Piscar de Olhos", "Isaías 25:8", "1 Coríntios 15:50-54"], ["O Julgamento Diante do Tribunal de Cristo", "Eclesiastes 12:14", "2 Coríntios 5:10; Romanos 14:10-12"], ["A Coroa da Justiça para os que Amam Sua Vinda", "Isaías 62:3", "2 Timóteo 4:7-8"], ["As Cartas às Igrejas: O Primeiro Amor", "Jeremias 2:2", "Apocalipse 2:1-7"], ["Fiel até a Morte e a Coroa da Vida", "Daniel 12:10", "Apocalipse 2:8-11"], ["O Maná Escondido e a Pedrinha Branca", "Êxodo 16:33", "Apocalipse 2:17"], ["O Nome no Livro da Vida", "Êxodo 32:32", "Apocalipse 3:1-6"], ["A Porta Aberta que Ninguém Fecha", "Isaías 22:22", "Apocalipse 3:7-13"], ["Eis que Estou à Porta e Bato", "Cantares 5:2", "Apocalipse 3:14-22"], ["A Adoração Celestial ao Criador", "Isaías 6:1-3", "Apocalipse 4:6-11"], ["O Leão de Judá e o Cordeiro Imolado", "Gênesis 49:9-10; Isaías 53:7", "Apocalipse 5:5-10"], ["Digno é o Cordeiro que Foi Morto", "Salmos 145:10-13", "Apocalipse 5:11-14"], ["A Grande Multidão de Todas as Nações", "Gênesis 15:5", "Apocalipse 7:9-12"], ["Deus Enxugará Toda Lágrima", "Isaías 25:8; 49:10", "Apocalipse 7:13-17"], ["O Cântico de Vitória sobre o Mal", "Êxodo 15:1-2", "Apocalipse 15:2-4"], ["As Bodas do Cordeiro", "Isaías 54:5; 62:5", "Apocalipse 19:6-9"], ["O Rei dos Reis e Senhor dos Senhores", "Deuteronômio 10:17; Salmos 2:9", "Apocalipse 19:11-16"], ["O Juízo Final e o Trono Branco", "Daniel 7:9-10", "Apocalipse 20:11-15"], ["Novos Céus e Nova Terra", "Isaías 65:17; 66:22", "Apocalipse 21:1-2"], ["O Tabernáculo de Deus com os Homens", "Ezequiel 37:27", "Apocalipse 21:3-5"], ["A Água da Vida de Graça", "Isaías 55:1", "Apocalipse 21:6-8"], ["A Nova Jerusalém e Suas Fundações", "Isaías 54:11-12", "Apocalipse 21:9-21"], ["O Cordeiro é a Lâmpada da Cidade", "Isaías 60:19-20", "Apocalipse 21:22-27"], ["O Rio da Água da Vida e a Árvore da Vida", "Gênesis 2:9; Ezequiel 47:12", "Apocalipse 22:1-2"], ["Não Haverá Mais Maldição", "Gênesis 3:17; Zacarias 14:11", "Apocalipse 22:3-5"], ["Bem-aventurados os que Guardam a Palavra", "Salmos 119:1-2", "Apocalipse 22:6-9"], ["A Raiz e a Geração de Davi, a Estrela da Manhã", "Isaías 11:10; Números 24:17", "Apocalipse 22:16"], ["O Espírito e a Noiva Dizem: Vem!", "Isaías 55:1", "Apocalipse 22:17"], ["Certamente Venho Sem Demora. Amém, Vem Senhor Jesus!", "Salmos 96:13", "Apocalipse 22:20-21"]];
-const MESES_PLANO = [["Mês 1", "Criação, Queda e Promessa", 31], ["Mês 2", "Fé e Aliança (Os Patriarcas)", 28], ["Mês 3", "Libertação e Páscoa", 31], ["Mês 4", "Santidade, Lei e Sacrifício", 30], ["Mês 5", "Obediência e Terra Prometida", 31], ["Mês 6", "O Reino e o Rei Ungido", 30], ["Mês 7", "Sabedoria, Oração e Adoração", 31], ["Mês 8", "Fidelidade em Meio às Provas", 31], ["Mês 9", "O Messias Prometido", 30], ["Mês 10", "Arrependimento e Nova Aliança", 31], ["Mês 11", "A Igreja, Missão e Espírito Santo", 30], ["Mês 12", "Esperança e Restauração Final", 31]];
-const CORES_MARCACAO = {"Vermelho": {"cor": "#c62828", "texto": "#ffffff", "descricao": "Amor, sangue de Cristo, salvação e cruz"}, "Azul": {"cor": "#1565c0", "texto": "#ffffff", "descricao": "Deus Pai, doutrina, ensino e verdade"}, "Amarelo": {"cor": "#f9d648", "texto": "#242424", "descricao": "Deus, luz, alegria, esperança e promessas"}, "Verde": {"cor": "#2e7d32", "texto": "#ffffff", "descricao": "Fé, crescimento espiritual, frutos e vida nova"}, "Roxo": {"cor": "#7b1fa2", "texto": "#ffffff", "descricao": "Realeza de Cristo, profecia e reino de Deus"}, "Laranja": {"cor": "#ef6c00", "texto": "#ffffff", "descricao": "Oração, louvor e adoração"}, "Rosa": {"cor": "#e88cae", "texto": "#242424", "descricao": "Família, relacionamentos e casamento"}, "Marrom": {"cor": "#795548", "texto": "#ffffff", "descricao": "História, geografia, lugares e povos"}, "Preto/cinza": {"cor": "#555b66", "texto": "#ffffff", "descricao": "Pecado, juízo, morte e advertências"}, "Branco/sublinhado": {"cor": "#ffffff", "texto": "#ffffff", "descricao": "Pureza, santidade e Espírito Santo", "sublinhado": true}};
-const MESES_NOME = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+
+  const MESES_PLANO = [
+  ["Mês 1", "Criação, Queda e Promessa", 31],
+  ["Mês 2", "Fé e Aliança (Os Patriarcas)", 28],
+  ["Mês 3", "Libertação e Páscoa", 31],
+  ["Mês 4", "Santidade, Lei e Sacrifício", 30],
+  ["Mês 5", "Obediência e Terra Prometida", 31],
+  ["Mês 6", "O Reino e o Rei Ungido", 30],
+  ["Mês 7", "Sabedoria, Oração e Adoração", 31],
+  ["Mês 8", "Fidelidade em Meio às Provas", 31],
+  ["Mês 9", "O Messias Prometido", 30],
+  ["Mês 10", "Arrependimento e Nova Aliança", 31],
+  ["Mês 11", "A Igreja, Missão e Espírito Santo", 30],
+  ["Mês 12", "Esperança e Restauração Final", 31]
+];
+
+const CORES_MARCACAO = {
+  "Vermelho": {cor:"#c62828", texto:"#ffffff", descricao:"Amor, sangue de Cristo, salvação e cruz"},
+  "Azul": {cor:"#1565c0", texto:"#ffffff", descricao:"Deus Pai, doutrina, ensino e verdade"},
+  "Amarelo": {cor:"#f9d648", texto:"#242424", descricao:"Deus, luz, alegria, esperança e promessas"},
+  "Verde": {cor:"#2e7d32", texto:"#ffffff", descricao:"Fé, crescimento espiritual, frutos e vida nova"},
+  "Roxo": {cor:"#7b1fa2", texto:"#ffffff", descricao:"Realeza de Cristo, profecia e reino de Deus"},
+  "Laranja": {cor:"#ef6c00", texto:"#ffffff", descricao:"Oração, louvor e adoração"},
+  "Rosa": {cor:"#e88cae", texto:"#242424", descricao:"Família, relacionamentos e casamento"},
+  "Marrom": {cor:"#795548", texto:"#ffffff", descricao:"História, geografia, lugares e povos"},
+  "Preto/cinza": {cor:"#555b66", texto:"#ffffff", descricao:"Pecado, juízo, morte e advertências"},
+  "Branco/sublinhado": {cor:"#ffffff", texto:"#ffffff", descricao:"Pureza, santidade e Espírito Santo", sublinhado:true}
+};
+
+const MESES_NOME = [
+  "Janeiro","Fevereiro","Março","Abril","Maio","Junho",
+  "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"
+];
+
 const chaveProgressoPlano = ano => `biblia_plano_${ano}`;
 const chaveMarcacoes = "biblia_marcacoes_texto_v1";
 const chaveCapitulosLidos = "biblia_capitulos_lidos_v1";
-function lerJSONLocal(chave, padrao){try{return JSON.parse(localStorage.getItem(chave)) ?? padrao}catch(_){return padrao}}
-function salvarJSONLocal(chave, valor){try{localStorage.setItem(chave,JSON.stringify(valor));return true}catch(e){console.error(e);return false}}
 
-// Plano anual: datas reais, ano selecionável, filtro mensal e progresso por ano.
-const painelPlano=document.getElementById("painelPlano");
-const anoPlano=document.getElementById("anoPlano");
-const mesPlano=document.getElementById("mesPlano");
-const linhasPlano=document.getElementById("linhasPlano");
-function progressoAno(ano){return new Set(lerJSONLocal(chaveProgressoPlano(ano),[]).map(Number));}
-function salvarProgressoAno(ano,set){salvarJSONLocal(chaveProgressoPlano(ano),[...set].sort((a,b)=>a-b));}
-function diaPlanoDoAno(data){const n=Math.floor((data-new Date(data.getFullYear(),0,1))/86400000)+1;return data.getFullYear()%4===0&&(data.getFullYear()%100!==0||data.getFullYear()%400===0)&&data>new Date(data.getFullYear(),1,29)?n-1:n;}
-function atualizarPlano(){
- const ano=Number(anoPlano.value);if(!Number.isInteger(ano)||ano<1||ano>9999)return;
- const lidos=progressoAno(ano),total=lidos.size;document.getElementById("resumoPlano").textContent=`${total}/365 concluídos | ${365-total} pendentes | ${(total/365*100).toFixed(1)}%`;
- document.getElementById("barraProgressoPlano").style.width=`${Math.min(100,total/365*100)}%`;
- linhasPlano.replaceChildren();const inicio=new Date(ano,0,1),dias=(new Date(ano,1,29).getMonth()===1?366:365),fragmento=document.createDocumentFragment();
- for(let ordinal=1;ordinal<=dias;ordinal++){const data=new Date(ano,0,ordinal),mes=data.getMonth()+1;if(Number(mesPlano.value)&&mes!==Number(mesPlano.value))continue;
-  const bissexto=dias===366&&mes===2&&data.getDate()===29;const dia=bissexto?null:diaPlanoDoAno(data);const tr=document.createElement("tr");if(dia&&lidos.has(dia))tr.classList.add("lido");
-  const vals=bissexto?["29/02","—","Dia extra: revisão ou recuperação das leituras","Releia uma passagem pendente","Retome o estudo"]:[data.toLocaleDateString("pt-BR"),null,`${LEITURAS_PLANO[dia-1][0]} | ${MESES_PLANO.find((m,i)=>dia-1>=MESES_PLANO.slice(0,i).reduce((a,x)=>a+x[2],0)&&dia-1<MESES_PLANO.slice(0,i+1).reduce((a,x)=>a+x[2],0))?.[1]||"Leitura bíblica"}`,LEITURAS_PLANO[dia-1][1],LEITURAS_PLANO[dia-1][2]];
-  vals.forEach((v,i)=>{const td=document.createElement("td");if(i===1&&!bissexto){const cb=document.createElement("input");cb.type="checkbox";cb.checked=lidos.has(dia);cb.setAttribute("aria-label",`Marcar leitura do dia ${dia}`);cb.addEventListener("change",()=>{const atual=progressoAno(ano);cb.checked?atual.add(dia):atual.delete(dia);salvarProgressoAno(ano,atual);atualizarPlano();});td.appendChild(cb);}else td.textContent=v??"";tr.appendChild(td);});fragmento.appendChild(tr);
- }
- linhasPlano.appendChild(fragmento);
+function lerJSONLocal(chave, padrao) {
+  try {
+    return JSON.parse(localStorage.getItem(chave)) ?? padrao;
+  } catch (_) {
+    return padrao;
+  }
 }
-function abrirPlano(){anoPlano.value=new Date().getFullYear();mesPlano.value="0";painelPlano.classList.remove("oculto");document.body.style.overflow="hidden";atualizarPlano();}
-document.getElementById("btnPlanoAnual").addEventListener("click",abrirPlano);
-document.getElementById("fecharPlano").addEventListener("click",()=>{painelPlano.classList.add("oculto");document.body.style.overflow="";});
-painelPlano.addEventListener("click",e=>{if(e.target===painelPlano){painelPlano.classList.add("oculto");document.body.style.overflow="";}});
-anoPlano.addEventListener("change",atualizarPlano);mesPlano.addEventListener("change",atualizarPlano);
-document.getElementById("marcarHojePlano").addEventListener("click",()=>{const ano=Number(anoPlano.value),hoje=new Date();if(ano!==hoje.getFullYear()){alert("O ano selecionado não é o ano atual.");return;}if(hoje.getMonth()===1&&hoje.getDate()===29){alert("29 de fevereiro é reservado para revisão ou recuperação.");return;}const dia=diaPlanoDoAno(hoje),set=progressoAno(ano);set.add(dia);salvarProgressoAno(ano,set);atualizarPlano();});
 
-// Marcação de capítulos lidos, persistida por livro e capítulo.
-function chaveCapitulo(){return livroAtual&&capituloAtual?`${livroAtual.nome}:${capituloAtual}`:"";}
-function atualizarCheckboxCapitulo(){const cb=document.getElementById("capituloLido"),chave=chaveCapitulo(),set=new Set(lerJSONLocal(chaveCapitulosLidos,[]));cb.disabled=!chave;cb.checked=!!chave&&set.has(chave);}
-document.getElementById("capituloLido").addEventListener("change",e=>{const chave=chaveCapitulo();if(!chave)return;const set=new Set(lerJSONLocal(chaveCapitulosLidos,[]));e.target.checked?set.add(chave):set.delete(chave);salvarJSONLocal(chaveCapitulosLidos,[...set]);});
+function salvarJSONLocal(chave, valor) {
+  try {
+    localStorage.setItem(chave, JSON.stringify(valor));
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
+}
 
-// Marcações de texto por seleção. A referência do versículo e o trecho são persistidos.
-function obterMarcacoes(){return lerJSONLocal(chaveMarcacoes,{});}
-function chaveVersiculo(artigo){return `${livroAtual?.nome||""}:${capituloAtual||""}:${artigo?.dataset.versiculo||""}`;}
-function salvarSelecaoMarcada(cor){const sel=window.getSelection();if(!sel||sel.isCollapsed||!sel.rangeCount){document.getElementById("statusMarcacao").textContent="Selecione primeiro uma palavra ou trecho de um versículo.";return;}
- const range=sel.getRangeAt(0),artigo=range.commonAncestorContainer.nodeType===1?range.commonAncestorContainer.closest(".versiculo"):range.commonAncestorContainer.parentElement?.closest(".versiculo");if(!artigo||!elementoListaVersiculos.contains(artigo)){document.getElementById("statusMarcacao").textContent="Selecione um trecho dentro de um versículo.";return;}
- const texto=sel.toString().trim();if(!texto)return;const dados=obterMarcacoes(),chave=chaveVersiculo(artigo);dados[chave]=dados[chave]||[];dados[chave].push({texto,cor});salvarJSONLocal(chaveMarcacoes,dados);aplicarMarcacoesNoArtigo(artigo);sel.removeAllRanges();document.getElementById("statusMarcacao").textContent=`Trecho marcado em ${cor}.`;
+// Plano anual
+const painelPlano = document.getElementById("painelPlano");
+const anoPlano = document.getElementById("anoPlano");
+const mesPlano = document.getElementById("mesPlano");
+const linhasPlano = document.getElementById("linhasPlano");
+
+function progressoAno(ano) {
+  return new Set(lerJSONLocal(chaveProgressoPlano(ano), []).map(Number));
 }
-function aplicarMarcacoesNoArtigo(artigo){const chave=chaveVersiculo(artigo),lista=obterMarcacoes()[chave]||[],alvo=artigo.querySelector(".texto-versiculo");if(!alvo)return;let texto=alvo.textContent;alvo.replaceChildren(document.createTextNode(texto));for(const item of lista){if(!item.texto)continue;const atual=alvo.textContent,idx=atual.indexOf(item.texto);if(idx<0)continue;const walker=document.createTreeWalker(alvo,NodeFilter.SHOW_TEXT);let node,offset=0,ini=null,fim=null;while(node=walker.nextNode()){const end=offset+node.nodeValue.length;if(ini===null&&idx>=offset&&idx<end)ini={node,off:idx-offset};if(idx+item.texto.length>offset&&idx+item.texto.length<=end)fim={node,off:idx+item.texto.length-offset};offset=end;}if(!ini||!fim||ini.node!==fim.node)continue;const r=document.createRange();r.setStart(ini.node,ini.off);r.setEnd(fim.node,fim.off);const span=document.createElement("mark");span.className="marcacao-texto"+(item.cor==="Branco/sublinhado"?" marcacao-branco":"");if(item.cor!=="Branco/sublinhado"){span.style.background=CORES_MARCACAO[item.cor].cor;span.style.color=CORES_MARCACAO[item.cor].texto;}try{r.surroundContents(span)}catch(_){}}
+
+function salvarProgressoAno(ano, set) {
+  salvarJSONLocal(chaveProgressoPlano(ano), [...set].sort((a,b) => a-b));
 }
-document.querySelectorAll(".botao-cor").forEach(btn=>btn.addEventListener("click",()=>salvarSelecaoMarcada(btn.dataset.cor)));
-document.getElementById("removerMarcacao").addEventListener("click",()=>{const sel=window.getSelection();const artigo=sel?.anchorNode?.parentElement?.closest(".versiculo");if(!artigo){document.getElementById("statusMarcacao").textContent="Selecione um trecho marcado para removê-lo.";return;}const chave=chaveVersiculo(artigo),dados=obterMarcacoes(),texto=sel.toString().trim();if(texto&&dados[chave]){dados[chave]=dados[chave].filter(x=>x.texto!==texto);if(!dados[chave].length)delete dados[chave];salvarJSONLocal(chaveMarcacoes,dados);aplicarMarcacoesNoArtigo(artigo);sel.removeAllRanges();document.getElementById("statusMarcacao").textContent="Marcação removida.";}else document.getElementById("statusMarcacao").textContent="Selecione o texto marcado que deseja remover.";});
-document.getElementById("verLegendaCores").addEventListener("click",()=>{const el=document.getElementById("legendaCores");el.classList.toggle("oculto");if(!el.childElementCount){Object.entries(CORES_MARCACAO).forEach(([nome,d])=>{const div=document.createElement("div");div.className="item-legenda";div.style.background=d.cor;div.style.color=d.texto;div.textContent=`${nome}: ${d.descricao}`;el.appendChild(div);});}});
+
+function diaPlanoDoAno(data) {
+  const n = Math.floor(
+    (data - new Date(data.getFullYear(), 0, 1)) / 86400000
+  ) + 1;
+
+  return data.getFullYear() % 4 === 0 &&
+    (data.getFullYear() % 100 !== 0 || data.getFullYear() % 400 === 0) &&
+    data > new Date(data.getFullYear(), 1, 29) ? n - 1 : n;
+}
+
+function atualizarPlano() {
+  const ano = Number(anoPlano.value);
+  if (!Number.isInteger(ano) || ano < 1 || ano > 9999) return;
+
+  const lidos = progressoAno(ano);
+  const total = lidos.size;
+
+  document.getElementById("resumoPlano").textContent =
+    `${total}/365 concluídos | ${365-total} pendentes | ${(total/365*100).toFixed(1)}%`;
+
+  document.getElementById("barraProgressoPlano").style.width =
+    `${Math.min(100,total/365*100)}%`;
+
+  linhasPlano.replaceChildren();
+
+  const dias = new Date(ano, 1, 29).getMonth() === 1 ? 366 : 365;
+  const fragmento = document.createDocumentFragment();
+
+  for (let ordinal = 1; ordinal <= dias; ordinal++) {
+    const data = new Date(ano, 0, ordinal);
+    const mes = data.getMonth() + 1;
+
+    if (Number(mesPlano.value) && mes !== Number(mesPlano.value)) continue;
+
+    const bissexto = dias === 366 && mes === 2 && data.getDate() === 29;
+    const dia = bissexto ? null : diaPlanoDoAno(data);
+    const tr = document.createElement("tr");
+
+    if (dia && lidos.has(dia)) tr.classList.add("lido");
+
+    const vals = bissexto
+      ? ["29/02","—","Dia extra: revisão ou recuperação das leituras","Releia uma passagem pendente","Retome o estudo"]
+      : [
+          data.toLocaleDateString("pt-BR"),
+          null,
+          `${LEITURAS_PLANO[dia-1][0]} | ${
+            MESES_PLANO.find((m,i) =>
+              dia-1 >= MESES_PLANO.slice(0,i).reduce((a,x)=>a+x[2],0) &&
+              dia-1 < MESES_PLANO.slice(0,i+1).reduce((a,x)=>a+x[2],0)
+            )?.[1] || "Leitura bíblica"
+          }`,
+          LEITURAS_PLANO[dia-1][1],
+          LEITURAS_PLANO[dia-1][2]
+        ];
+
+    vals.forEach((v,i) => {
+      const td = document.createElement("td");
+
+      if (i === 1 && !bissexto) {
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = lidos.has(dia);
+        cb.setAttribute("aria-label", `Marcar leitura do dia ${dia}`);
+
+        cb.addEventListener("change", () => {
+          const atual = progressoAno(ano);
+          cb.checked ? atual.add(dia) : atual.delete(dia);
+          salvarProgressoAno(ano, atual);
+          atualizarPlano();
+        });
+
+        td.appendChild(cb);
+      } else {
+        td.textContent = v ?? "";
+      }
+
+      tr.appendChild(td);
+    });
+
+    fragmento.appendChild(tr);
+  }
+
+  linhasPlano.appendChild(fragmento);
+}
+
+function abrirPlano() {
+  anoPlano.value = new Date().getFullYear();
+  mesPlano.value = "0";
+  painelPlano.classList.remove("oculto");
+  document.body.style.overflow = "hidden";
+  atualizarPlano();
+}
+
+document.getElementById("btnPlanoAnual").addEventListener("click", abrirPlano);
+
+document.getElementById("fecharPlano").addEventListener("click", () => {
+  painelPlano.classList.add("oculto");
+  document.body.style.overflow = "";
+});
+
+painelPlano.addEventListener("click", e => {
+  if (e.target === painelPlano) {
+    painelPlano.classList.add("oculto");
+    document.body.style.overflow = "";
+  }
+});
+
+anoPlano.addEventListener("change", atualizarPlano);
+mesPlano.addEventListener("change", atualizarPlano);
+
+document.getElementById("marcarHojePlano").addEventListener("click", () => {
+  const ano = Number(anoPlano.value);
+  const hoje = new Date();
+
+  if (ano !== hoje.getFullYear()) {
+    alert("O ano selecionado não é o ano atual.");
+    return;
+  }
+
+  if (hoje.getMonth() === 1 && hoje.getDate() === 29) {
+    alert("29 de fevereiro é reservado para revisão ou recuperação.");
+    return;
+  }
+
+  const dia = diaPlanoDoAno(hoje);
+  const set = progressoAno(ano);
+  set.add(dia);
+  salvarProgressoAno(ano, set);
+  atualizarPlano();
+});
+
+// Marcação de capítulos lidos
+function chaveCapitulo() {
+  return livroAtual && capituloAtual
+    ? `${livroAtual.nome}:${capituloAtual}`
+    : "";
+}
+
+function atualizarCheckboxCapitulo() {
+  const cb = document.getElementById("capituloLido");
+  const chave = chaveCapitulo();
+  const set = new Set(lerJSONLocal(chaveCapitulosLidos, []));
+
+  cb.disabled = !chave;
+  cb.checked = !!chave && set.has(chave);
+}
+
+document.getElementById("capituloLido").addEventListener("change", e => {
+  const chave = chaveCapitulo();
+  if (!chave) return;
+
+  const set = new Set(lerJSONLocal(chaveCapitulosLidos, []));
+  e.target.checked ? set.add(chave) : set.delete(chave);
+  salvarJSONLocal(chaveCapitulosLidos, [...set]);
+});
+
+// Marcações de texto
+function obterMarcacoes() {
+  return lerJSONLocal(chaveMarcacoes, {});
+}
+
+function chaveVersiculo(artigo) {
+  return `${livroAtual?.nome||""}:${capituloAtual||""}:${artigo?.dataset.versiculo||""}`;
+}
+
+function salvarSelecaoMarcada(cor) {
+  const sel = window.getSelection();
+
+  if (!sel || sel.isCollapsed || !sel.rangeCount) {
+    document.getElementById("statusMarcacao").textContent =
+      "Selecione primeiro uma palavra ou trecho de um versículo.";
+    return;
+  }
+
+  const range = sel.getRangeAt(0);
+  const artigo = range.commonAncestorContainer.nodeType === 1
+    ? range.commonAncestorContainer.closest(".versiculo")
+    : range.commonAncestorContainer.parentElement?.closest(".versiculo");
+
+  if (!artigo || !elementoListaVersiculos.contains(artigo)) {
+    document.getElementById("statusMarcacao").textContent =
+      "Selecione um trecho dentro de um versículo.";
+    return;
+  }
+
+  const texto = sel.toString().trim();
+  if (!texto) return;
+
+  const dados = obterMarcacoes();
+  const chave = chaveVersiculo(artigo);
+
+  dados[chave] = dados[chave] || [];
+  dados[chave].push({texto,cor});
+
+  salvarJSONLocal(chaveMarcacoes, dados);
+  aplicarMarcacoesNoArtigo(artigo);
+  sel.removeAllRanges();
+
+  document.getElementById("statusMarcacao").textContent =
+    `Trecho marcado em ${cor}.`;
+}
+
+function aplicarMarcacoesNoArtigo(artigo) {
+  const chave = chaveVersiculo(artigo);
+  const lista = obterMarcacoes()[chave] || [];
+  const alvo = artigo.querySelector(".texto-versiculo");
+  if (!alvo) return;
+
+  const texto = alvo.textContent;
+  alvo.replaceChildren(document.createTextNode(texto));
+
+  for (const item of lista) {
+    if (!item.texto) continue;
+
+    const atual = alvo.textContent;
+    const idx = atual.indexOf(item.texto);
+    if (idx < 0) continue;
+
+    const walker = document.createTreeWalker(alvo, NodeFilter.SHOW_TEXT);
+    let node, offset = 0, ini = null, fim = null;
+
+    while (node = walker.nextNode()) {
+      const end = offset + node.nodeValue.length;
+
+      if (ini === null && idx >= offset && idx < end) {
+        ini = {node,off:idx-offset};
+      }
+
+      if (idx + item.texto.length > offset &&
+          idx + item.texto.length <= end) {
+        fim = {node,off:idx+item.texto.length-offset};
+      }
+
+      offset = end;
+    }
+
+    if (!ini || !fim || ini.node !== fim.node) continue;
+
+    const r = document.createRange();
+    r.setStart(ini.node,ini.off);
+    r.setEnd(fim.node,fim.off);
+
+    const span = document.createElement("mark");
+    span.className = "marcacao-texto" +
+      (item.cor === "Branco/sublinhado" ? " marcacao-branco" : "");
+
+    if (item.cor !== "Branco/sublinhado") {
+      span.style.background = CORES_MARCACAO[item.cor].cor;
+      span.style.color = CORES_MARCACAO[item.cor].texto;
+    }
+
+    try {
+      r.surroundContents(span);
+    } catch (_) {}
+  }
+}
+
+document.querySelectorAll(".botao-cor").forEach(btn =>
+  btn.addEventListener("click", () => salvarSelecaoMarcada(btn.dataset.cor))
+);
+
+document.getElementById("removerMarcacao").addEventListener("click", () => {
+  const sel = window.getSelection();
+  const artigo = sel?.anchorNode?.parentElement?.closest(".versiculo");
+
+  if (!artigo) {
+    document.getElementById("statusMarcacao").textContent =
+      "Selecione um trecho marcado para removê-lo.";
+    return;
+  }
+
+  const chave = chaveVersiculo(artigo);
+  const dados = obterMarcacoes();
+  const texto = sel.toString().trim();
+
+  if (texto && dados[chave]) {
+    dados[chave] = dados[chave].filter(x => x.texto !== texto);
+
+    if (!dados[chave].length) delete dados[chave];
+
+    salvarJSONLocal(chaveMarcacoes, dados);
+    aplicarMarcacoesNoArtigo(artigo);
+    sel.removeAllRanges();
+
+    document.getElementById("statusMarcacao").textContent =
+      "Marcação removida.";
+  } else {
+    document.getElementById("statusMarcacao").textContent =
+      "Selecione o texto marcado que deseja remover.";
+  }
+});
+
+document.getElementById("verLegendaCores").addEventListener("click", () => {
+  const el = document.getElementById("legendaCores");
+  el.classList.toggle("oculto");
+
+  if (!el.childElementCount) {
+    Object.entries(CORES_MARCACAO).forEach(([nome,d]) => {
+      const div = document.createElement("div");
+      div.className = "item-legenda";
+      div.style.background = d.cor;
+      div.style.color = d.texto;
+      div.textContent = `${nome}: ${d.descricao}`;
+      el.appendChild(div);
+    });
+  }
+});
+
+  </script>
+
+  document
+  .getElementById("btnCompartilhar")
+  .addEventListener("click", compartilharVersiculo);
+
+/* =====================================================
+   COMPARTILHAR VERSÍCULO DO DIA
+===================================================== */
+
+async function compartilharVersiculoDoDia() {
+  const texto = (
+    document.getElementById("textoDiario")?.textContent || ""
+  ).trim();
+
+  const referencia = (
+    document.getElementById("referenciaDiaria")?.textContent || ""
+  ).trim();
+
+  if (
+    !texto ||
+    !referencia ||
+    texto.includes("Carregando") ||
+    texto.includes("Não foi possível")
+  ) {
+    alert("Aguarde o versículo do dia carregar antes de compartilhar.");
+    return;
+  }
+
+  const conteudo =
+    "✨ Versículo do dia — Bíblia King James\n\n“" +
+    texto + "”\n" +
+    referencia + "\n\n" +
+    window.location.href;
+
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Versículo do dia — Bíblia King James",
+        text: conteudo
+      });
+      return;
+    } catch (erro) {
+      if (erro.name === "AbortError") return;
+    }
+  }
+
+  try {
+    await navigator.clipboard.writeText(conteudo);
+    alert(
+      "Versículo copiado! Agora você pode colá-lo no WhatsApp ou em outro aplicativo."
+    );
+  } catch (erro) {
+    window.prompt("Copie o versículo para compartilhar:", conteudo);
+  }
+}
+
+document
+  .getElementById("btnCompartilharDiario")
+  .addEventListener("click", compartilharVersiculoDoDia);
+
+/* =====================================================
+   VERSÍCULO DO DIA — DADOS DA ABA VersiculoDia
+===================================================== */
+
+async function atualizarVersiculoDoDia() {
+  const textoEl = document.getElementById("textoDiario");
+  const referenciaEl = document.getElementById("referenciaDiaria");
+
+  if (!textoEl || !referenciaEl) return;
+
+  textoEl.textContent = "Carregando versículo do dia...";
+  referenciaEl.textContent = "";
+
+  function extrairVersiculo(resposta) {
+    if (!resposta || typeof resposta !== "object") return null;
+
+    const texto = String(
+      resposta.texto || resposta.versiculo || ""
+    ).trim();
+
+    let referencia = String(
+      resposta.referencia || resposta.ref || ""
+    ).trim();
+
+    if (!referencia) {
+      const nomeLivro = String(
+        resposta.nomeLivro ||
+        (
+          resposta.livro &&
+          (
+            resposta.livro.nomeLivro ||
+            resposta.livro.nome ||
+            resposta.livro.livro
+          )
+        ) ||
+        ""
+      ).trim();
+
+      const capitulo = Number(resposta.capitulo);
+
+      const versiculo = Number(
+        resposta.versiculoNumero ||
+        resposta.numeroVersiculo ||
+        resposta.ver
+      );
+
+      if (nomeLivro && capitulo > 0 && versiculo > 0) {
+        referencia =
+          nomeLivro + " " + capitulo + ":" + versiculo;
+      }
+    }
+
+    return texto && referencia
+      ? { texto, referencia }
+      : null;
+  }
+
+  let dados = null;
+  let erroPrincipal = null;
+
+  try {
+    dados = extrairVersiculo(
+      await consultarAPI({ action: "versiculoDia" })
+    );
+  } catch (erro) {
+    erroPrincipal = erro;
+    console.warn(
+      "A ação versiculoDia falhou; tentando a rota diario.",
+      erro
+    );
+  }
+
+  if (!dados) {
+    try {
+      dados = extrairVersiculo(
+        await consultarAPI({ action: "diario" })
+      );
+    } catch (erroAlternativo) {
+      console.error(
+        "A ação diario também falhou:",
+        erroAlternativo
+      );
+
+      if (!erroPrincipal) {
+        erroPrincipal = erroAlternativo;
+      }
+    }
+  }
+
+  if (!dados) {
+    console.error(
+      "Não foi possível carregar o Versículo do Dia.",
+      erroPrincipal
+    );
+
+    textoEl.textContent =
+      "Não foi possível carregar o versículo do dia.";
+
+    referenciaEl.textContent =
+      "Verifique a publicação do Apps Script e as abas Texto e VersiculoDia.";
+
+    return;
+  }
+
+  textoEl.textContent = dados.texto;
+  referenciaEl.textContent = dados.referencia;
+
+  referenciaEl.setAttribute("role", "button");
+  referenciaEl.setAttribute("tabindex", "0");
+  referenciaEl.setAttribute(
+    "title",
+    "Clique para abrir esta referência na Bíblia"
+  );
+
+  referenciaEl.style.cursor = "pointer";
+
+  const abrirReferenciaDiaria = function() {
+    if (typeof abrirReferencia === "function") {
+      abrirReferencia(dados.referencia);
+    } else if (typeof navegarParaReferencia === "function") {
+      navegarParaReferencia(dados.referencia);
+    }
+  };
+
+  referenciaEl.onclick = abrirReferenciaDiaria;
+
+  referenciaEl.onkeydown = function(evento) {
+    if (evento.key === "Enter" || evento.key === " ") {
+      evento.preventDefault();
+      abrirReferenciaDiaria();
+    }
+  };
+}
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
+
+atualizarVersiculoDoDia();
+
+console.log("Recursos da Bíblia King James inicializados.");
+
+/* =====================================================
+   RECURSOS INTEGRADOS DA BÍBLIA
+===================================================== */
+
+    let dados = null;
+  let erroPrincipal = null;
+
+  // Primeiro tenta a rota específica da aba VersiculoDia.
+  try {
+    dados = extrairVersiculo(
+      await consultarAPI({ action: "versiculoDia" })
+    );
+  } catch (erro) {
+    erroPrincipal = erro;
+    console.warn(
+      "A ação versiculoDia falhou; tentando a rota diario.",
+      erro
+    );
+  }
+
+  // Compatibilidade com versões anteriores do Apps Script.
+  if (!dados) {
+    try {
+      dados = extrairVersiculo(
+        await consultarAPI({ action: "diario" })
+      );
+    } catch (erroAlternativo) {
+      console.error(
+        "A ação diario também falhou:",
+        erroAlternativo
+      );
+
+      if (!erroPrincipal) erroPrincipal = erroAlternativo;
+    }
+  }
+
+  if (!dados) {
+    console.error(
+      "Não foi possível carregar o Versículo do Dia.",
+      erroPrincipal
+    );
+
+    textoEl.textContent =
+      "Não foi possível carregar o versículo do dia.";
+
+    referenciaEl.textContent =
+      "Verifique a publicação do Apps Script e as abas Texto e VersiculoDia.";
+
+    return;
+  }
+
+  textoEl.textContent = dados.texto;
+  referenciaEl.textContent = dados.referencia;
+
+  referenciaEl.setAttribute("role", "button");
+  referenciaEl.setAttribute("tabindex", "0");
+  referenciaEl.setAttribute(
+    "title",
+    "Clique para abrir esta referência na Bíblia"
+  );
+
+  referenciaEl.style.cursor = "pointer";
+
+  const abrirReferenciaDiaria = function() {
+    if (typeof abrirReferencia === "function") {
+      abrirReferencia(dados.referencia);
+    } else if (typeof navegarParaReferencia === "function") {
+      navegarParaReferencia(dados.referencia);
+    }
+  };
+
+  referenciaEl.onclick = abrirReferenciaDiaria;
+
+  referenciaEl.onkeydown = function(evento) {
+    if (evento.key === "Enter" || evento.key === " ") {
+      evento.preventDefault();
+      abrirReferenciaDiaria();
+    }
+  };
+}
+
+/* =====================================================
+   INICIALIZAÇÃO
+===================================================== */
+
+atualizarVersiculoDoDia();
+
+console.log("Recursos da Bíblia King James inicializados.");
+
+/* =====================================================
+   RECURSOS INTEGRADOS DA BÍBLIA
+===================================================== */
+  const MESES_NOME = [
+  "Janeiro", "Fevereiro", "Março", "Abril",
+  "Maio", "Junho", "Julho", "Agosto",
+  "Setembro", "Outubro", "Novembro", "Dezembro"
+];
+
+const chaveProgressoPlano = ano => `biblia_plano_${ano}`;
+const chaveMarcacoes = "biblia_marcacoes_texto_v1";
+const chaveCapitulosLidos = "biblia_capitulos_lidos_v1";
+
+function lerJSONLocal(chave, padrao) {
+  try {
+    return JSON.parse(localStorage.getItem(chave)) ?? padrao;
+  } catch (_) {
+    return padrao;
+  }
+}
+
+function salvarJSONLocal(chave, valor) {
+  try {
+    localStorage.setItem(chave, JSON.stringify(valor));
+    return true;
+  } catch (erro) {
+    console.error(erro);
+    return false;
+  }
+}
+
+// Plano anual de leitura
+const painelPlano = document.getElementById("painelPlano");
+const anoPlano = document.getElementById("anoPlano");
+const mesPlano = document.getElementById("mesPlano");
+const linhasPlano = document.getElementById("linhasPlano");
+
+function progressoAno(ano) {
+  return new Set(
+    lerJSONLocal(chaveProgressoPlano(ano), []).map(Number)
+  );
+}
+
+function salvarProgressoAno(ano, set) {
+  salvarJSONLocal(
+    chaveProgressoPlano(ano),
+    [...set].sort((a, b) => a - b)
+  );
+}
+
+function diaPlanoDoAno(data) {
+  const numero = Math.floor(
+    (data - new Date(data.getFullYear(), 0, 1)) / 86400000
+  ) + 1;
+
+  const ano = data.getFullYear();
+
+  const bissexto =
+    ano % 4 === 0 &&
+    (ano % 100 !== 0 || ano % 400 === 0);
+
+  return bissexto && data > new Date(ano, 1, 29)
+    ? numero - 1
+    : numero;
+}
+
+function atualizarPlano() {
+  const ano = Number(anoPlano.value);
+
+  if (!Number.isInteger(ano) || ano < 1 || ano > 9999) return;
+
+  const lidos = progressoAno(ano);
+  const total = lidos.size;
+
+  document.getElementById("resumoPlano").textContent =
+    `${total}/365 concluídos | ${365 - total} pendentes | ${(total / 365 * 100).toFixed(1)}%`;
+
+  document.getElementById("barraProgressoPlano").style.width =
+    `${Math.min(100, total / 365 * 100)}%`;
+
+  linhasPlano.replaceChildren();
+
+  const dias =
+    new Date(ano, 1, 29).getMonth() === 1 ? 366 : 365;
+
+  const fragmento = document.createDocumentFragment();
+
+  for (let ordinal = 1; ordinal <= dias; ordinal++) {
+    const data = new Date(ano, 0, ordinal);
+    const mes = data.getMonth() + 1;
+
+    if (Number(mesPlano.value) && mes !== Number(mesPlano.value)) {
+      continue;
+    }
+
+    const bissexto = dias === 366 && mes === 2 && data.getDate() === 29;
+    const dia = bissexto ? null : diaPlanoDoAno(data);
+
+    const linha = document.createElement("tr");
+
+    if (dia && lidos.has(dia)) {
+      linha.classList.add("lido");
+    }
+
+    const indiceMes = MESES_PLANO.findIndex((mesItem, indice) => {
+      const inicio = MESES_PLANO
+        .slice(0, indice)
+        .reduce((soma, item) => soma + item[2], 0);
+
+      const fim = inicio + mesItem[2];
+
+      return dia !== null && dia - 1 >= inicio && dia - 1 < fim;
+    });
+
+    const leitura = bissexto
+      ? [
+          "29/02",
+          null,
+          "Dia extra: revisão ou recuperação das leituras",
+          "Releia uma passagem pendente",
+          "Retome o estudo"
+        ]
+      : [
+          data.toLocaleDateString("pt-BR"),
+          null,
+          `${LEITURAS_PLANO[dia - 1][0]} | ${MESES_PLANO[indiceMes]?.[1] || "Leitura bíblica"}`,
+          LEITURAS_PLANO[dia - 1][1],
+          LEITURAS_PLANO[dia - 1][2]
+        ];
+
+    leitura.forEach((valor, indice) => {
+      const celula = document.createElement("td");
+
+      if (indice === 1 && !bissexto) {
+        const checkbox = document.createElement("input");
+
+        checkbox.type = "checkbox";
+        checkbox.checked = lidos.has(dia);
+        checkbox.setAttribute(
+          "aria-label",
+          `Marcar leitura do dia ${dia}`
+        );
+
+        checkbox.addEventListener("change", () => {
+          const atual = progressoAno(ano);
+
+          checkbox.checked
+            ? atual.add(dia)
+            : atual.delete(dia);
+
+          salvarProgressoAno(ano, atual);
+          atualizarPlano();
+        });
+
+        celula.appendChild(checkbox);
+      } else {
+        celula.textContent = valor ?? "";
+      }
+
+      linha.appendChild(celula);
+    });
+
+    fragmento.appendChild(linha);
+  }
+
+  linhasPlano.appendChild(fragmento);
+}
+
+function abrirPlano() {
+  anoPlano.value = new Date().getFullYear();
+  mesPlano.value = "0";
+
+  painelPlano.classList.remove("oculto");
+  document.body.style.overflow = "hidden";
+
+  atualizarPlano();
+}
+
+document
+  .getElementById("btnPlanoAnual")
+  .addEventListener("click", abrirPlano);
+
+document
+  .getElementById("fecharPlano")
+  .addEventListener("click", () => {
+    painelPlano.classList.add("oculto");
+    document.body.style.overflow = "";
+  });
+
+painelPlano.addEventListener("click", evento => {
+  if (evento.target === painelPlano) {
+    painelPlano.classList.add("oculto");
+    document.body.style.overflow = "";
+  }
+});
+
+anoPlano.addEventListener("change", atualizarPlano);
+mesPlano.addEventListener("change", atualizarPlano);
+
+document
+  .getElementById("marcarHojePlano")
+  .addEventListener("click", () => {
+    const ano = Number(anoPlano.value);
+    const hoje = new Date();
+
+    if (ano !== hoje.getFullYear()) {
+      alert("O ano selecionado não é o ano atual.");
+      return;
+    }
+
+    if (hoje.getMonth() === 1 && hoje.getDate() === 29) {
+      alert("29 de fevereiro é reservado para revisão ou recuperação.");
+      return;
+    }
+
+    const dia = diaPlanoDoAno(hoje);
+    const set = progressoAno(ano);
+
+    set.add(dia);
+    salvarProgressoAno(ano, set);
+    atualizarPlano();
+  });
+
+// Capítulos lidos
+function chaveCapitulo() {
+  return livroAtual && capituloAtual
+    ? `${livroAtual.nome}:${capituloAtual}`
+    : "";
+}
+
+function atualizarCheckboxCapitulo() {
+  const checkbox = document.getElementById("capituloLido");
+  const chave = chaveCapitulo();
+  const set = new Set(
+    lerJSONLocal(chaveCapitulosLidos, [])
+  );
+
+  checkbox.disabled = !chave;
+  checkbox.checked = !!chave && set.has(chave);
+}
+
+document
+  .getElementById("capituloLido")
+  .addEventListener("change", evento => {
+    const chave = chaveCapitulo();
+    if (!chave) return;
+
+    const set = new Set(
+      lerJSONLocal(chaveCapitulosLidos, [])
+    );
+
+    evento.target.checked
+      ? set.add(chave)
+      : set.delete(chave);
+
+    salvarJSONLocal(chaveCapitulosLidos, [...set]);
+  });
+
+// Marcações coloridas
+function obterMarcacoes() {
+  return lerJSONLocal(chaveMarcacoes, {});
+}
+
+function chaveVersiculo(artigo) {
+  return `${livroAtual?.nome || ""}:${capituloAtual || ""}:${artigo?.dataset.versiculo || ""}`;
+}
+
+function salvarSelecaoMarcada(cor) {
+  const selecao = window.getSelection();
+
+  if (!selecao || selecao.isCollapsed || !selecao.rangeCount) {
+    document.getElementById("statusMarcacao").textContent =
+      "Selecione primeiro uma palavra ou trecho de um versículo.";
+    return;
+  }
+
+  const range = selecao.getRangeAt(0);
+
+  const artigo =
+    range.commonAncestorContainer.nodeType === 1
+      ? range.commonAncestorContainer.closest(".versiculo")
+      : range.commonAncestorContainer.parentElement?.closest(".versiculo");
+
+  if (!artigo || !elementoListaVersiculos.contains(artigo)) {
+    document.getElementById("statusMarcacao").textContent =
+      "Selecione um trecho dentro de um versículo.";
+    return;
+  }
+
+  const texto = selecao.toString().trim();
+  if (!texto) return;
+
+  const dados = obterMarcacoes();
+  const chave = chaveVersiculo(artigo);
+
+  dados[chave] = dados[chave] || [];
+  dados[chave].push({ texto, cor });
+
+  salvarJSONLocal(chaveMarcacoes, dados);
+  aplicarMarcacoesNoArtigo(artigo);
+
+  selecao.removeAllRanges();
+
+  document.getElementById("statusMarcacao").textContent =
+    `Trecho marcado em ${cor}.`;
+}
+
+function aplicarMarcacoesNoArtigo(artigo) {
+  const chave = chaveVersiculo(artigo);
+  const lista = obterMarcacoes()[chave] || [];
+  const alvo = artigo.querySelector(".texto-versiculo");
+
+  if (!alvo) return;
+
+  const texto = alvo.textContent;
+  alvo.replaceChildren(document.createTextNode(texto));
+
+  for (const item of lista) {
+    if (!item.texto) continue;
+
+    const atual = alvo.textContent;
+    const indice = atual.indexOf(item.texto);
+
+    if (indice < 0) continue;
+
+    const walker = document.createTreeWalker(
+      alvo,
+      NodeFilter.SHOW_TEXT
+    );
+
+    let node;
+    let offset = 0;
+    let inicio = null;
+    let fim = null;
+
+    while (node = walker.nextNode()) {
+      const final = offset + node.nodeValue.length;
+
+      if (inicio === null && indice >= offset && indice < final) {
+        inicio = {
+          node,
+          off: indice - offset
+        };
+      }
+
+      if (
+        indice + item.texto.length > offset &&
+        indice + item.texto.length <= final
+      ) {
+        fim = {
+          node,
+          off: indice + item.texto.length - offset
+        };
+      }
+
+      offset = final;
+    }
+
+    if (!inicio || !fim || inicio.node !== fim.node) continue;
+
+    const range = document.createRange();
+
+    range.setStart(inicio.node, inicio.off);
+    range.setEnd(fim.node, fim.off);
+
+    const marca = document.createElement("mark");
+
+    marca.className =
+      "marcacao-texto" +
+      (item.cor === "Branco/sublinhado" ? " marcacao-branco" : "");
+
+    if (item.cor !== "Branco/sublinhado") {
+      marca.style.background = CORES_MARCACAO[item.cor].cor;
+      marca.style.color = CORES_MARCACAO[item.cor].texto;
+    }
+
+    try {
+      range.surroundContents(marca);
+    } catch (_) {}
+  }
+}
+
+document.querySelectorAll(".botao-cor").forEach(botao => {
+  botao.addEventListener("click", () => {
+    salvarSelecaoMarcada(botao.dataset.cor);
+  });
+});
+
+document
+  .getElementById("removerMarcacao")
+  .addEventListener("click", () => {
+    const selecao = window.getSelection();
+
+    const artigo =
+      selecao?.anchorNode?.parentElement?.closest(".versiculo");
+
+    if (!artigo) {
+      document.getElementById("statusMarcacao").textContent =
+        "Selecione um trecho marcado para removê-lo.";
+      return;
+    }
+
+    const chave = chaveVersiculo(artigo);
+    const dados = obterMarcacoes();
+    const texto = selecao.toString().trim();
+
+    if (texto && dados[chave]) {
+      dados[chave] = dados[chave].filter(
+        item => item.texto !== texto
+      );
+
+      if (!dados[chave].length) {
+        delete dados[chave];
+      }
+
+      salvarJSONLocal(chaveMarcacoes, dados);
+      aplicarMarcacoesNoArtigo(artigo);
+      selecao.removeAllRanges();
+
+      document.getElementById("statusMarcacao").textContent =
+        "Marcação removida.";
+    } else {
+      document.getElementById("statusMarcacao").textContent =
+        "Selecione o texto marcado que deseja remover.";
+    }
+  });
+
+document
+  .getElementById("verLegendaCores")
+  .addEventListener("click", () => {
+    const elemento = document.getElementById("legendaCores");
+
+    elemento.classList.toggle("oculto");
+
+    if (!elemento.childElementCount) {
+      Object.entries(CORES_MARCACAO).forEach(([nome, dados]) => {
+        const div = document.createElement("div");
+
+        div.className = "item-legenda";
+        div.style.background = dados.cor;
+        div.style.color = dados.texto;
+        div.textContent = `${nome}: ${dados.descricao}`;
+
+        elemento.appendChild(div);
+      });
+    }
+  });
 
 </script>
-
 
 <script>
 /* =====================================================
    LEITURA EM VOZ ALTA DO CAPÍTULO
-   Usa a voz disponível no navegador (Web Speech API).
 ===================================================== */
+
 (function configurarLeituraEmVozAlta() {
   const btnOuvir = document.getElementById("btnOuvirCapitulo");
   const btnPausar = document.getElementById("btnPausarVoz");
   const btnParar = document.getElementById("btnPararVoz");
   const status = document.getElementById("statusLeituraVoz");
+
   if (!btnOuvir || !btnPausar || !btnParar || !status) return;
 
-  const suportaVoz = "speechSynthesis" in window && "SpeechSynthesisUtterance" in window;
+  const suportaVoz =
+    "speechSynthesis" in window &&
+    "SpeechSynthesisUtterance" in window;
+
   let fila = [];
   let indiceAtual = 0;
   let emExecucao = false;
@@ -3000,31 +4049,45 @@ document.getElementById("verLegendaCores").addEventListener("click",()=>{const e
   let identificador = 0;
 
   if (!suportaVoz) {
-    status.textContent = "Este navegador não oferece suporte à leitura em voz alta.";
+    status.textContent =
+      "Este navegador não oferece suporte à leitura em voz alta.";
+
     btnOuvir.disabled = true;
     return;
   }
 
   function atualizarBotoes() {
-    btnOuvir.disabled = !Array.isArray(versiculosAtuais) || versiculosAtuais.length === 0 || emExecucao;
+    btnOuvir.disabled =
+      !Array.isArray(versiculosAtuais) ||
+      versiculosAtuais.length === 0 ||
+      emExecucao;
+
     btnPausar.disabled = !emExecucao;
     btnParar.disabled = !emExecucao;
-    btnPausar.textContent = pausada ? "▶ Continuar" : "⏸ Pausar";
+
+    btnPausar.textContent =
+      pausada ? "▶ Continuar" : "⏸ Pausar";
   }
 
   function pararLeitura(mensagem) {
     identificador++;
     window.speechSynthesis.cancel();
+
     fila = [];
     indiceAtual = 0;
     emExecucao = false;
     pausada = false;
+
     atualizarBotoes();
-    if (mensagem) status.textContent = mensagem;
+
+    if (mensagem) {
+      status.textContent = mensagem;
+    }
   }
 
   function falarProximo(id) {
     if (id !== identificador || !emExecucao || pausada) return;
+
     if (indiceAtual >= fila.length) {
       pararLeitura("Leitura do capítulo concluída.");
       return;
@@ -3032,64 +4095,107 @@ document.getElementById("verLegendaCores").addEventListener("click",()=>{const e
 
     const item = fila[indiceAtual];
     const fala = new SpeechSynthesisUtterance(item.texto);
+
     fala.lang = "pt-BR";
     fala.rate = 1;
     fala.pitch = 1;
     fala.volume = 1;
 
     const vozes = window.speechSynthesis.getVoices();
-    const vozPortugues = vozes.find(v => /^pt-BR$/i.test(v.lang)) ||
-      vozes.find(v => /^pt/i.test(v.lang));
-    if (vozPortugues) fala.voice = vozPortugues;
 
-    status.textContent = "Lendo " + item.referencia + "… (" + (indiceAtual + 1) + "/" + fila.length + ")";
+    const vozPortugues =
+      vozes.find(voz => /^pt-BR$/i.test(voz.lang)) ||
+      vozes.find(voz => /^pt/i.test(voz.lang));
+
+    if (vozPortugues) {
+      fala.voice = vozPortugues;
+    }
+
+    status.textContent =
+      "Lendo " + item.referencia +
+      "… (" + (indiceAtual + 1) + "/" + fila.length + ")";
+
     fala.onend = function() {
       if (id !== identificador) return;
+
       indiceAtual++;
       falarProximo(id);
     };
+
     fala.onerror = function(evento) {
-      if (id !== identificador || evento.error === "canceled" || evento.error === "interrupted") return;
-      pararLeitura("A leitura por voz foi interrompida pelo navegador. Toque em Ouvir capítulo para tentar novamente.");
+      if (
+        id !== identificador ||
+        evento.error === "canceled" ||
+        evento.error === "interrupted"
+      ) {
+        return;
+      }
+
+      pararLeitura(
+        "A leitura por voz foi interrompida pelo navegador. Toque em Ouvir capítulo para tentar novamente."
+      );
     };
+
     window.speechSynthesis.speak(fala);
   }
 
   btnOuvir.addEventListener("click", function() {
-    if (!Array.isArray(versiculosAtuais) || !versiculosAtuais.length || !livroAtual || !capituloAtual) {
-      status.textContent = "Primeiro selecione um capítulo bíblico.";
+    if (
+      !Array.isArray(versiculosAtuais) ||
+      !versiculosAtuais.length ||
+      !livroAtual ||
+      !capituloAtual
+    ) {
+      status.textContent =
+        "Primeiro selecione um capítulo bíblico.";
       return;
     }
+
     pararLeitura("");
-    fila = versiculosAtuais.map(function(v, i) {
-      const numero = obterNumeroVersiculo(v, i);
-      const texto = obterTextoVersiculo(v);
-      return { referencia: livroAtual.nome + " " + capituloAtual + ":" + numero,
-        texto: texto ? "Versículo " + numero + ". " + texto : "" };
+
+    fila = versiculosAtuais.map(function(versiculo, indice) {
+      const numero = obterNumeroVersiculo(versiculo, indice);
+      const texto = obterTextoVersiculo(versiculo);
+
+      return {
+        referencia:
+          livroAtual.nome + " " + capituloAtual + ":" + numero,
+        texto: texto
+          ? "Versículo " + numero + ". " + texto
+          : ""
+      };
     }).filter(item => item.texto);
+
     if (!fila.length) {
-      status.textContent = "Não há texto disponível para leitura neste capítulo.";
+      status.textContent =
+        "Não há texto disponível para leitura neste capítulo.";
+
       atualizarBotoes();
       return;
     }
+
     identificador++;
     indiceAtual = 0;
     emExecucao = true;
     pausada = false;
+
     atualizarBotoes();
     falarProximo(identificador);
   });
 
   btnPausar.addEventListener("click", function() {
     if (!emExecucao) return;
+
     if (pausada) {
       pausada = false;
       window.speechSynthesis.resume();
+
       atualizarBotoes();
-      status.textContent = "Retomando a leitura…";
+      status.textContent = "Retomando a leitura...";
     } else {
       pausada = true;
       window.speechSynthesis.pause();
+
       atualizarBotoes();
       status.textContent = "Leitura pausada.";
     }
@@ -3099,22 +4205,31 @@ document.getElementById("verLegendaCores").addEventListener("click",()=>{const e
     pararLeitura("Leitura interrompida.");
   });
 
-  // Ao trocar de capítulo, interrompe a leitura anterior.
   const seletorLivro = document.getElementById("livro");
   const seletorCapitulo = document.getElementById("capitulo");
-  seletorLivro?.addEventListener("change", () => pararLeitura("Selecione um capítulo para ouvir."));
-  seletorCapitulo?.addEventListener("change", () => pararLeitura("Carregando capítulo…"));
 
-  // Atualiza a disponibilidade quando um capítulo terminar de carregar.
+  seletorLivro?.addEventListener("change", () => {
+    pararLeitura("Selecione um capítulo para ouvir.");
+  });
+
+  seletorCapitulo?.addEventListener("change", () => {
+    pararLeitura("Carregando capítulo...");
+  });
+
   const lista = document.getElementById("listaVersiculos");
+
   if (lista && "MutationObserver" in window) {
     new MutationObserver(() => {
       if (!emExecucao) atualizarBotoes();
     }).observe(lista, { childList: true });
   }
+
   atualizarBotoes();
 })();
+
 </script>
 
 </body>
 </html>
+
+          
