@@ -457,6 +457,143 @@
       opacity: .5;
       cursor: not-allowed;
     }
+    /* ==========================================
+   ESTUDOS COMPLEMENTARES
+========================================== */
+
+.estudos-container {
+    margin: 30px 0;
+    padding: 22px;
+    border-radius: 14px;
+    background: var(--surface, #ffffff);
+    border: 1px solid var(--line, #dddddd);
+}
+
+.estudos-container h2 {
+    margin-top: 0;
+    font-size: 23px;
+}
+
+.estudos-descricao {
+    color: var(--muted, #777);
+    line-height: 1.5;
+}
+
+.estudos-form {
+    display: grid;
+    gap: 14px;
+    margin-top: 20px;
+}
+
+.estudos-campo {
+    display: grid;
+    gap: 7px;
+}
+
+.estudos-campo label {
+    font-weight: bold;
+}
+
+.estudos-campo input,
+.estudos-campo select,
+.estudos-campo textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--line, #ccc);
+    border-radius: 8px;
+    font: inherit;
+    box-sizing: border-box;
+}
+
+.estudos-campo textarea {
+    min-height: 220px;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+.estudos-botoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.estudos-botoes button,
+.estudo-acoes button {
+    padding: 10px 16px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.btn-estudo-salvar {
+    background: #c99b32;
+    color: #171717;
+}
+
+.btn-estudo-limpar {
+    background: #555;
+    color: white;
+}
+
+.estudos-lista {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.estudo-card {
+    padding: 15px;
+    border: 1px solid var(--line, #ddd);
+    border-radius: 10px;
+}
+
+.estudo-titulo {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.estudo-informacao {
+    margin-top: 5px;
+    font-size: 12px;
+    color: var(--muted, #777);
+}
+
+.estudo-conteudo {
+    margin-top: 12px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    line-height: 1.6;
+}
+
+.estudo-acoes {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.estudo-acoes button {
+    background: #444;
+    color: white;
+}
+
+.estudos-mensagem {
+    margin-top: 10px;
+    font-size: 13px;
+}
+
+.estudos-vazio {
+    padding: 20px;
+    text-align: center;
+    color: var(--muted, #777);
+}
+
+@media(max-width:600px) {
+    .estudos-container {
+        padding: 15px;
+    }
+}
   </style>
 </head>
 
@@ -614,7 +751,128 @@
         class="lista-versiculos"
       ></div>
     </section>
+<!-- =====================================
+     ESTUDOS COMPLEMENTARES
+===================================== -->
 
+<section class="estudos-container" id="estudosSection">
+
+    <h2>📚 Estudos Complementares</h2>
+
+    <p class="estudos-descricao">
+        Cadastre estudos bíblicos, transcrições de vídeos,
+        legendas do YouTube e materiais de apoio.
+        Cada conteúdo ficará associado a um livro da Bíblia.
+    </p>
+
+    <form id="formEstudo" class="estudos-form">
+
+        <input type="hidden" id="estudoId">
+
+        <div class="estudos-campo">
+
+            <label for="estudoLivro">
+                Livro da Bíblia
+            </label>
+
+            <select id="estudoLivro" required>
+                <option value="">Selecione um livro</option>
+            </select>
+
+        </div>
+
+        <div class="estudos-campo">
+
+            <label for="estudoTitulo">
+                Título do estudo
+            </label>
+
+            <input
+                type="text"
+                id="estudoTitulo"
+                maxlength="180"
+                placeholder="Ex.: Estudo sobre a carta de Judas"
+                required
+            >
+
+        </div>
+
+        <div class="estudos-campo">
+
+            <label for="estudoConteudo">
+                Conteúdo do estudo
+            </label>
+
+            <textarea
+                id="estudoConteudo"
+                placeholder="Cole aqui a transcrição ou legenda do vídeo..."
+                required
+            ></textarea>
+
+        </div>
+
+        <div class="estudos-botoes">
+
+            <button
+                type="button"
+                class="btn-estudo-limpar"
+                onclick="document.getElementById('arquivoEstudo').click()"
+            >
+                📄 Importar TXT
+            </button>
+
+            <input
+                type="file"
+                id="arquivoEstudo"
+                accept=".txt,text/plain"
+                hidden
+            >
+
+            <button
+                type="submit"
+                class="btn-estudo-salvar"
+                id="btnSalvarEstudo"
+            >
+                💾 Salvar estudo
+            </button>
+
+            <button
+                type="button"
+                class="btn-estudo-limpar"
+                onclick="limparEstudo()"
+            >
+                Limpar
+            </button>
+
+        </div>
+
+        <div
+            id="mensagemEstudo"
+            class="estudos-mensagem"
+            aria-live="polite"
+        ></div>
+
+    </form>
+
+    <hr>
+
+    <h3>Estudos cadastrados</h3>
+
+    <button
+        type="button"
+        class="btn-estudo-limpar"
+        onclick="carregarEstudos()"
+    >
+        ↻ Atualizar estudos
+    </button>
+
+    <div id="listaEstudos" class="estudos-lista">
+        <div class="estudos-vazio">
+            Carregando estudos...
+        </div>
+    </div>
+
+</section>
   </main>
 
   <section id="painelPlano" class="painel-plano oculto" aria-modal="true" role="dialog" aria-labelledby="tituloPlano">
@@ -630,8 +888,393 @@
   <footer class="rodape">
     Bíblia King James — leitura e estudo bíblico
   </footer>
+/* ==========================================
+   ESTUDOS COMPLEMENTARES - JAVASCRIPT
+========================================== */
 
-  
+let estudosCadastrados = [];
+
+function inicializarSeletorEstudos() {
+
+    const seletor = document.getElementById('estudoLivro');
+
+    if (!seletor) return;
+
+    seletor.innerHTML =
+        '<option value="">Selecione um livro</option>';
+
+    livros.forEach(livro => {
+
+        const opcao = document.createElement('option');
+
+        opcao.value = livro.livro;
+
+        opcao.textContent = livro.nome;
+
+        seletor.appendChild(opcao);
+
+    });
+
+}
+
+document.getElementById('arquivoEstudo').addEventListener('change', async function() {
+
+    const arquivo = this.files[0];
+
+    if (!arquivo) return;
+
+    try {
+
+        document.getElementById('estudoConteudo').value =
+            await arquivo.text();
+
+        document.getElementById('mensagemEstudo').textContent =
+            'Arquivo TXT carregado com sucesso.';
+
+    } catch (erro) {
+
+        alert('Não foi possível abrir o arquivo.');
+
+    }
+
+    this.value = '';
+
+});
+
+
+document.getElementById('formEstudo').addEventListener('submit', async function(evento) {
+
+    evento.preventDefault();
+
+    const id = document.getElementById('estudoId').value;
+
+    const livro = document.getElementById('estudoLivro').value;
+
+    const titulo = document.getElementById('estudoTitulo').value.trim();
+
+    const conteudo = document.getElementById('estudoConteudo').value.trim();
+
+    const mensagem = document.getElementById('mensagemEstudo');
+
+    const botao = document.getElementById('btnSalvarEstudo');
+
+    if (!livro || !titulo || !conteudo) {
+
+        mensagem.textContent = 'Preencha todos os campos.';
+
+        return;
+
+    }
+
+    botao.disabled = true;
+
+    botao.textContent = 'Enviando...';
+
+    mensagem.textContent = 'Salvando estudo na planilha...';
+
+    try {
+
+        await enviarEstudoPOST({
+            action: 'salvarEstudo',
+            id: id,
+            livro: livro,
+            titulo: titulo,
+            conteudo: conteudo
+        });
+
+        limparEstudo();
+
+        mensagem.textContent = 'Solicitação enviada. Atualizando a lista...';
+
+        await new Promise(resolve => setTimeout(resolve, 1200));
+
+        await carregarEstudos();
+
+    } catch (erro) {
+
+        mensagem.textContent = erro.message;
+
+    } finally {
+
+        botao.disabled = false;
+
+        botao.textContent = '💾 Salvar estudo';
+
+    }
+
+});
+
+
+function enviarEstudoPOST(dados) {
+
+    return new Promise((resolve, reject) => {
+
+        let iframe = document.getElementById('iframeEstudos');
+
+        if (!iframe) {
+
+            iframe = document.createElement('iframe');
+
+            iframe.id = 'iframeEstudos';
+
+            iframe.name = 'iframeEstudos';
+
+            iframe.style.display = 'none';
+
+            document.body.appendChild(iframe);
+
+        }
+
+        const enviar = () => {
+
+            const formulario = document.createElement('form');
+
+            formulario.method = 'POST';
+
+            formulario.action = API_URL;
+
+            formulario.target = 'iframeEstudos';
+
+            formulario.style.display = 'none';
+
+            Object.entries(dados).forEach(([chave, valor]) => {
+
+                const campo = document.createElement('input');
+
+                campo.type = 'hidden';
+
+                campo.name = chave;
+
+                campo.value = valor;
+
+                formulario.appendChild(campo);
+
+            });
+
+            let terminou = false;
+
+            const timeout = setTimeout(() => {
+
+                if (terminou) return;
+
+                terminou = true;
+
+                formulario.remove();
+
+                reject(new Error(
+                    'Tempo esgotado. Atualize a lista para conferir a gravação.'
+                ));
+
+            }, 30000);
+
+            iframe.onload = () => {
+
+                if (terminou) return;
+
+                terminou = true;
+
+                clearTimeout(timeout);
+
+                formulario.remove();
+
+                resolve(true);
+
+            };
+
+            document.body.appendChild(formulario);
+
+            formulario.submit();
+
+        };
+
+        if (iframe.dataset.pronto === 'sim') {
+
+            enviar();
+
+        } else {
+
+            iframe.onload = () => {
+
+                iframe.dataset.pronto = 'sim';
+
+                enviar();
+
+            };
+
+        }
+
+    });
+
+}
+
+
+async function carregarEstudos() {
+
+    const lista = document.getElementById('listaEstudos');
+
+    lista.innerHTML = '<div class="estudos-vazio">Carregando...</div>';
+
+    try {
+
+        const dados = await api({
+            action: 'listarEstudos'
+        });
+
+        estudosCadastrados = Array.isArray(dados.estudos)
+            ? dados.estudos
+            : [];
+
+        renderizarEstudos();
+
+    } catch (erro) {
+
+        lista.textContent = 'Erro ao carregar estudos: ' + erro.message;
+
+    }
+
+}
+
+
+function renderizarEstudos() {
+
+    const lista = document.getElementById('listaEstudos');
+
+    lista.innerHTML = '';
+
+    if (!estudosCadastrados.length) {
+
+        lista.innerHTML =
+            '<div class="estudos-vazio">Nenhum estudo cadastrado.</div>';
+
+        return;
+
+    }
+
+    estudosCadastrados.forEach(estudo => {
+
+        const card = document.createElement('article');
+
+        card.className = 'estudo-card';
+
+        const titulo = document.createElement('div');
+
+        titulo.className = 'estudo-titulo';
+
+        titulo.textContent = estudo.titulo;
+
+        const informacao = document.createElement('div');
+
+        informacao.className = 'estudo-informacao';
+
+        informacao.textContent =
+            estudo.livro + ' • ' + estudo.data;
+
+        const conteudo = document.createElement('div');
+
+        conteudo.className = 'estudo-conteudo';
+
+        const texto = String(estudo.conteudo || '');
+
+        conteudo.textContent =
+            texto.length > 600
+                ? texto.substring(0, 600) + '...'
+                : texto;
+
+        const acoes = document.createElement('div');
+
+        acoes.className = 'estudo-acoes';
+
+        const editar = document.createElement('button');
+
+        editar.textContent = '✏️ Editar';
+
+        editar.onclick = () => editarEstudo(estudo.id);
+
+        const excluir = document.createElement('button');
+
+        excluir.textContent = '🗑 Excluir';
+
+        excluir.onclick = () => excluirEstudo(estudo.id);
+
+        acoes.append(editar, excluir);
+
+        card.append(titulo, informacao, conteudo, acoes);
+
+        lista.appendChild(card);
+
+    });
+
+}
+
+
+function editarEstudo(id) {
+
+    const estudo = estudosCadastrados.find(
+        item => String(item.id) === String(id)
+    );
+
+    if (!estudo) return;
+
+    document.getElementById('estudoId').value = estudo.id;
+
+    document.getElementById('estudoLivro').value = estudo.livro;
+
+    document.getElementById('estudoTitulo').value = estudo.titulo;
+
+    document.getElementById('estudoConteudo').value = estudo.conteudo;
+
+    document.getElementById('btnSalvarEstudo').textContent =
+        'Atualizar estudo';
+
+    document.getElementById('estudosSection').scrollIntoView({
+        behavior: 'smooth'
+    });
+
+}
+
+
+function limparEstudo() {
+
+    document.getElementById('formEstudo').reset();
+
+    document.getElementById('estudoId').value = '';
+
+    document.getElementById('btnSalvarEstudo').textContent =
+        '💾 Salvar estudo';
+
+}
+
+
+async function excluirEstudo(id) {
+
+    const estudo = estudosCadastrados.find(
+        item => String(item.id) === String(id)
+    );
+
+    if (!estudo) return;
+
+    if (!confirm('Deseja excluir o estudo "' + estudo.titulo + '"?')) {
+        return;
+    }
+
+    try {
+
+        await enviarEstudoPOST({
+            action: 'excluirEstudo',
+            id: id
+        });
+
+        await new Promise(resolve => setTimeout(resolve, 1200));
+
+        await carregarEstudos();
+
+    } catch (erro) {
+
+        alert('Erro ao excluir: ' + erro.message);
+
+    }
+
+} 
 <script>
 /* =====================================================
    BÍBLIA KING JAMES — PARTE 2
