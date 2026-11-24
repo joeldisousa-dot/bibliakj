@@ -888,6 +888,14 @@
   <footer class="rodape">
     Bíblia King James — leitura e estudo bíblico
   </footer>
+  <script>
+/* ==========================================
+   ESTUDOS COMPLEMENTARES - JAVASCRIPT
+========================================== */
+
+let estudosCadastrados = [];
+
+<script>
 /* ==========================================
    ESTUDOS COMPLEMENTARES - JAVASCRIPT
 ========================================== */
@@ -903,49 +911,52 @@ function inicializarSeletorEstudos() {
         return;
     }
 
+    // Limpa as opções anteriores
     seletor.innerHTML = '';
 
+    // Opção inicial
     const opcaoInicial = document.createElement('option');
     opcaoInicial.value = '';
     opcaoInicial.textContent = 'Selecione um livro';
     seletor.appendChild(opcaoInicial);
 
-    // Usa os livros carregados pela API da Bíblia
-    if (!Array.isArray(livros) || livros.length === 0) {
-
-        console.error('A lista de livros ainda não foi carregada.');
-
-        opcaoInicial.textContent = 'Livros não carregados';
-
+    // Verifica a lista oficial dos 66 livros
+    if (!Array.isArray(LIVROS) || LIVROS.length !== 66) {
+        console.error('A lista de livros da Bíblia não está disponível.');
         return;
     }
 
-    livros.forEach(livro => {
+    // Antigo Testamento
+    const grupoAntigo = document.createElement('optgroup');
+    grupoAntigo.label = 'Antigo Testamento';
 
-        const codigo = String(
-            livro.livro || livro.codigo || ''
-        ).trim();
+    // Novo Testamento
+    const grupoNovo = document.createElement('optgroup');
+    grupoNovo.label = 'Novo Testamento';
 
-        const nome = String(
-            livro.nome || livro.nomeLivro || codigo
-        ).trim();
-
-        if (!codigo || !nome) return;
+    LIVROS.forEach((livro, indice) => {
 
         const opcao = document.createElement('option');
 
-        opcao.value = codigo;
-        opcao.textContent = nome;
+        // Usa o nome do livro como valor
+        opcao.value = livro.nome;
+        opcao.textContent = livro.nome;
 
-        seletor.appendChild(opcao);
+        if (indice < 39) {
+            grupoAntigo.appendChild(opcao);
+        } else {
+            grupoNovo.appendChild(opcao);
+        }
 
     });
 
-    console.log(
-        'Livros carregados no seletor:',
-        seletor.options.length - 1
-    );
+    seletor.appendChild(grupoAntigo);
+    seletor.appendChild(grupoNovo);
 
+    console.log(
+        'Livros carregados no seletor de estudos:',
+        LIVROS.length
+    );
 }
 
 
