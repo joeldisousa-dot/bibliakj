@@ -1508,16 +1508,18 @@ function localizarLivro(nome) {
     );
   }) || null;
 }
-
 /* =====================================================
    PREPARAR A INTERFACE
 ===================================================== */
 
 preencherLivros();
 
+// Preenche o seletor de livros dos Estudos Complementares
+inicializarSeletorEstudos();
+
 console.log("Livros bíblicos carregados:", LIVROS.length);
+console.log("Seletor de estudos inicializado.");
 console.log("Configuração da Bíblia King James concluída.");
-</script>
 
 <script>
 /* =====================================================
