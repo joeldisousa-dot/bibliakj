@@ -898,111 +898,55 @@ function inicializarSeletorEstudos() {
 
     const seletor = document.getElementById('estudoLivro');
 
-    if (!seletor) return;
+    if (!seletor) {
+        console.error('Campo estudoLivro não encontrado.');
+        return;
+    }
 
-    seletor.innerHTML =
-        '<option value="">Selecione um livro</option>';
+    seletor.innerHTML = '';
+
+    const opcaoInicial = document.createElement('option');
+    opcaoInicial.value = '';
+    opcaoInicial.textContent = 'Selecione um livro';
+    seletor.appendChild(opcaoInicial);
+
+    // Usa os livros carregados pela API da Bíblia
+    if (!Array.isArray(livros) || livros.length === 0) {
+
+        console.error('A lista de livros ainda não foi carregada.');
+
+        opcaoInicial.textContent = 'Livros não carregados';
+
+        return;
+    }
 
     livros.forEach(livro => {
 
+        const codigo = String(
+            livro.livro || livro.codigo || ''
+        ).trim();
+
+        const nome = String(
+            livro.nome || livro.nomeLivro || codigo
+        ).trim();
+
+        if (!codigo || !nome) return;
+
         const opcao = document.createElement('option');
 
-        opcao.value = livro.livro;
-
-        opcao.textContent = livro.nome;
+        opcao.value = codigo;
+        opcao.textContent = nome;
 
         seletor.appendChild(opcao);
 
     });
 
+    console.log(
+        'Livros carregados no seletor:',
+        seletor.options.length - 1
+    );
+
 }
-
-document.getElementById('arquivoEstudo').addEventListener('change', async function() {
-
-    const arquivo = this.files[0];
-
-    if (!arquivo) return;
-
-    try {
-
-        document.getElementById('estudoConteudo').value =
-            await arquivo.text();
-
-        document.getElementById('mensagemEstudo').textContent =
-            'Arquivo TXT carregado com sucesso.';
-
-    } catch (erro) {
-
-        alert('Não foi possível abrir o arquivo.');
-
-    }
-
-    this.value = '';
-
-});
-
-
-document.getElementById('formEstudo').addEventListener('submit', async function(evento) {
-
-    evento.preventDefault();
-
-    const id = document.getElementById('estudoId').value;
-
-    const livro = document.getElementById('estudoLivro').value;
-
-    const titulo = document.getElementById('estudoTitulo').value.trim();
-
-    const conteudo = document.getElementById('estudoConteudo').value.trim();
-
-    const mensagem = document.getElementById('mensagemEstudo');
-
-    const botao = document.getElementById('btnSalvarEstudo');
-
-    if (!livro || !titulo || !conteudo) {
-
-        mensagem.textContent = 'Preencha todos os campos.';
-
-        return;
-
-    }
-
-    botao.disabled = true;
-
-    botao.textContent = 'Enviando...';
-
-    mensagem.textContent = 'Salvando estudo na planilha...';
-
-    try {
-
-        await enviarEstudoPOST({
-            action: 'salvarEstudo',
-            id: id,
-            livro: livro,
-            titulo: titulo,
-            conteudo: conteudo
-        });
-
-        limparEstudo();
-
-        mensagem.textContent = 'Solicitação enviada. Atualizando a lista...';
-
-        await new Promise(resolve => setTimeout(resolve, 1200));
-
-        await carregarEstudos();
-
-    } catch (erro) {
-
-        mensagem.textContent = erro.message;
-
-    } finally {
-
-        botao.disabled = false;
-
-        botao.textContent = '💾 Salvar estudo';
-
-    }
-
-});
 
 
 function enviarEstudoPOST(dados) {
