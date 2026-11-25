@@ -1363,11 +1363,16 @@ function carregarLocal(chave, padrao = []) {
   e tratar diferentes formatos de resposta.
 */
 
+
+/* =========================================================
+   6. CONSULTA API
+========================================================= */
+
 async function consultarAPI(acao, parametros = {}) {
 
   const url = new URL(API_URL);
 
-  url.searchParams.set("acao", acao);
+  url.searchParams.set("action", acao);
 
   Object.entries(parametros).forEach(([chave, valor]) => {
 
@@ -1432,7 +1437,7 @@ function consultarJSONP(acao, parametros = {}) {
 
     const url = new URL(API_URL);
 
-    url.searchParams.set("acao", acao);
+    url.searchParams.set("action", acao);
     url.searchParams.set("callback", callback);
 
     Object.entries(parametros).forEach(([chave, valor]) => {
@@ -1529,6 +1534,7 @@ async function consultarDados(acao, parametros = {}) {
   }
 
 }
+
 
 /* =========================================================
    9. TRATAMENTO DE RESPOSTAS
