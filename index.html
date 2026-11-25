@@ -3842,170 +3842,43 @@ obterElemento("mesPlano")?.addEventListener(
    39. VERSÍCULO DO DIA
 ========================================================= */
 
+
 async function carregarVersiculoDia() {
-
   try {
+    const resposta = await consultarDados("versiculodia");
 
-    const dados = await consultarDados(
-      "versiculoDia"
-    );
+    const dados = Array.isArray(resposta)
+      ? resposta[0]
+      : resposta;
 
-    verificarErroAPI(dados);
+    const texto = dados?.texto || dados?.versiculo || "";
+    const referencia = dados?.referencia || "";
 
-    const item = Array.isArray(dados)
-      ? dados[0]
-      : dados?.versiculo || dados?.dados?.[0] || dados;
-
-    if (!item) {
-      throw new Error("Versículo não encontrado.");
-    }
-
-    const texto =
-      item.texto ??
-      item.versiculo ??
-      item.conteudo ??
-      "";
-
-    const referencia =
-      item.referencia ??
-      item.ref ??
-      (
-        (item.livro || "") +
-        (item.capitulo ? " " + item.capitulo : "") +
-        (item.numero ? ":" + item.numero : "")
-      );
-
-    if (!texto) {
+    if (!texto.trim()) {
       throw new Error("A API não retornou o texto do versículo.");
     }
 
-    elementoTextoDiario.textContent = texto;
+    const elementoTexto = obterElemento("textoDiario");
+    const elementoReferencia = obterElemento("referenciaDiaria");
 
-    elementoReferenciaDiaria.textContent = referencia;
+    if (elementoTexto) {
+      elementoTexto.textContent = texto;
+    }
 
-    elementoReferenciaDiaria.className =
-      "referencia-diaria";
-
-    elementoReferenciaDiaria.onclick = () => {
-
-      if (item.livro && item.capitulo) {
-
-        const nomeLivro = resolverNomeLivroDaAPI(item);
-
-        elementoLivro.value = nomeLivro;
-
-        preencherCapitulos(nomeLivro);
-
-        elementoCapitulo.value = String(item.capitulo);
-
-        lerCapitulo();
-
-      }
-
-    };
+    if (elementoReferencia) {
+      elementoReferencia.textContent = referencia;
+    }
 
   } catch (erro) {
-
     console.error("Erro ao carregar versículo do dia:", erro);
 
-    elementoTextoDiario.textContent =
-      "Não foi possível carregar o versículo do dia.";
-
-    elementoReferenciaDiaria.textContent =
-      "Verifique a conexão com a API.";
-
+    mostrarMensagem(
+      "Não foi possível carregar o versículo do dia.",
+      "erro"
+    );
   }
-
 }
 
-obterElemento("btnCompartilharDiario")?.addEventListener(
-  "click",
-  () => {
-
-    const texto =
-      elementoTextoDiario.textContent +
-      "\n\n" +
-      elementoReferenciaDiaria.textContent;
-
-    compartilharTexto(
-      texto,
-      "Versículo do dia — Bíblia King James"
-    );
-
-  }
-);
-
-/* =========================================================
-   40. ESTUDO DE PALAVRAS COM DUPLO CLIQUE
-========================================================= */
-
-document.addEventListener("dblclick", evento => {
-
-  const elemento = evento.target.closest(
-    ".texto-versiculo"
-  );
-
-  if (!elemento) return;
-
-  const selecao = window.getSelection();
-
-  const palavra = selecao?.toString().trim();
-
-  if (!palavra || palavra.length > 60) return;
-
-  const painel = obterElemento("painelPalavra");
-
-  const titulo = obterElemento("tituloPalavra");
-
-  const conteudo = obterElemento("conteudoPalavra");
-
-  if (!painel || !titulo || !conteudo) return;
-
-  titulo.textContent = palavra;
-
-  conteudo.innerHTML = "";
-
-  const explicacao = document.createElement("p");
-
-  explicacao.textContent =
-    "Pesquise esta palavra na Bíblia para encontrar " +
-    "versículos e passagens relacionados.";
-
-  const botao = document.createElement("button");
-
-  botao.type = "button";
-
-  botao.className = "botao";
-
-  botao.textContent = "Pesquisar palavra";
-
-  botao.addEventListener("click", () => {
-
-    elementoTermoPesquisa.value = palavra;
-
-    pesquisarBiblia();
-
-    painel.classList.add("oculto");
-
-    obterElemento("termoPesquisa")
-      ?.scrollIntoView({ behavior: "smooth" });
-
-  });
-
-  conteudo.append(explicacao, botao);
-
-  painel.classList.remove("oculto");
-
-});
-
-obterElemento("fecharPainelPalavra")?.addEventListener(
-  "click",
-  () => {
-
-    obterElemento("painelPalavra")?.classList.add("oculto");
-
-  }
-);
 
 /* =========================================================
    41. RESTAURAR MARCAÇÕES AO CARREGAR CAPÍTULO
