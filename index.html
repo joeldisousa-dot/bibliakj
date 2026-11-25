@@ -1756,7 +1756,7 @@ async function buscarCapitulo(livro, capitulo) {
   };
 
   const dados = await consultarDados(
-    "buscar",
+    "capitulo",
     parametros
   );
 
@@ -1765,25 +1765,7 @@ async function buscarCapitulo(livro, capitulo) {
   let lista = extrairLista(dados);
 
   if (!lista.length && dados && typeof dados === "object") {
-
-    if (dados.versiculos) {
-      lista = dados.versiculos;
-    } else if (dados.texto) {
-
-      if (typeof dados.texto === "string") {
-
-        lista = dados.texto
-          .split(/\n/)
-          .filter(Boolean);
-
-      } else if (Array.isArray(dados.texto)) {
-
-        lista = dados.texto;
-
-      }
-
-    }
-
+    lista = dados.versiculos || [];
   }
 
   const normalizados = lista
@@ -1791,15 +1773,12 @@ async function buscarCapitulo(livro, capitulo) {
     .filter(Boolean);
 
   if (!normalizados.length) {
-
     throw new Error(
       "Nenhum versículo foi encontrado para este capítulo."
     );
-
   }
 
   return normalizados;
-
 }
 
 /* =========================================================
