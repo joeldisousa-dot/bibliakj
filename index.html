@@ -2531,13 +2531,13 @@ async function pesquisarBiblia() {
 
   try {
 
-    const dados = await consultarDados(
-      "buscar",
-      {
-        pesquisa: termo,
-        termo: termo
-      }
-    );
+   const dados = await consultarDados(
+  "buscar",
+  {
+    q: termo,
+    limite: 100
+  }
+);
 
     verificarErroAPI(dados);
 
