@@ -3845,7 +3845,11 @@ obterElemento("mesPlano")?.addEventListener(
 
 async function carregarVersiculoDia() {
   try {
-    const resposta = await consultarDados("versiculodia");
+ const resposta = await consultarDados("versiculodia", {});
+
+console.log("RESPOSTA COMPLETA DA API:", resposta);
+console.log("TIPO DA RESPOSTA:", typeof resposta);
+console.log("CONTEÚDO DA RESPOSTA:", JSON.stringify(resposta, null, 2));
 
     const dados = Array.isArray(resposta)
       ? resposta[0]
