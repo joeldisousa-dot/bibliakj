@@ -2489,6 +2489,34 @@ function restaurarMarcacoesCapitulo() {
    24. PESQUISA BÍBLICA
 ========================================================= */
 
+/* =========================================================
+   24. PESQUISA BÍBLICA — PALAVRA EXATA
+========================================================= */
+
+function correspondePalavraExata(texto, termo) {
+
+  const textoNormalizado = normalizarTexto(texto);
+  const termoNormalizado = normalizarTexto(termo);
+
+  if (!textoNormalizado || !termoNormalizado) {
+    return false;
+  }
+
+  // Escapa caracteres especiais e preserva expressões
+  const termoEscapado = termoNormalizado
+    .replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+    .replace(/\s+/g, "\\s+");
+
+  // Exige limite antes e depois da palavra
+  const regex = new RegExp(
+    `(^|[^\\p{L}\\p{N}_])${termoEscapado}($|[^\\p{L}\\p{N}_])`,
+    "u"
+  );
+
+  return regex.test(textoNormalizado);
+}
+
+
 async function pesquisarBiblia() {
 
   const termo = elementoTermoPesquisa?.value.trim();
@@ -2502,7 +2530,6 @@ async function pesquisarBiblia() {
     );
 
     return;
-
   }
 
   elementoResultadosPesquisa.innerHTML =
@@ -2510,17 +2537,33 @@ async function pesquisarBiblia() {
 
   try {
 
-   const dados = await consultarDados(
-  "buscar",
-  {
-    q: termo,
-    limite: 100
-  }
-);
+    const dados = await consultarDados(
+      "buscar",
+      {
+        q: termo,
+        limite: 100
+      }
+    );
 
     verificarErroAPI(dados);
 
-    resultadoPesquisaAtual = extrairLista(dados);
+    // Recebe os resultados da API
+    const resultadosAPI = extrairLista(dados);
+
+    // Mantém somente os versículos que possuem
+    // a palavra ou expressão exata
+    resultadoPesquisaAtual = resultadosAPI.filter(item => {
+
+      const versiculo = normalizarVersiculo(item);
+
+      if (!versiculo) return false;
+
+      return correspondePalavraExata(
+        versiculo.texto,
+        termo
+      );
+
+    });
 
     exibirResultadosPesquisa(
       resultadoPesquisaAtual,
